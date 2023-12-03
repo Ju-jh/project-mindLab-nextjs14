@@ -22,7 +22,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
 
   useEffect(() => {
     axios
-      .post(`${process.env.BACKEND_BASEURL}/user/cookie`)
+      .post(`${process.env.BACKEND_BASEURL}user/cookie`)
       .then((response) => {
         if (response.data && response.data.isCookie) {
           setAccessToken(true);
