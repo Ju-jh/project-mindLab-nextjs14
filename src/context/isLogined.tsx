@@ -1,3 +1,5 @@
+'use client'
+
 import { gql, useQuery } from '@apollo/client';
 import React, { createContext, useContext, ReactNode } from 'react';
 
