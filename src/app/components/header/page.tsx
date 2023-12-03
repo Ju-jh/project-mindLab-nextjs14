@@ -20,7 +20,7 @@ export default function Header() {
           <Image src={'/icon.png'} alt='IconImage' width={100} height={100}></Image>
         </Link>
       { accessToken === false && <Link href={'https://mind-lab-be-bffdf1dcb8ba.herokuapp.com/user/google/callback'}>
-          <button className='flex items-center justify-center  h-[50px] m-[5px] shadow-md rounded-md  p-[20px]'>
+          <button className='flex items-center justify-center  h-[50px] m-[5px] shadow-md rounded-md  p-[20px] hover:bg-blue-300 transition-all'>
             <Image src={'/google.png'} alt='GoogleImage' width={30} height={30}></Image>
             <span className='font-bold ml-[5px]'>Google Login</span>
           </button>
