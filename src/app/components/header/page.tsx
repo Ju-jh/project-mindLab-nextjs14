@@ -9,6 +9,10 @@ export default function Header() {
   console.log(accessToken,'여기가 accessToken')
 
 
+  const redirectAfterLogoutPath = () => {
+    window.location.href = "https://https://mind-lab-be-bffdf1dcb8ba.herokuapp.com/user/logout";
+  };
+
   return (
     <header className=' fixed w-full h-[60px] shadow-md bg-white z-50'>
       <div className='h-full flex items-start justify-between px-[50px]'>
@@ -28,6 +32,12 @@ export default function Header() {
               <Image src={'/photo.png'} alt='ProfileImage' width={40} height={40}></Image>
             </div>
             <span className='font-bold ml-[20px]'>email@gmail.com</span>
+              <button
+                className='ml-[20px] p-[10px] rounded-md shadow-sm shadow-slate-400 hover:bg-slate-400 transition-all'
+                onClick={redirectAfterLogoutPath}
+              >
+              <span className='font-bold'>Logout</span>
+            </button>
           </div>
         }
       </div>
