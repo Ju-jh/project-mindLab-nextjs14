@@ -5,7 +5,8 @@ import Link from 'next/link';
 
 export default function Header() {
 
-    const { accessToken } = useAuth();
+  const { accessToken } = useAuth();
+  console.log(accessToken,'여기가 accessToken')
 
 
   return (
@@ -14,7 +15,7 @@ export default function Header() {
         <Link href={'/'}>
           <Image src={'/icon.png'} alt='IconImage' width={100} height={100}></Image>
         </Link>
-      { accessToken! && <Link href={'https://mind-lab-be-bffdf1dcb8ba.herokuapp.com/user/google/callback'}>
+      { accessToken && <Link href={'https://mind-lab-be-bffdf1dcb8ba.herokuapp.com/user/google/callback'}>
           <button className='flex items-center justify-center  h-[50px] m-[5px] shadow-md rounded-md  p-[20px]'>
             <Image src={'/google.png'} alt='GoogleImage' width={30} height={30}></Image>
             <span className='font-bold ml-[5px]'>Google Login</span>
