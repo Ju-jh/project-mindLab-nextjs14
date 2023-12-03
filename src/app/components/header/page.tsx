@@ -22,7 +22,7 @@ export default function Header() {
           </button>
         </Link>}
         {
-          accessToken &&
+          accessToken! &&
           <div className='flex items-center justify-center  h-[50px] m-[5px] p-[20px]'>
             <div className='w-[40px] h-[40px] overflow-hidden rounded-full shadow-md bg-slate-200'>
               <Image src={'/photo.png'} alt='ProfileImage' width={40} height={40}></Image>
