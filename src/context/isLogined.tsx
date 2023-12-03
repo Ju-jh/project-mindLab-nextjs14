@@ -22,7 +22,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
 
   useEffect(() => {
     axios
-      .post("https://port-0-coin-market-be-12fhqa2llob5p0if.sel5.cloudtype.app/user/cookie")
+      .post("https://mind-lab-be-bffdf1dcb8ba.herokuapp.com/user/cookie")
       .then((response) => {
         if (response.data && response.data.isCookie) {
           setAccessToken(true);
