@@ -25,8 +25,10 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       .post('https://mind-lab-be-bffdf1dcb8ba.herokuapp.com/user/cookie', {}, { withCredentials: true })
       .then((response) => {
         if (response.data && response.data.isCookie) {
+          console.log('response.data가 있어 && response.data.isCookie가 있어')
           setAccessToken(true);
         } else {
+          console.log('response.data가 없어 && response.data.isCookie가 없어')
           setAccessToken(false);
         }
       })
