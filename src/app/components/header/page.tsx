@@ -3,38 +3,37 @@ import { useAuth } from '@/context/isLogined';
 import axios from 'axios';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function Header() {
 
   const { accessToken } = useAuth();
+  const [email, setEmail] = useState(null);
+  const [photo, setPhoto] = useState(null);
 
   const redirectAfterLogoutPath = () => {
     window.location.href = "https://mind-lab-be-bffdf1dcb8ba.herokuapp.com/user/logout";
   };
 
-  const yourGraphQLEndpoint = 'https://mind-lab-be-bffdf1dcb8ba.herokuapp.com/graphql';
-
-
-  const query = `
-    mutation {
-      getUserEmailPhotoByCookie {
-        email
-        photo
-      }
-    }
-  `;
-
-
   useEffect(() => {
-    axios.post(yourGraphQLEndpoint, { query }, {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then(response => console.log(response.data))
-      .catch(error => console.error('Error:', error));
+    axios
+      .post('https://mind-lab-be-bffdf1dcb8ba.herokuapp.com/user/getEmailAndPhoto', {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      })
+      .then((response) => {
+        if (response.data) {
+          setEmail(response.data.email);
+          setPhoto(response.data.photo)
+        } else {
+        }
+      })
+      .catch(() => {
+      });
   }, []);
+
   
   return (
     <header className=' fixed w-full h-[60px] shadow-md bg-white z-50'>
@@ -52,9 +51,9 @@ export default function Header() {
           accessToken &&
           <div className='flex items-center justify-center  h-[50px] m-[5px] p-[20px]'>
             <div className='w-[40px] h-[40px] overflow-hidden rounded-full shadow-md bg-slate-200'>
-              <Image src={'/photo.png'} alt='ProfileImage' width={40} height={40}></Image>
+              <Image src={ `${photo}`} alt='ProfileImage' width={40} height={40}></Image>
             </div>
-            <span className='font-bold ml-[20px]'>email@gmail.com</span>
+            <span className='font-bold ml-[20px]'>{ email }</span>
               <button
                 className='ml-[20px] p-[10px] rounded-md shadow-sm shadow-slate-400 hover:bg-slate-400 transition-all'
                 onClick={redirectAfterLogoutPath}
