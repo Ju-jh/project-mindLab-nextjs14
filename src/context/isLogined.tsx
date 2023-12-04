@@ -34,6 +34,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         withCredentials: true,
       })
       .then((response) => {
+        console.log(response.data, '여기가 프론트 response.data');
         if (response.data) {
           setAccessToken(true);
           setEmail(response.data.email)
