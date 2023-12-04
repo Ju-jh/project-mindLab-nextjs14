@@ -23,15 +23,14 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   const [accessToken, setAccessToken] = useState<boolean>(false);
   useEffect(() => {
     axios
-      .post('https://mind-lab-be-bffdf1dcb8ba.herokuapp.com/user/cookie', {
+      .post('https://mind-lab-be-bffdf1dcb8ba.herokuapp.com/user/cookie',{} , {
         headers: {
           "Content-Type": "application/json",
         },
         withCredentials: true,
       })
       .then((response) => {
-        if (response.data) {
-          console.log(response.data)
+        if (response.data && response.data.isCookie) {
           setAccessToken(true);
         } else {
           setAccessToken(false);
