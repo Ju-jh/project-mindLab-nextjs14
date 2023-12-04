@@ -30,12 +30,9 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         withCredentials: true,
       })
       .then((response) => {
-        console.log(response.data, 'response.data')
         if (response.data) {
-          console.log('response.data가 있어 && response.data.isCookie가 있어')
           setAccessToken(true);
         } else {
-          console.log('response.data가 없어 && response.data.isCookie가 없어')
           setAccessToken(false);
         }
       })

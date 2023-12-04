@@ -10,6 +10,7 @@ export default function Header() {
 
 
   const redirectAfterLogoutPath = () => {
+    accessToken === false;
     window.location.href = "https://mind-lab-be-bffdf1dcb8ba.herokuapp.com/user/logout";
   };
 
