@@ -29,7 +29,12 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     const requestOptions: RequestOptions = { withCredentials: true };
 
     axios
-      .post('https://mind-lab-be-bffdf1dcb8ba.herokuapp.com/user/cookie', {}, requestOptions)
+      .post('https://mind-lab-be-bffdf1dcb8ba.herokuapp.com/user/cookie', {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      })
       .then((response) => {
         if (response.data && response.data.isCookie) {
           console.log('response.data가 있어 && response.data.isCookie가 있어')
