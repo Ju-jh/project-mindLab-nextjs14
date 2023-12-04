@@ -31,6 +31,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       })
       .then((response) => {
         if (response.data) {
+          console.log(response.data)
           setAccessToken(true);
         } else {
           setAccessToken(false);
