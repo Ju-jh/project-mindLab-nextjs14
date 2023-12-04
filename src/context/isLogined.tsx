@@ -28,14 +28,11 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   useEffect(() => {
     axios
       .get('https://mind-lab-be-bffdf1dcb8ba.herokuapp.com/user/apikey', {
-        headers: {
-          "Content-Type": "application/json",
-        },
         withCredentials: true,
       })
       .then((response) => {
+        console.log(response.data, 'response.data')
         if (response.data) {
-          console.log(response.data, 'response.data')
           console.log('response.data가 있어 && response.data.isCookie가 있어')
           setAccessToken(true);
         } else {
