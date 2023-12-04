@@ -23,7 +23,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
 
   useEffect(() => {
     axios
-      .get('https://mind-lab-be-bffdf1dcb8ba.herokuapp.com/user/apikey', {
+      .post('https://mind-lab-be-bffdf1dcb8ba.herokuapp.com/user/cookie', {
         headers: {
           "Content-Type": "application/json",
         },
