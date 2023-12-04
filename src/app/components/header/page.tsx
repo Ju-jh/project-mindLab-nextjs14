@@ -3,6 +3,7 @@ import { useAuth } from '@/context/isLogined';
 import axios from 'axios';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useEffect } from 'react';
 
 export default function Header() {
 
@@ -24,13 +25,16 @@ export default function Header() {
     }
   `;
 
+
+  useEffect(() => {
     axios.post(yourGraphQLEndpoint, { query }, {
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  })
-  .then(response => console.log(response.data))
-  .catch(error => console.error('Error:', error));
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(response => console.log(response.data))
+      .catch(error => console.error('Error:', error));
+  }, []);
   
   return (
     <header className=' fixed w-full h-[60px] shadow-md bg-white z-50'>
