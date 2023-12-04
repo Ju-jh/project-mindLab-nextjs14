@@ -13,16 +13,33 @@ interface AuthContextProps {
   accessToken: boolean;
 }
 
+interface Headers {
+  'Content-Type': string;
+  'Cookie'?: string;
+}
+
+interface RequestOptions {
+  withCredentials: boolean;
+}
+
+
 const AuthContext = createContext<AuthContextProps | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
   const [accessToken, setAccessToken] = useState<boolean>(false);
+  const cookies = document.cookie;
+  const headers: Headers = { 'Content-Type': 'application/json' };
+  if (cookies) {
+    headers['Cookie'] = cookies;
+  }
 
   useEffect(() => {
+    const requestOptions: RequestOptions = { withCredentials: true };
+
     axios
-      .post('https://mind-lab-be-bffdf1dcb8ba.herokuapp.com/user/cookie', {}, { withCredentials: true })
+      .post('https://mind-lab-be-bffdf1dcb8ba.herokuapp.com/user/cookie', {}, requestOptions)
       .then((response) => {
         if (response.data && response.data.isCookie) {
           console.log('response.data가 있어 && response.data.isCookie가 있어')
