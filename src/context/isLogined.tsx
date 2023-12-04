@@ -13,11 +13,6 @@ interface AuthContextProps {
   accessToken: boolean;
 }
 
-interface Headers {
-  'Content-Type': string;
-  'Cookie'?: string;
-}
-
 interface RequestOptions {
   withCredentials: boolean;
 }
@@ -29,13 +24,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
   const [accessToken, setAccessToken] = useState<boolean>(false);
-  const cookies = document.cookie;
-  console.log(cookies, 'cookies frontendcontextpart')
-  const headers: Headers = { 'Content-Type': 'application/json' };
-  if (cookies) {
-    headers['Cookie'] = cookies;
-    console.log(cookies, 'cookies frontendcontextpart')
-  }
 
   useEffect(() => {
     const requestOptions: RequestOptions = { withCredentials: true };
