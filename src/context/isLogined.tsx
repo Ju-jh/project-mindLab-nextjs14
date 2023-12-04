@@ -13,10 +13,6 @@ interface AuthContextProps {
   accessToken: boolean;
 }
 
-interface RequestOptions {
-  withCredentials: boolean;
-}
-
 
 const AuthContext = createContext<AuthContextProps | undefined>(undefined);
 
@@ -28,6 +24,9 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   useEffect(() => {
     axios
       .get('https://mind-lab-be-bffdf1dcb8ba.herokuapp.com/user/apikey', {
+        headers: {
+          "Content-Type": "application/json",
+        },
         withCredentials: true,
       })
       .then((response) => {
