@@ -17,7 +17,7 @@ export default function Header() {
 
   useEffect(() => {
     axios
-      .post('https://mind-lab-be-bffdf1dcb8ba.herokuapp.com/user/getEmailAndPhoto', {
+      .post('https://mind-lab-be-bffdf1dcb8ba.herokuapp.com/user/getemailandphoto', {
         headers: {
           "Content-Type": "application/json",
         },
