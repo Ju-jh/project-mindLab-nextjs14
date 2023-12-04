@@ -1,5 +1,6 @@
 'use client'
 import { useAuth } from '@/context/isLogined';
+import axios from 'axios';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -11,6 +12,26 @@ export default function Header() {
     window.location.href = "https://mind-lab-be-bffdf1dcb8ba.herokuapp.com/user/logout";
   };
 
+  const yourGraphQLEndpoint = 'https://mind-lab-be-bffdf1dcb8ba.herokuapp.com/graphql';
+
+
+  const query = `
+    mutation {
+      getUserEmailPhotoByCookie {
+        email
+        photo
+      }
+    }
+  `;
+
+    axios.post(yourGraphQLEndpoint, { query }, {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+  .then(response => console.log(response.data))
+  .catch(error => console.error('Error:', error));
+  
   return (
     <header className=' fixed w-full h-[60px] shadow-md bg-white z-50'>
       <div className='h-full flex items-start justify-between px-[50px]'>
