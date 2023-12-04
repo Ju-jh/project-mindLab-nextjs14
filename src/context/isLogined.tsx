@@ -26,10 +26,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   const [accessToken, setAccessToken] = useState<boolean>(false);
 
   useEffect(() => {
-    const requestOptions: RequestOptions = { withCredentials: true };
-
     axios
-      .post('https://mind-lab-be-bffdf1dcb8ba.herokuapp.com/user/cookie', {
+      .get('https://mind-lab-be-bffdf1dcb8ba.herokuapp.com/user/apikey', {
         headers: {
           "Content-Type": "application/json",
         },
