@@ -28,7 +28,7 @@ export default function Header() {
           accessToken &&
           <div className='flex items-center justify-center  h-[50px] m-[5px] p-[20px]'>
             <div className='w-[40px] h-[40px] overflow-hidden rounded-full shadow-md bg-slate-200'>
-              <img className='w-[40px] h-[40px]' src='https://lh3.googleusercontent.com/a/ACg8ocLjTPYSblhcJKamDnTIw3ZXqvQtpEJAZdq7Rvz8MciQ5rk=s96-c' alt='ProfileImage'></img>
+              <img className='w-[40px] h-[40px]' src={ photo } alt='ProfileImage'></img>
             </div>
             <span className='font-bold ml-[20px]'>{ email }</span>
               <button
