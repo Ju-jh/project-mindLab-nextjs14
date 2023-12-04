@@ -30,9 +30,11 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
 }) => {
   const [accessToken, setAccessToken] = useState<boolean>(false);
   const cookies = document.cookie;
+  console.log(cookies, 'cookies frontendcontextpart')
   const headers: Headers = { 'Content-Type': 'application/json' };
   if (cookies) {
     headers['Cookie'] = cookies;
+    console.log(cookies, 'cookies frontendcontextpart')
   }
 
   useEffect(() => {
