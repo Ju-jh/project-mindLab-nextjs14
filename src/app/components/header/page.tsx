@@ -17,7 +17,7 @@ export default function Header() {
 
   useEffect(() => {
     axios
-      .get('https://mind-lab-be-bffdf1dcb8ba.herokuapp.com/user/getEmailAndPhoto', {
+      .post('https://mind-lab-be-bffdf1dcb8ba.herokuapp.com/user/getEmailAndPhoto', {
         headers: {
           "Content-Type": "application/json",
         },
@@ -33,6 +33,7 @@ export default function Header() {
         }
       })
       .catch(() => {
+        setPhoto(null)
       });
   }, []);
 
