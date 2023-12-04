@@ -24,6 +24,7 @@ export default function Header() {
         withCredentials: true,
       })
       .then((response) => {
+        console.log(response.data)
         if (response.data) {
           setEmail(response.data.email);
           setPhoto(response.data.photo)
