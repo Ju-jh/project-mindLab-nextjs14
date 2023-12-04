@@ -17,14 +17,15 @@ export default function Header() {
 
   useEffect(() => {
     axios
-      .get('https://mind-lab-be-bffdf1dcb8ba.herokuapp.com/user/getEmailAndPhoto', {
+      .post('https://mind-lab-be-bffdf1dcb8ba.herokuapp.com/user/getEmailAndPhoto', {
         headers: {
           "Content-Type": "application/json",
         },
         withCredentials: true,
       })
       .then((response) => {
-        console.log(response.data)
+        console.log(response, '여기가 response')
+        console.log(response.data, '여기가 response,data')
         if (response.data) {
           setEmail(response.data.email);
           setPhoto(response.data.photo)
