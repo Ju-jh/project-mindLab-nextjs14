@@ -11,6 +11,8 @@ import React, {
 
 interface AuthContextProps {
   accessToken: boolean;
+  email: string;
+  photo: string;
 }
 
 
@@ -20,6 +22,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
   const [accessToken, setAccessToken] = useState<boolean>(false);
+  const [email, setEmail] = useState('');
+  const [photo, setPhoto] = useState('/photo.png');
 
   useEffect(() => {
     axios
@@ -32,6 +36,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       .then((response) => {
         if (response.data) {
           setAccessToken(true);
+          setEmail(response.data.email)
+          setPhoto(response.data.photo)
         } else {
           setAccessToken(false);
         }
@@ -42,7 +48,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   }, []);
 
   return (
-    <AuthContext.Provider value={{ accessToken }}>
+    <AuthContext.Provider value={{ accessToken, email, photo }}>
       {children}
     </AuthContext.Provider>
   );
