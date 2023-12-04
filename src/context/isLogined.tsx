@@ -25,28 +25,28 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   const [email, setEmail] = useState('');
   const [photo, setPhoto] = useState('/photo.png');
 
-  useEffect(() => {
-    axios
-      .post('https://mind-lab-be-bffdf1dcb8ba.herokuapp.com/user/cookie', {
-        headers: {
-          "Content-Type": "application/json",
-        },
-        withCredentials: true,
-      })
-      .then((response) => {
-        console.log(response.data, '여기가 프론트 response.data');
-        if (response.data) {
-          setAccessToken(true);
-          setEmail(response.data.email)
-          setPhoto(response.data.photo)
-        } else {
-          setAccessToken(false);
-        }
-      })
-      .catch(() => {
-        setAccessToken(false);
-      });
-  }, []);
+  // useEffect(() => {
+  //   axios
+  //     .post('https://mind-lab-be-bffdf1dcb8ba.herokuapp.com/user/cookie', {
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       withCredentials: true,
+  //     })
+  //     .then((response) => {
+  //       console.log(response.data, '여기가 프론트 response.data');
+  //       if (response.data) {
+  //         setAccessToken(true);
+  //         setEmail(response.data.email)
+  //         setPhoto(response.data.photo)
+  //       } else {
+  //         setAccessToken(false);
+  //       }
+  //     })
+  //     .catch(() => {
+  //       setAccessToken(false);
+  //     });
+  // }, []);
 
   return (
     <AuthContext.Provider value={{ accessToken, email, photo }}>
