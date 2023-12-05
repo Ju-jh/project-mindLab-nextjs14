@@ -53,7 +53,7 @@ export default function Home() {
   };
 
   const deleteSurvey = async (surveyId: string) => {
-    const mutation = `
+    const query = `
       mutation DeleteSurvey($surveyId: String!) {
         deleteSurvey(surveyId: $surveyId) {
           s_id
@@ -67,7 +67,7 @@ export default function Home() {
     console.log(variables, 'deleteSurvey variables 변수')
 
     try {
-      const result = await deleteGraphQLQuery(mutation, { variables });
+      const result = await deleteGraphQLQuery(query, variables);
       const success = result.data?.deleteSurvey?.success;
 
       if (success) {
