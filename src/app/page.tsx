@@ -7,6 +7,7 @@ import { faX } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import { useAuth } from './context/isLogined';
 
 interface Survey {
   s_id: string;
@@ -14,6 +15,7 @@ interface Survey {
 }
 
 export default function Home() {
+  const { accessToken, email, photo } = useAuth();
 
   const [mySurveys, setMySurveys] = useState<Survey[]>([]);
 
@@ -85,7 +87,7 @@ export default function Home() {
         <span className='font-bold text-[22px]'>내가 만든 설문지</span>
       </div>
       <div className='cardsDiv flex items-start justify-start flex-wrap gap-[30px] w-full min-h-[300px] shadow-sm shadow-slate-400 rounded-md p-[30px] mt-[20px]'>
-        { mySurveys.map((survey) => (
+        { accessToken && mySurveys.map((survey) => (
           <div key={survey.s_id} className='w-[250px] h-[150px]'>
             <Link href={`/mysurvey/${survey.s_id}`}>
               <button
