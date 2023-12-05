@@ -1,6 +1,6 @@
 'use client'
 
-import { deleteGraphQLMutation } from '@/graphql/Delete/survey';
+import { deleteGraphQLQuery } from '@/graphql/Delete/survey';
 import { getGraphQLQuery } from '@/graphql/Get/query';
 import { sendGraphQLQuery } from '@/graphql/Post/mutation';
 import { faX } from '@fortawesome/free-solid-svg-icons';
@@ -64,7 +64,7 @@ export default function Home() {
     const variables = { surveyId };
 
     try {
-      const result = await deleteGraphQLMutation({ mutation, variables });
+      const result = await deleteGraphQLQuery(mutation, variables); 
       const success = result.data?.deleteSurvey?.success;
 
       if (success) {

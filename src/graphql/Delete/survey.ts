@@ -1,25 +1,20 @@
-interface GraphQLMutation {
-  mutation: string;
-  variables: Record<string, any>;
-}
-
-export async function deleteGraphQLMutation({ mutation, variables }: GraphQLMutation) {
+export async function deleteGraphQLQuery(query: any, variables: any) {
   const endpoint = 'https://mind-lab-be-bffdf1dcb8ba.herokuapp.com/graphql';
 
   try {
     const response = await fetch(endpoint, {
-      method: 'DELETE',
+      method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
+      body: JSON.stringify({ query, variables }), 
       credentials: 'include',
-      body: JSON.stringify({ query: mutation, variables }),
     });
 
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error('GraphQL DELETE mutation 실패:', error);
+    console.error('GraphQL 쿼리 실패:', error);
     throw error;
   }
 }
