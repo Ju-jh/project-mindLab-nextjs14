@@ -83,11 +83,16 @@ export default function Home() {
 
   return (
     <main className='main flex-col w-full min-h-[1400px] p-[30px] pt-[90px] text-center'>
-      <div className='my-[20px]'>
-        <span className='font-bold text-[22px]'>내가 만든 설문지</span>
-      </div>
+      {
+        accessToken &&
+        <div className='my-[20px]'>
+          <span className='font-bold text-[22px]'>내가 만든 설문지</span>
+        </div>
+      }
+      {
+        accessToken && 
       <div className='cardsDiv flex items-start justify-start flex-wrap gap-[30px] w-full min-h-[300px] shadow-sm shadow-slate-400 rounded-md p-[30px] mt-[20px]'>
-        { accessToken && mySurveys.map((survey) => (
+        { mySurveys.map((survey) => (
           <div key={survey.s_id} className='w-[250px] h-[150px]'>
             <Link href={`/mysurvey/${survey.s_id}`}>
               <button
@@ -109,6 +114,7 @@ export default function Home() {
           <span>+</span>
         </button>
       </div>
+      }
       <div className='my-[20px]'>
         <span className='font-bold text-[22px]'>참여하는 설문지</span>
       </div>
