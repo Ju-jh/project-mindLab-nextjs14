@@ -3,6 +3,7 @@
 import { faX } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 
 
 export async function sendGraphQLQuery(query: any, variables: any) {
@@ -32,8 +33,13 @@ interface HomeProps {
   }>;
 }
 
-export default function Home({ mySurveys }: HomeProps) {
-
+export default function Home() {
+  const [mySurveys, setMySurveys] = useState<Array<{
+    s_id: string;
+    title: string;
+  }>>([]);
+  
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   async function createSurvey() {
     const query = `
       mutation CreateSurvey {
@@ -50,6 +56,28 @@ export default function Home({ mySurveys }: HomeProps) {
       console.error('새 설문지 생성 실패:', error);
     }
   }
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const query = `
+          query GetMySurvey {
+            getMySurvey {
+              s_id
+              title
+            }
+          }
+        `;
+        const result = await sendGraphQLQuery(query, {});
+        setMySurveys(result.data.getMySurvey || []);
+      } catch (error) {
+        console.error('Error while getting my surveys:', error);
+      }
+    };
+
+    fetchData();
+    }, [createSurvey]); // 빈 배열은 컴포넌트가 처음 마운트될 때만 실행되도록 합니다.
+
 
   return (
     <main className='main flex-col w-full min-h-[1400px] p-[30px] pt-[90px] text-center'>
