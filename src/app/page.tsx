@@ -64,7 +64,7 @@ export default function Home() {
         { mySurveys.map((survey) => (
           <div key={survey.s_id} className='w-[250px] h-[150px]'>
             <button
-              onClick={() => Router.push(`/mysurvey/${survey.s_id}`)}
+              onClick={() => typeof window !== 'undefined' && Router.push(`/mysurvey/${survey.s_id}`)}
               className='buttonDiv flex flex-col items-center justify-center w-full h-full rounded-lg shadow-md shadow-slate-400 text-[16px] hover:text-[18px] hover:bg-slate-300 transition-all'
             >
               <span>{survey.title}</span>
