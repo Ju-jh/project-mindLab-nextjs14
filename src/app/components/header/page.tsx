@@ -1,5 +1,5 @@
 'use client'
-import { useAuth } from '@/context/isLogined';
+import { useAuth } from '@/app/context/isLogined';
 import Image from 'next/image';
 import Link from 'next/link';
 
