@@ -64,7 +64,7 @@ export default function Home() {
     const variables = { surveyId };
 
     try {
-      const result = await deleteGraphQLQuery(mutation, variables); 
+      const result = await deleteGraphQLQuery(mutation, { variables });
       const success = result.data?.deleteSurvey?.success;
 
       if (success) {
@@ -77,6 +77,7 @@ export default function Home() {
       console.error('설문지 삭제 중 오류 발생:', error);
     }
   };
+
 
 
   useEffect(() => {
