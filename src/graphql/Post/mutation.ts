@@ -6,6 +6,7 @@ export async function sendGraphQLQuery(query: any, variables: any) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'credentials': 'include',
       },
       body: JSON.stringify({ query, variables }),
     });
