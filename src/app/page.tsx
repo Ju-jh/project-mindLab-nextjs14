@@ -13,27 +13,6 @@ interface Survey {
   title: string;
 }
 
-export async function generateStaticParams() {
-  const query = `
-    query GetMySurvey {
-      getMySurvey {
-        s_id
-      }
-    }
-  `;
-  try {
-    const result = await getGraphQLQuery({ query });
-    const surveys = result.data.getMySurvey || [];
-    const paths = surveys.map((survey: { s_id: string; }) => ({
-      params: { id: survey.s_id },
-    }));
-    return paths;
-  } catch (error) {
-    console.error('나의 설문지 라우팅 실패:', error);
-    return [];
-  }
-}
-
 export default function Home() {
 
   const [mySurveys, setMySurveys] = useState<Survey[]>([]);
@@ -100,7 +79,7 @@ export default function Home() {
 
   useEffect(() => {
     fetchData();
-  },[generateStaticParams])
+  },[])
 
   return (
     <main className='main flex-col w-full min-h-[1400px] p-[30px] pt-[90px] text-center'>
