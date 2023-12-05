@@ -1,7 +1,10 @@
 'use client'
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 
-export default function Home() {
+export default function MySurvey() {
+  const router = useRouter();
+  const { id } = router.query;
 
   const [isChecked, setChecked] = useState(false);
 
@@ -13,7 +16,7 @@ export default function Home() {
     <main className='flex-col w-full h-full p-[30px] pt-[60px]'>
       <section className='titleSection w-full h-[200px]  flex items-center justify-center '>
         <div className='titleDiv w-[500px]  flex-col items-center justify-center'>
-          <input type="text" placeholder='설문지 제목을 적어주세요.' className='text-center text-[30px] w-full font-bold'/>
+          <input type="text" placeholder={`${ id }설문지 제목을 적어주세요.`} className='text-center text-[30px] w-full font-bold'/>
           { false ? <h1 className='text-center text-[30px] font-bold'>휴가 때 가고싶은 해외여행</h1> : null}
         </div>
       </section>
