@@ -3,9 +3,9 @@
 import { faX } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Link from 'next/link';
-import { Key, ReactElement, JSXElementConstructor, ReactNode, ReactPortal, PromiseLikeOfReactNode } from 'react';
 
-async function sendGraphQLQuery(query: any, variables: any) {
+
+export async function sendGraphQLQuery(query: any, variables: any) {
   const endpoint = 'https://mind-lab-be-bffdf1dcb8ba.herokuapp.com/graphql';
 
   try {
@@ -22,26 +22,6 @@ async function sendGraphQLQuery(query: any, variables: any) {
   } catch (error) {
     console.error('GraphQL query failed:', error);
     throw error;
-  }
-}
-
-export async function getServerSideProps() {
-  const query = `
-    query GetMySurvey {
-      getMySurvey {
-        s_id
-        title
-      }
-    }
-  `;
-
-  try {
-    const result = await sendGraphQLQuery(query, {});
-    const mySurveys = result.data.getMySurvey || [];
-    return { props: { mySurveys } };
-  } catch (error) {
-    console.error('Error while getting my surveys:', error);
-    return { props: { mySurveys: [] } };
   }
 }
 
