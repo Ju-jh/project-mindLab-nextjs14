@@ -8,7 +8,7 @@ export async function deleteGraphQLMutation({ mutation, variables }: GraphQLMuta
 
   try {
     const response = await fetch(endpoint, {
-      method: 'POST',
+      method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
       },
