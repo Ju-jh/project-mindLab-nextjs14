@@ -1,5 +1,6 @@
 'use client'
 
+import { deleteGraphQLMutation } from '@/graphql/Delete/survey';
 import { getGraphQLQuery } from '@/graphql/Get/query';
 import { sendGraphQLQuery } from '@/graphql/Post/mutation';
 import { faX } from '@fortawesome/free-solid-svg-icons';
@@ -51,6 +52,33 @@ export default function Home() {
     }
   };
 
+  const deleteSurvey = async (surveyId: string) => {
+    const mutation = `
+      mutation DeleteSurvey($surveyId: String!) {
+        deleteSurvey(surveyId: $surveyId) {
+          success
+        }
+      }
+    `;
+
+    const variables = { surveyId };
+
+    try {
+      const result = await deleteGraphQLMutation({ mutation, variables });
+      const success = result.data?.deleteSurvey?.success;
+
+      if (success) {
+        console.log(`설문지 ${surveyId}가 삭제되었습니다.`);
+        fetchData();
+      } else {
+        console.error(`설문지 ${surveyId} 삭제 실패.`);
+      }
+    } catch (error) {
+      console.error('설문지 삭제 중 오류 발생:', error);
+    }
+  };
+
+
   useEffect(() => {
     fetchData();
   },[])
@@ -70,7 +98,9 @@ export default function Home() {
                 <span>{survey.title}</span>
               </button>
             </Link>
-            <button className='absolute flex flex-col items-center justify-center translate-x-[235px] translate-y-[-160px]  w-[30px] h-[30px] rounded-full bg-green-300 hover:bg-green-500'>
+            <button
+              onClick={() => deleteSurvey(survey.s_id)}
+              className='absolute flex flex-col items-center justify-center translate-x-[235px] translate-y-[-160px]  w-[30px] h-[30px] rounded-full bg-green-300 hover:bg-green-500'>
               <FontAwesomeIcon icon={faX} className='w-[40%]'/>
             </button>
           </div>
