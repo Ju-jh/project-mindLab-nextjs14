@@ -26,7 +26,7 @@ export default function Home() {
         }
       `;
       try {
-        const result = await getGraphQLQuery(query, {});
+        const result = await getGraphQLQuery({ query });
         const mySurveysData = result.data.getMySurvey || [];
         setMySurveys(mySurveysData);
       } catch (error) {
