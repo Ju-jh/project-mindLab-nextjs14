@@ -1,20 +1,47 @@
-import { gql, useMutation } from '@apollo/client';
+'use client'
+
 import { faX } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
 
-const CREATE_SURVEY = gql`
-  mutation CreateSurvey($input: SurveyInput!) {
-    createSurvey(input: $input)
+async function sendGraphQLQuery(query: any, variables: any) {
+  const endpoint = 'https://mind-lab-be-bffdf1dcb8ba.herokuapp.com/graphql';
+
+  try {
+    const response = await fetch(endpoint, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ query, variables }),
+    });
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('GraphQL query failed:', error);
+    throw error;
   }
-`;
+}
+
 
 export default function Home() {
-  const router = useRouter();
 
+  async function createSurvey() {
+    const query = `
+      mutation CreateSurvey {
+        createSurvey {
+        }
+      }
+    `;
+    try {
+      const result = await sendGraphQLQuery(query, {});
 
-    const [createSurvey] = useMutation(CREATE_SURVEY);
+      console.log('새 설문지가 생성되었습니다:', result.data.createSurvey);
+    } catch (error) {
+      console.error('새 설문지 생성 실패:', error);
+    }
+  }
 
   return (
     <main className='main flex-col w-full min-h-[1400px] p-[30px] pt-[90px] text-center'>
@@ -35,19 +62,7 @@ export default function Home() {
           </button>
         </div>
         <button
-          onClick={async () => {
-            try {
-              const { data } = await createSurvey({
-                variables: {
-                  input: {
-                  },
-                },
-              });
-              router.push(`/survey/${data.createSurvey}`);
-            } catch (error) {
-              console.error('설문 생성 중 오류:', error);
-            }
-          }}
+          onClick={createSurvey}
           className='newCardDiv flex flex-col items-center justify-center w-[250px] h-[150px] rounded-lg shadow-md shadow-slate-400 text-[55px] hover:text-[70px] hover:bg-slate-300 transition-all'>
           <span>+</span>
         </button>
