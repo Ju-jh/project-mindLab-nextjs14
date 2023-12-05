@@ -63,6 +63,9 @@ export default function Home() {
 
     const variables = { surveyId };
 
+    console.log(surveyId, 'deleteSurvey parameter 변수')
+    console.log(variables, 'deleteSurvey variables 변수')
+
     try {
       const result = await deleteGraphQLQuery(mutation, { variables });
       const success = result.data?.deleteSurvey?.success;
