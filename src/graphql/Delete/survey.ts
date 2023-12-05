@@ -1,4 +1,4 @@
-export async function deleteGraphQLQuery(query: any, variables: any) {
+export async function deleteGraphQLQuery(mutation: any, variables: any) {
   const endpoint = 'https://mind-lab-be-bffdf1dcb8ba.herokuapp.com/graphql';
 
   try {
@@ -7,7 +7,7 @@ export async function deleteGraphQLQuery(query: any, variables: any) {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ query, variables }), 
+      body: JSON.stringify({ query: mutation, variables }),
       credentials: 'include',
     });
 
