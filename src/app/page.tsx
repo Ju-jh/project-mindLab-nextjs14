@@ -53,7 +53,7 @@ export default function Home() {
 
   useEffect(() => {
     fetchData();
-  })
+  },[createSurvey])
 
   return (
     <main className='main flex-col w-full min-h-[1400px] p-[30px] pt-[90px] text-center'>
