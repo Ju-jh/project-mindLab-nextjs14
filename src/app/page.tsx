@@ -6,6 +6,7 @@ import { sendGraphQLQuery } from '@/graphql/Post/mutation';
 import { faX } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
 interface Survey {
@@ -31,7 +32,7 @@ export default function Home() {
         const mySurveysData = result.data.getMySurvey || [];
         setMySurveys(mySurveysData);
       } catch (error) {
-        console.error('Error while getting my surveys:', error);
+        console.error('나의 설문지 가져오기 실패:', error);
       }
     };
 
@@ -45,8 +46,9 @@ export default function Home() {
     `;
     try {
       const result = await sendGraphQLQuery(query, {});
-      console.log('새 설문지가 생성되었습니다:', result.data.createSurvey);
-      fetchData();
+      if (result.data.createSurvey) {
+        fetchData();
+      }
     } catch (error) {
       console.error('새 설문지 생성 실패:', error);
     }
@@ -65,9 +67,7 @@ export default function Home() {
 
     try {
       const result = await deleteGraphQLQuery(query, variables);
-
-      if (result) {
-        console.log(`설문지 ${surveyId}가 삭제되었습니다.`);
+      if (result.data.deleteSurvey) {
         fetchData();
       }
       

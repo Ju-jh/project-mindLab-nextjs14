@@ -17,9 +17,7 @@ export default function Home() {
   };
 
   const handleSubmission = () => {
-    // 여기서 selectedButtons 배열을 사용하여 제출 로직을 수행할 수 있습니다.
     console.log('선택된 버튼:', selectedButtons);
-    // 여기에서 제출 로직을 수행합니다.
   };
 
   return (
