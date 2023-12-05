@@ -1,8 +1,8 @@
 'use client'
 
-import { deleteGraphQLQuery } from '@/graphql/Delete/survey';
-import { getGraphQLQuery } from '@/graphql/Get/query';
-import { sendGraphQLQuery } from '@/graphql/Post/mutation';
+import { sendGraphQLQuery } from '@/graphql/Survey/createMySurvey';
+import { deleteGraphQLQuery } from '@/graphql/Survey/deleteSurvey';
+import { getGraphQLQuery } from '@/graphql/Survey/getMySurvey';
 import { faX } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Link from 'next/link';
@@ -74,8 +74,6 @@ export default function Home() {
         console.error(`설문지 ${surveyId} 삭제 실패.`);
     }
   };
-
-
 
   useEffect(() => {
     fetchData();
