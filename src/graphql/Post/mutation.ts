@@ -2,11 +2,12 @@ export async function sendGraphQLQuery(query: any, variables: any) {
   const endpoint = 'https://mind-lab-be-bffdf1dcb8ba.herokuapp.com/graphql';
 
   try {
+    const cookieHeader = document.cookie;
     const response = await fetch(endpoint, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'credentials': 'include',
+        'credentials': cookieHeader,
       },
       body: JSON.stringify({ query, variables }),
     });
