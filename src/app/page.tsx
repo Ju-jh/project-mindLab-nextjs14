@@ -31,6 +31,7 @@ export default function Home() {
     const query = `
       mutation CreateSurvey {
         createSurvey {
+          s_id
         }
       }
     `;
