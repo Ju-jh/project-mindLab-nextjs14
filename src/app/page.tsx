@@ -65,14 +65,12 @@ export default function Home() {
       <div className='cardsDiv flex items-start justify-start flex-wrap gap-[30px] w-full h-[300px] shadow-sm shadow-slate-400 rounded-md p-[30px] mt-[20px]'>
         { mySurveys.map((survey) => (
           <div key={survey.s_id} className='w-[250px] h-[150px]'>
-            <Link href={`/mysurvey/${survey.s_id}`}>
-              <button
-                onClick={() => router.push(`/mysurvey/${survey.s_id}`)}
-                className='buttonDiv flex flex-col items-center justify-center w-full h-full rounded-lg shadow-md shadow-slate-400 text-[16px] hover:text-[18px] hover:bg-slate-300 transition-all'
-              >
-                <span>{survey.title}</span>
-              </button>
-            </Link>
+            <button
+              onClick={() => router.push(`/mysurvey/${survey.s_id}`)}
+              className='buttonDiv flex flex-col items-center justify-center w-full h-full rounded-lg shadow-md shadow-slate-400 text-[16px] hover:text-[18px] hover:bg-slate-300 transition-all'
+            >
+              <span>{survey.title}</span>
+            </button>
             <button className='absolute flex flex-col items-center justify-center translate-x-[235px] translate-y-[-160px]  w-[30px] h-[30px] rounded-full bg-green-300 hover:bg-green-500'>
               <FontAwesomeIcon icon={faX} className='w-[40%]'/>
             </button>
