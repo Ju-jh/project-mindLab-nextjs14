@@ -1,58 +1,39 @@
 'use client'
 
+import { sendGraphQLQuery } from '@/graphql/Post/mutation';
 import { faX } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+// import { useEffect, useState } from 'react';
 
 
-async function sendGraphQLQuery(query: any, variables: any) {
-  const endpoint = 'https://mind-lab-be-bffdf1dcb8ba.herokuapp.com/graphql';
 
-  try {
-    const response = await fetch(endpoint, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ query, variables }),
-    });
 
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error('GraphQL query failed:', error);
-    throw error;
-  }
-}
+// async function getGraphQLQuery(query: any) {
+//   const endpoint = 'https://mind-lab-be-bffdf1dcb8ba.herokuapp.com/graphql';
 
-async function getGraphQLQuery(query: any) {
-  const endpoint = 'https://mind-lab-be-bffdf1dcb8ba.herokuapp.com/graphql';
+//   try {
+//     const response = await fetch(endpoint, {
+//       method: 'GET',
+//       headers: {
+//         'Content-Type': 'application/json',
+//       },
+//     });
 
-  try {
-    const response = await fetch(endpoint, {
-      method: 'GET', // GraphQL을 GET 요청으로 사용하려면 서버에서 지원되어야 합니다.
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      // 여기서는 GET 요청이므로 body에 데이터를 보내지 않습니다.
-    });
-
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error('GraphQL query failed:', error);
-    throw error;
-  }
-}
+//     const data = await response.json();
+//     return data;
+//   } catch (error) {
+//     console.error('GraphQL query failed:', error);
+//     throw error;
+//   }
+// }
 
 export default function Home() {
-  const [mySurveys, setMySurveys] = useState<Array<{
-    s_id: string;
-    title: string;
-  }>>([]);
+  // const [mySurveys, setMySurveys] = useState<Array<{
+  //   s_id: string;
+  //   title: string;
+  // }>>([]);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   async function createSurvey() {
     const query = `
       mutation CreateSurvey {
@@ -70,28 +51,36 @@ export default function Home() {
     }
   }
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const query = `
-          query GetMySurvey {
-            getMySurvey {
-              s_id
-              title
-            }
-          }
-        `;
-        const result = await getGraphQLQuery(query);
-        setMySurveys(result.data.getMySurvey || []);
-      } catch (error) {
-        console.error('Error while getting my surveys:', error);
-      }
-    };
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const query = `
+  //         query GetMySurvey {
+  //           getMySurvey {
+  //             s_id
+  //             title
+  //           }
+  //         }
+  //       `;
+  //       const result = await getGraphQLQuery(query);
+  //       setMySurveys(result.data.getMySurvey || []);
+  //     } catch (error) {
+  //       console.error('Error while getting my surveys:', error);
+  //     }
+  //   };
 
-    fetchData();
-    }, [createSurvey]); // 빈 배열은 컴포넌트가 처음 마운트될 때만 실행되도록 합니다.
+  //   fetchData();
+  //   }, [createSurvey]); 
 
-
+  const mySurveys = [{
+        "s_id": "0c453259-64b9-47ff-918d-4c057369cdf4",
+        "title": ""
+      },
+      {
+        "s_id": "f704fe26-dd9e-4616-9363-11b09ad145af",
+        "title": ""
+    }]
+  
   return (
     <main className='main flex-col w-full min-h-[1400px] p-[30px] pt-[90px] text-center'>
       <div className='my-[20px]'>
