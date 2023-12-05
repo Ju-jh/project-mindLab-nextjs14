@@ -57,6 +57,7 @@ export default function Home() {
       mutation DeleteSurvey($surveyId: String!) {
         deleteSurvey(surveyId: $surveyId) {
           s_id
+          success
         }
       }
     `;
