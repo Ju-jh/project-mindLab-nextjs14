@@ -1,15 +1,11 @@
-'use client'
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+
+
+
 
 export default function MySurvey() {
   const router = useRouter();
 
-  const [isChecked, setChecked] = useState(false);
-
-  const handleCheckboxChange = () => {
-    setChecked(!isChecked);
-  };
 
   return (
     <main className='flex-col w-full h-full p-[30px] pt-[60px]'>
