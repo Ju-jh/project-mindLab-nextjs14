@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
 
-export async function sendGraphQLQuery(query: any, variables: any) {
+async function sendGraphQLQuery(query: any, variables: any) {
   const endpoint = 'https://mind-lab-be-bffdf1dcb8ba.herokuapp.com/graphql';
 
   try {
@@ -26,11 +26,24 @@ export async function sendGraphQLQuery(query: any, variables: any) {
   }
 }
 
-interface HomeProps {
-  mySurveys: Array<{
-    s_id: string;
-    title: string;
-  }>;
+async function getGraphQLQuery(query: any) {
+  const endpoint = 'https://mind-lab-be-bffdf1dcb8ba.herokuapp.com/graphql';
+
+  try {
+    const response = await fetch(endpoint, {
+      method: 'GET', // GraphQL을 GET 요청으로 사용하려면 서버에서 지원되어야 합니다.
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      // 여기서는 GET 요청이므로 body에 데이터를 보내지 않습니다.
+    });
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('GraphQL query failed:', error);
+    throw error;
+  }
 }
 
 export default function Home() {
@@ -38,7 +51,7 @@ export default function Home() {
     s_id: string;
     title: string;
   }>>([]);
-  
+
   // eslint-disable-next-line react-hooks/exhaustive-deps
   async function createSurvey() {
     const query = `
@@ -68,7 +81,7 @@ export default function Home() {
             }
           }
         `;
-        const result = await sendGraphQLQuery(query, {});
+        const result = await getGraphQLQuery(query);
         setMySurveys(result.data.getMySurvey || []);
       } catch (error) {
         console.error('Error while getting my surveys:', error);
