@@ -6,7 +6,6 @@ import { sendGraphQLQuery } from '@/graphql/Post/mutation';
 import { faX } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
 interface Survey {
