@@ -57,28 +57,22 @@ export default function Home() {
       mutation DeleteSurvey($surveyId: String!) {
         deleteSurvey(surveyId: $surveyId) {
           s_id
-          success
         }
       }
     `;
 
     const variables = { surveyId };
 
-    console.log(surveyId, 'deleteSurvey parameter 변수')
-    console.log(variables, 'deleteSurvey variables 변수')
-
     try {
       const result = await deleteGraphQLQuery(query, variables);
-      const success = result.data?.deleteSurvey?.success;
 
-      if (success) {
+      if (result) {
         console.log(`설문지 ${surveyId}가 삭제되었습니다.`);
         fetchData();
-      } else {
-        console.error(`설문지 ${surveyId} 삭제 실패.`);
       }
+      
     } catch (error) {
-      console.error('설문지 삭제 중 오류 발생:', error);
+        console.error(`설문지 ${surveyId} 삭제 실패.`);
     }
   };
 
