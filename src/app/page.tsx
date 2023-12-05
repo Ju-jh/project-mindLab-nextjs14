@@ -32,7 +32,7 @@ interface HomeProps {
   }>;
 }
 
-export default function Home({ mySurveys }:HomeProps) {
+export default function Home({ mySurveys }: HomeProps) {
 
   async function createSurvey() {
     const query = `
@@ -57,7 +57,7 @@ export default function Home({ mySurveys }:HomeProps) {
         <span className='font-bold text-[22px]'>내가 만든 설문지</span>
       </div>
       <div className='cardsDiv flex items-start justify-start flex-wrap gap-[30px] w-full h-[300px] shadow-sm shadow-slate-400 rounded-md p-[30px] mt-[20px]'>
-        {mySurveys.map((survey) => (
+        { mySurveys ? mySurveys.map((survey) => (
           <div key={survey.s_id} className='w-[250px] h-[150px]'>
             <Link href={`/mysurvey/${survey.s_id}`}>
               <button
@@ -70,7 +70,7 @@ export default function Home({ mySurveys }:HomeProps) {
               <FontAwesomeIcon icon={faX} className='w-[40%]'/>
             </button>
           </div>
-        ))}
+        )):null}
         <button
           onClick={createSurvey}
           className='newCardDiv flex flex-col items-center justify-center w-[250px] h-[150px] rounded-lg shadow-md shadow-slate-400 text-[55px] hover:text-[70px] hover:bg-slate-300 transition-all'>
