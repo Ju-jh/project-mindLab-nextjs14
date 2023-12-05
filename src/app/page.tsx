@@ -56,7 +56,7 @@ export default function Home() {
     const mutation = `
       mutation DeleteSurvey($surveyId: String!) {
         deleteSurvey(surveyId: $surveyId) {
-          success
+          s_id
         }
       }
     `;
