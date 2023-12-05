@@ -66,7 +66,7 @@ export default function Home() {
 
     try {
       const result = await deleteGraphQLQuery(query, variables);
-      if (result.data.deleteSurvey) {
+      if (result) {
         fetchData();
       }
       
