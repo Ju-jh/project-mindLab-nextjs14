@@ -5,6 +5,7 @@ import { sendGraphQLQuery } from '@/graphql/Post/mutation';
 import { faX } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Link from 'next/link';
+import Router, { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
 interface Survey {
@@ -13,6 +14,7 @@ interface Survey {
 }
 
 export default function Home() {
+  const router = useRouter();
 
   const [mySurveys, setMySurveys] = useState<Survey[]>([]);
 
@@ -65,6 +67,7 @@ export default function Home() {
           <div key={survey.s_id} className='w-[250px] h-[150px]'>
             <Link href={`/mysurvey/${survey.s_id}`}>
               <button
+                onClick={() => router.push(`/mysurvey/${survey.s_id}`)}
                 className='buttonDiv flex flex-col items-center justify-center w-full h-full rounded-lg shadow-md shadow-slate-400 text-[16px] hover:text-[18px] hover:bg-slate-300 transition-all'
               >
                 <span>{survey.title}</span>
