@@ -96,8 +96,8 @@ export default function Home({ params }: {
 
   const getQuestions = async (surveyId: string) => {
     const query = `
-      query GetQuestions($surveyId: String!) {
-        getQuestions(surveyId: $surveyId) {
+      query GetAllQuestions($surveyId: String!) {
+        getAllQuestions(surveyId: $surveyId) {
           q_id
           text
         }
@@ -112,8 +112,10 @@ export default function Home({ params }: {
       const result = await sendGraphQLQuery(query, variables);
       const questions = result.data.getQuestions;
 
+      // Assuming you have a function to map GraphQL response to the required format
       const mappedQuestions = mapQuestionsToProblems(questions);
 
+      // Assuming you have a state setter function to set the problems array
       setProblems(await mappedQuestions);
     } catch (error) {
       console.error('Failed to fetch questions:', error);
