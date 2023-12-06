@@ -134,7 +134,7 @@ export default function Home({ params }: {
         <div className='titleDiv w-[500px]  flex items-center justify-center'>
           <input
             type="text"
-            placeholder={`설문지 제목을 입력해주세요.`}
+            placeholder={`${surveyTitle}`}
             className='text-center text-[30px] w-full font-bold'
             value={surveyTitle}
             onChange={(e) => setSurveyTitle(e.target.value)}
