@@ -19,7 +19,7 @@ export default function Home() {
 
   const [mySurveys, setMySurveys] = useState<Survey[]>([]);
 
-  const fetchData = async () => {
+  const getMySurvey = async () => {
       const query = `
         query GetMySurvey {
           getMySurvey {
@@ -35,7 +35,7 @@ export default function Home() {
       } catch (error) {
         console.error('나의 설문지 가져오기 실패:', error);
       }
-    };
+  };
 
   const createSurvey = async () => {
     const query = `
@@ -48,7 +48,7 @@ export default function Home() {
     try {
       const result = await sendGraphQLQuery(query, {});
       if (result.data.createSurvey) {
-        fetchData();
+        getMySurvey();
       }
     } catch (error) {
       console.error('새 설문지 생성 실패:', error);
@@ -69,7 +69,7 @@ export default function Home() {
     try {
       const result = await deleteGraphQLQuery(query, variables);
       if (result) {
-        fetchData();
+        getMySurvey();
       }
       
     } catch (error) {
@@ -78,7 +78,7 @@ export default function Home() {
   };
 
   useEffect(() => {
-    fetchData();
+    getMySurvey();
   },[])
 
   return (

@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 
-export default function Home() {
+export default function PushedSurvey() {
   const [isChecked, setChecked] = useState(false);
   const [selectedButtons, setSelectedButtons] = useState<number[]>([]);
 
