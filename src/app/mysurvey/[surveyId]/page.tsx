@@ -202,7 +202,7 @@ export default function Home({ params }: {
             onChange={(e) => setSurveyDescription(e.target.value)}
           />
           <button
-            className='w-[80px] h-full p-[5px] rounded-md shadow-md bg-slate-200 hover:bg-blue-400'
+            className='w-[120px] h-full p-[5px] rounded-md shadow-md bg-slate-200 hover:bg-blue-400'
             onClick={() => PushSurveyDescription(surveyId, surveyDescription)}
           >
             설명 저장
