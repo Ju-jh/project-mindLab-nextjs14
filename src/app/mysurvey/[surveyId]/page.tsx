@@ -144,7 +144,6 @@ export default function Home({ params }: {
     const mutation = `
       mutation DeleteQuestion($surveyId: String!, $questionId: String!) {
         deleteQuestion(surveyId: $surveyId, questionId: $questionId) {
-          q_id
         }
       }
     `;
