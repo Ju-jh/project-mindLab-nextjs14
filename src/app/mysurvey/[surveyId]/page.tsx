@@ -1,6 +1,7 @@
 'use client'
 
 import { sendGraphQLQuery } from '@/graphql/Problem/createProblem';
+import { mapQuestionsToProblems } from '@/graphql/Problem/getProblems';
 import { getGraphQLQuery } from '@/graphql/Survey/getMySurvey';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -90,6 +91,38 @@ export default function Home({ params }: {
       }
     } catch (error) {
       console.error('Question creation failed:', error);
+    }
+  };
+
+  const getQuestions = async (surveyId: string) => {
+    const query = `
+      query GetQuestions($surveyId: String!) {
+        getQuestions(surveyId: $surveyId) {
+          q_id
+          text
+          options {
+            o_id
+            text
+          }
+        }
+      }
+    `;
+
+    const variables = {
+      surveyId: surveyId,
+    };
+
+    try {
+      const result = await sendGraphQLQuery(query, variables);
+      const questions = result.data.getQuestions;
+
+      // Assuming you have a function to map GraphQL response to the required format
+      const mappedQuestions = mapQuestionsToProblems(questions);
+
+      // Assuming you have a state setter function to set the problems array
+      setProblems(await mappedQuestions);
+    } catch (error) {
+      console.error('Failed to fetch questions:', error);
     }
   };
 
