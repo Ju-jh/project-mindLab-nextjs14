@@ -295,16 +295,16 @@ export default function Home({ params }: {
                 />
                 <button>문제 제목 저장</button>
                 <div className='flex mt-[20px]'>
-                  {Question.options.map((option, optionIndex) => (
+                    {Question.options && Question.options.map((option, optionIndex) => (
                     <div
                       key={option.o_id}
                       className='mr-[30px] px-[20px] py-[10px] shadow-sm shadow-slate-400 rounded-sm transition-all flex items-center'
                     >
                       <div className='bg-slate-300 flex items-center justify-center w-[23px] h-[23px] rounded-full mr-[10px]'>
-                        <span>{option.o_id}</span>
+                        <span>{option.text}</span>
                       </div>
-                      <input type='text' placeholder='문항을 입력하세요.' className='bg-transparent' />
-                      <input type='number' placeholder='점수를 입력하세요.' className='bg-transparent' />
+                      <input type='text' placeholder='문항을 입력하세요.' className='bg-transparent' / >
+                      <input type='number' placeholder='점수를 입력하세요.' className='bg-transparent' / >
                       <button
                         className='w-[50px] text-[20px] h-full rounded-sm shadow-sm hover:bg-red-600 hover:text-white'
                         // onClick={() => removeOption(QuestionIndex, optionIndex)}
