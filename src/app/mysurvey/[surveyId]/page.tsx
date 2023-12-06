@@ -305,7 +305,7 @@ export default function Home({ params }: {
                       </div>
                       <div className='flex flex-col items-center justify-between'>
                         <input type='text' placeholder={`${option.text}`} className='bg-transparent' />
-                        <input type='number' placeholder={`${option.score}`} className='bg-transparent' />
+                        <input type='number' placeholder='점수를 입력하세요.' className='bg-transparent text-end' />
                       </div>
                       <button
                         className='w-[40px] text-[20px] h-full rounded-sm shadow-sm hover:bg-blue-600 hover:text-white'
