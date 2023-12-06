@@ -54,6 +54,8 @@ export default function Home({ params }: {
     `
     try {
       const result = await getSurveyDataGraphQLQuery(query, surveyId);
+      setSurveyTitle(result.title)
+      setSurveyDescription(result.description)
       setSurveyDATA(result)
       console.log(result)
     } catch (error) {
