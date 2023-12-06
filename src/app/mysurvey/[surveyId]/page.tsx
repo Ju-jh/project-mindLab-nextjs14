@@ -144,6 +144,7 @@ export default function Home({ params }: {
     const mutation = `
       mutation DeleteQuestion($surveyId: String!, $questionId: String!) {
         deleteQuestion(surveyId: $surveyId, questionId: $questionId) {
+          q_id
         }
       }
     `;
@@ -157,6 +158,7 @@ export default function Home({ params }: {
     try {
       console.log(questionId, surveyId, '여기여기')
       const result = await deleteGraphQLQuery(mutation, variables);
+      console.log(result)
     } catch (error) {
       console.log(questionId, surveyId, '여기여기')
       console.error('Failed to delete questions:', error);
