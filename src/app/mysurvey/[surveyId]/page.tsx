@@ -117,10 +117,19 @@ export default function Home({ params }: {
     const variables = {
       surveyId: surveyId,
     };
-    getQuestions(surveyId);
+
     try {
       const result = await sendGraphQLQuery(mutation, variables);
       if (result.data.createQuestion) {
+        setQuestions((prevQuestions) => [
+          ...prevQuestions,
+          {
+            q_id: result.data.createQuestion.q_id,
+            text: '',
+            survey: { s_id: surveyId, title: '', description: '', user: '' },
+            options: [],
+          },
+        ]);
       }
     } catch (error) {
       console.error('Question creation failed:', error);
