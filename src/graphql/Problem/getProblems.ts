@@ -7,7 +7,7 @@ export async function mapQuestionsToProblems(query: any, variables: any) {
 
   try {
     const response = await fetch(`${endpoint}?query=${encodeURIComponent(query)}`, {
-      method: 'GET',
+      method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
