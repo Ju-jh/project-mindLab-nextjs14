@@ -5,7 +5,7 @@ import { mapQuestionsToProblems } from '@/graphql/Problem/getProblems';
 import { getGraphQLQuery } from '@/graphql/Survey/getMySurvey';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 interface Survey {
   s_id: string;
@@ -84,7 +84,7 @@ export default function Home({ params }: {
     const variables = {
       surveyId: surveyId,
     };
-
+    getQuestions(surveyId);
     try {
       const result = await sendGraphQLQuery(mutation, variables);
       if (result.data.createQuestion) {
@@ -126,6 +126,10 @@ export default function Home({ params }: {
     }
   };
 
+
+  useEffect(() => {
+    getQuestions(surveyId)
+  })
 
   return (
     <main className='flex-col w-full h-full p-[30px] pt-[60px]'>
