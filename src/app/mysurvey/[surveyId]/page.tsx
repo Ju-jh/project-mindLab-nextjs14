@@ -294,7 +294,7 @@ export default function Home({ params }: {
                   className='ml-[10px] pl-[10px] w-[500px]'
                 />
                 <button>문제 제목 저장</button>
-                <div className='flex mt-[20px]'>
+                <div className='flex mt-[20px] h-[80px]'>
                   {Question.options && Question.options.map((option, optionIndex) => (
                     <div
                       key={option.o_id}
@@ -335,7 +335,7 @@ export default function Home({ params }: {
             className='w-full py-[10px] rounded-md shadow-sm shadow-slate-400 hover:bg-slate-400 transition-all'
             onClick={()=>createQuestion(surveyId)}
           >
-            문항 추가하기 +
+            문제 추가하기 +
           </button>
         </div>
       </section>
