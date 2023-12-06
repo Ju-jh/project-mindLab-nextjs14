@@ -325,12 +325,12 @@ export default function Home({ params }: {
                     type="text"
                     placeholder={Question.text}
                     className='ml-[10px] pl-[10px] w-[500px]'
+                    value={Question.text}
                     onChange={(e) => {
                       const newText = e.target.value;
                       setQuestions((prevQuestions) => {
                         const updatedQuestions = [...prevQuestions];
-                        const updatedQuestion = { ...updatedQuestions[QuestionIndex], text: newText };
-                        updatedQuestions[QuestionIndex] = updatedQuestion;
+                        updatedQuestions[QuestionIndex].text = newText;
                         return updatedQuestions;
                       });
                     }}
