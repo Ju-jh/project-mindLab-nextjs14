@@ -42,13 +42,13 @@ export default function Home({ params }: {
     const query = `
       mutation UpdatMySurveyTitle($surveyId: String!, $newTitle: String!) {
         updatMySurveyTitle(surveyId: $surveyId, newTitle: $newTitle) {
-        
+          title
         }
       }
     `;
     try {
       const result = await sendGraphQLQuery(query, {surveyId, newTitle: newTitle});
-      if (result.data.createSurvey) {
+      if (result.data.PushSurveyTitle) {
       }
     } catch (error) {
       console.error('설문지 제목 수정 실패:', error);
