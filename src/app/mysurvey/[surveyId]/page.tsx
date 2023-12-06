@@ -38,7 +38,7 @@ export default function Home({ params }: {
 
   const surveyId = params.surveyId;
 
-  const PushSurveyTitle = async () => {
+  const PushSurveyTitle = async (surveyId: string, newTitle: string) => {
     const query = `
       mutation CreateSurvey {
         createSurvey {
@@ -47,11 +47,11 @@ export default function Home({ params }: {
       }
     `;
     try {
-      const result = await sendGraphQLQuery(query, {});
+      const result = await sendGraphQLQuery(query, {surveyId, newTitle: surveyTitle});
       if (result.data.createSurvey) {
       }
     } catch (error) {
-      console.error('새 설문지 생성 실패:', error);
+      console.error('설문지 제목 수정 실패:', error);
     }
   };
 
@@ -138,25 +138,19 @@ export default function Home({ params }: {
             value={surveyTitle}
             onChange={(e) => setSurveyTitle(e.target.value)}
           />
-          { true && <button
+          <button
             className='absolute translate-x-[300px] w-[80px] p-[5px] rounded-md shadow-md bg-slate-200 hover:bg-blue-400'
-            onClick={PushSurveyTitle}
+            onClick={() => { PushSurveyTitle }}
           >
             제목 저장
-          </button>}
-          { false && <button
-            className='absolute translate-x-[300px] w-[80px] p-[5px] rounded-md shadow-md bg-slate-200 hover:bg-blue-400'
-            onClick={PushSurveyTitle}
-          >
-            제목 수정
-          </button>}
+          </button>
         </div>
       </section>
       <section className='descriptoionSection w-full h-full  flex items-center justify-center mb-[120px]'>
-        <div className='descriptoionDiv w-[800px] h-[130px] shadow-sm shadow-slate-400 rounded-md p-[30px] cursor-pointer'>
+        <div className='descriptoionDiv w-[800px] h-[130px] flex shadow-sm shadow-slate-400 rounded-md p-[30px] cursor-pointer'>
           <input type='text' placeholder='설문지를 설명해주세요.' className='w-full h-full bg-transparent border-none'/>
           <button
-            className='absolute translate-x-[50px] w-[80px] h-[70px] p-[5px] rounded-md shadow-md bg-slate-200 hover:bg-blue-400'
+            className='w-[80px] h-full p-[5px] rounded-md shadow-md bg-slate-200 hover:bg-blue-400'
             onClick={PushSurveyDescription}
           >
             설명 저장
