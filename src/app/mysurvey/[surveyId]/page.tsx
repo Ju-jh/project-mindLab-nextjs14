@@ -167,7 +167,7 @@ export default function Home({ params }: {
   useEffect(() => {
     getQuestions(surveyId)
     getSurveyData(surveyId)
-  },[surveyId])
+  },[surveyId, Questions])
 
   return (
     <main className='flex-col w-full h-full p-[30px] pt-[60px]'>
@@ -193,7 +193,7 @@ export default function Home({ params }: {
         </div>
       </section>
       <section className='descriptoionSection w-full h-full  flex items-center justify-center mb-[120px]'>
-        <div className='descriptoionDiv w-[800px] h-[130px] flex shadow-sm shadow-slate-400 rounded-md p-[30px] cursor-pointer'>
+        <div className='descriptoionDiv min-w-[800px] h-[130px] flex shadow-sm shadow-slate-400 rounded-md p-[30px] cursor-pointer'>
           <input
             type='text'
             placeholder={`${originDescription}`}
