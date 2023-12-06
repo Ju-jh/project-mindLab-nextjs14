@@ -39,6 +39,7 @@ export default function Home({ params }: {
   const [surveyTitle, setSurveyTitle] = useState<string>(originTitle);
   const [originDescription, setOriginDescription] = useState<string>('');
   const [surveyDescription, setSurveyDescription] = useState<string>(originDescription);
+
   const [Questions, setQuestions] = useState<Question[]>([]);
 
   const surveyId = params.surveyId;
