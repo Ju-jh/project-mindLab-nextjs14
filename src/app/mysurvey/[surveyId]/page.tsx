@@ -154,13 +154,9 @@ export default function Home({ params }: {
       questionId: questionId,
     };
 
-    console.log(questionId, surveyId, '여기여기')
     try {
-      console.log(questionId, surveyId, '여기여기')
       const result = await deleteGraphQLQuery(mutation, variables);
-      console.log(result)
     } catch (error) {
-      console.log(questionId, surveyId, '여기여기')
       console.error('Failed to delete questions:', error);
     }
   };
