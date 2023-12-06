@@ -34,8 +34,10 @@ interface Option {
 export default function Home({ params }: {
   params: { surveyId:string}
 }) {
-  const [surveyTitle, setSurveyTitle] = useState<string>('');
-  const [surveyDescription, setSurveyDescription] = useState<string>('');
+  const [originTitle, setOriginTitle] = useState<string>('')
+  const [surveyTitle, setSurveyTitle] = useState<string>(originTitle);
+  const [originDescription, setOriginDescription] = useState<string>('');
+  const [surveyDescription, setSurveyDescription] = useState<string>(originDescription);
   const [Questions, setQuestions] = useState<Question[]>([]);
 
   const surveyId = params.surveyId;
@@ -51,8 +53,8 @@ export default function Home({ params }: {
     `
     try {
       const result = await getSurveyDataGraphQLQuery(query, surveyId);
-      setSurveyTitle(result.data.getSurveyData.title)
-      setSurveyDescription(result.data.getSurveyData.description)
+      setOriginTitle(result.data.getSurveyData.title)
+      setOriginDescription(result.data.getSurveyData.description)
     } catch (error) {
       console.error('설문지 데이터 로딩 실패:', error);
     }
