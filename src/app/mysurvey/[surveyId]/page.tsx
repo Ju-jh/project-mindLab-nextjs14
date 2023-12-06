@@ -60,8 +60,8 @@ export default function Home({ params }: {
 
   const PushSurveyDescription = async (surveyId: string, newDescription: string) => {
     const query = `
-      mutation UpdatMySurveyDescription($surveyId: String!, $newDescription: String!) {
-        updatMySurveyDescription(surveyId: $surveyId, newDescription: $newDescription) {
+      mutation UpdateMySurveyDescription($surveyId: String!, $newDescription: String!) {
+        updateMySurveyDescription(surveyId: $surveyId, newDescription: $newDescription) {
           description
         }
       }
