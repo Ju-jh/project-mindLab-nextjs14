@@ -99,11 +99,6 @@ export default function Home({ params }: {
       query GetQuestions($surveyId: String!) {
         getQuestions(surveyId: $surveyId) {
           q_id
-          text
-          options {
-            o_id
-            text
-          }
         }
       }
     `;
