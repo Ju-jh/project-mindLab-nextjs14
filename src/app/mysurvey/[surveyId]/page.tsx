@@ -152,7 +152,7 @@ export default function Home({ params }: {
         variables: { surveyId, questionId, newText },
       });
       if (result.data.updateQuestionText) {
-        alert('질문 제목 수정 완료되었습니다.');
+        alert(newText)
       }
     } catch (error) {
       console.error('질문 제목 수정 실패:', error);
