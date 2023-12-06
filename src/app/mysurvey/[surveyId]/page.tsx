@@ -146,7 +146,7 @@ export default function Home({ params }: {
   useEffect(() => {
     getQuestions(surveyId)
     getSurveyData(surveyId)
-  },[surveyId, createQuestion])
+  },[surveyId])
 
   return (
     <main className='flex-col w-full h-full p-[30px] pt-[60px]'>
