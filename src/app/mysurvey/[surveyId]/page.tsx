@@ -3,6 +3,7 @@
 import { sendGraphQLQuery } from '@/graphql/Problem/createProblem';
 import { mapQuestionsToProblems } from '@/graphql/Problem/getProblems';
 import { getGraphQLQuery } from '@/graphql/Survey/getMySurvey';
+import { getSurveyDataGraphQLQuery } from '@/graphql/Survey/getSurveyData';
 import { updateGraphQLQuery } from '@/graphql/Survey/updateSurveyTitle';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -33,23 +34,43 @@ interface Option {
 export default function Home({ params }: {
   params: { surveyId:string}
 }) {
-  const [mySurveys, setMySurveys] = useState<Survey[]>([]);
+  const [SurveyDATA, setSurveyDATA] = useState<Survey[]>([]);
   const [surveyTitle, setSurveyTitle] = useState<string>('');
   const [surveyDescription, setSurveyDescription] = useState<string>('');
   const [Questions, setQuestions] = useState<Question[]>([]);
 
   const surveyId = params.surveyId;
 
+  console.log(SurveyDATA)
+
+  const getSurveyData = async (surveyId: string) => {
+    const query = `
+    query GetSurveyData($surveyId: String!) {
+      getSurveyData(surveyId: $surveyId) {
+        title
+        description
+      }
+    }
+    `
+    try {
+      const result = await getSurveyDataGraphQLQuery(query, surveyId);
+      setSurveyDATA(result)
+      console.log(result)
+    } catch (error) {
+      console.error('설문지 데이터 로딩 실패:', error);
+    }
+  }
+
   const PushSurveyTitle = async (surveyId: string, newTitle: string) => {
     const query = `
-      mutation UpdatMySurveyTitle($surveyId: String!, $newTitle: String!) {
-        updatMySurveyTitle(surveyId: $surveyId, newTitle: $newTitle) {
+      mutation UpdateMySurveyTitle($surveyId: String!, $newTitle: String!) {
+        updateMySurveyTitle(surveyId: $surveyId, newTitle: $newTitle) {
           title
         }
       }
     `;
     try {
-      const result = await updateGraphQLQuery(query, {surveyId, newTitle});
+      const result = await updateGraphQLQuery(query, { surveyId, newTitle });
       if (result.data.PushSurveyTitle) {
         alert('수정 완료되었습니다.')
       }
@@ -125,6 +146,7 @@ export default function Home({ params }: {
 
   useEffect(() => {
     getQuestions(surveyId)
+    getSurveyData(surveyId)
   },[surveyId, createQuestion])
 
   return (
