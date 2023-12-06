@@ -120,7 +120,7 @@ export default function Home() {
       </div>
       <div className='cardsDiv flex items-start justify-start flex-wrap gap-[30px] w-full h-[300px] shadow-sm shadow-slate-400 rounded-md p-[30px] mt-[20px]'>
         <div className='w-[250px] h-[150px]'>
-          <Link href={'/survey'}>
+          <Link href={'/pushedsurvey/'}>
             <button
               className='buttonDiv flex flex-col items-center justify-center w-full h-full rounded-lg shadow-md shadow-slate-400 text-[16px] hover:text-[18px] hover:bg-slate-300 transition-all'
             >

@@ -1,6 +1,8 @@
 'use client'
 
 import { getGraphQLQuery } from '@/graphql/Survey/getMySurvey';
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState } from 'react';
 
 interface Survey {
@@ -14,18 +16,20 @@ export default function Home({ params }: {
   params: { surveyId:string}
 }) {
   const [mySurveys, setMySurveys] = useState<Survey[]>([]);
-  const [isChecked, setChecked] = useState(false);
   const [problems, setProblems] = useState([{ id: 1, title: '', options: [{ id: 1, text: '' }] }]);
 
   const surveyId = params.surveyId;
 
-  const handleCheckboxChange = () => {
-    setChecked(!isChecked);
-  };
 
   const addProblem = () => {
     const newProblem = { id: problems.length + 1, title: '', options: [{ id: 1, text: '' }] };
     setProblems([...problems, newProblem]);
+  };
+
+  const removeProblem = (problemIndex: number) => {
+    const updatedProblems = [...problems];
+    updatedProblems.splice(problemIndex, 1);
+    setProblems(updatedProblems);
   };
 
 
@@ -34,6 +38,16 @@ export default function Home({ params }: {
     const updatedOptions = [...problems[problemIndex].options, newOption];
     const updatedProblems = [...problems];
     updatedProblems[problemIndex].options = updatedOptions;
+    setProblems(updatedProblems);
+  };
+
+  const removeOption = (problemIndex: number, optionIndex: number) => {
+    const updatedOptions = [...problems[problemIndex].options];
+    updatedOptions.splice(optionIndex, 1);
+
+    const updatedProblems = [...problems];
+    updatedProblems[problemIndex].options = updatedOptions;
+
     setProblems(updatedProblems);
   };
 
@@ -59,52 +73,71 @@ export default function Home({ params }: {
 
   return (
     <main className='flex-col w-full h-full p-[30px] pt-[60px]'>
+      <section className='w-full h-[80px]  flex items-center justify-end pr-[50px]'>
+        <button className='w-[80px] p-[5px] rounded-md shadow-md bg-slate-200 hover:bg-blue-400'>Save</button>
+        <button className='w-[80px] p-[5px] rounded-md shadow-md ml-[20px] bg-slate-200 hover:bg-blue-400'>Puplic</button>
+      </section>
       <section className='titleSection w-full h-[200px]  flex items-center justify-center '>
         <div className='titleDiv w-[500px]  flex-col items-center justify-center'>
           <input
             type="text"
-            placeholder={`${surveyId}설문지 제목을 적어주세요.`}
+            placeholder={`설문지 제목을 적어주세요.`}
             className='text-center text-[30px] w-full font-bold'
           />
         </div>
       </section>
-      <section className='explainSection w-full h-full  flex items-center justify-center mb-[120px]'>
-        <div className='explainDiv w-[800px] h-[130px] shadow-sm shadow-slate-400 rounded-md p-[30px] cursor-pointer hover:bg-slate-400 transition-all'>
+      <section className='descriptoionSection w-full h-full  flex items-center justify-center mb-[120px]'>
+        <div className='descriptoionDiv w-[800px] h-[130px] shadow-sm shadow-slate-400 rounded-md p-[30px] cursor-pointer'>
           <input type='text' placeholder='설문지를 설명해주세요.' className='w-full h-full bg-transparent border-none'/>
         </div>
       </section>
       <section className='problemSection w-full min-h-[400px]  '>
-        <ul className='problemUl flex-col list-decimal  pl-[30px]'>
-          {problems.map((problem, problemIndex) => (
-            <li key={problem.id} className='mb-[30px]'>
-              <input
-                type="text"
-                placeholder={`문제 ${problemIndex + 1} 제목을 입력해주세요`}
-                className='ml-[10px] pl-[10px] w-full'
-              />
-              <div className='flex mt-[20px]'>
-                {problem.options.map((option, optionIndex) => (
-                  <button
-                    key={option.id}
-                    className='mr-[30px] px-[20px] py-[10px] shadow-sm shadow-slate-400 rounded-sm hover:bg-slate-400 transition-all'
-                  >
-                    <div className='bg-slate-300 w-[23px] h-[23px] rounded-full inline-block mr-[10px]'>
-                      <span>{option.id}</span>
-                    </div>
-                    <input type='text' placeholder='문항을 입력하세요.' className='bg-transparent'/>
-                  </button>
-                ))}
+        {problems.length > 0 && (
+          <ul className='problemUl flex-col list-decimal  pl-[30px]'>
+            {problems.map((problem, problemIndex) => (
+              <li key={problem.id} className='mb-[30px] ml-[30px]'>
                 <button
-                  className='mr-[30px] p-[10px] w-[50px] h-[50px] shadow-sm shadow-slate-400 rounded-sm hover:bg-slate-400 transition-all'
-                  onClick={() => addOption(problemIndex, problem.options.length)}
+                  onClick={() => removeProblem(problemIndex)}
+                  className='bg-red-600 flex items-center justify-center absolute w-[30px] h-[30px] rounded-full translate-x-[-60px] translate-y-[-4px] hover:bg-slate-400 transition-all'
                 >
-                  <span>+</span>
+                  <span className='text-white text-[40px]'>-</span>
                 </button>
-              </div>
+                <input
+                  type="text"
+                  placeholder={`문제 ${problemIndex + 1} 제목을 입력해주세요`}
+                  className='ml-[10px] pl-[10px] w-[500px]'
+                />
+                <div className='flex mt-[20px]'>
+                  {problem.options.map((option, optionIndex) => (
+                    <div
+                      key={option.id}
+                      className='mr-[30px] px-[20px] py-[10px] shadow-sm shadow-slate-400 rounded-sm transition-all flex items-center'
+                    >
+                      <div className='bg-slate-300 flex items-center justify-center w-[23px] h-[23px] rounded-full mr-[10px]'>
+                        <span>{option.id}</span>
+                      </div>
+                      <input type='text' placeholder='문항을 입력하세요.' className='bg-transparent' />
+                      <input type='number' placeholder='점수를 입력하세요.' className='bg-transparent' />
+                      <button
+                        className='w-[50px] text-[20px] h-full rounded-sm shadow-sm hover:bg-red-600 hover:text-white'
+                        onClick={() => removeOption(problemIndex, optionIndex)}
+                      >
+                        <FontAwesomeIcon icon={faTrash} className='text-[20px]'/>
+                      </button>
+                    </div>
+
+                  ))}
+                  <button
+                    className='mr-[30px] p-[10px] w-[50px] h-[50px] shadow-sm shadow-slate-400 rounded-sm hover:bg-slate-400 transition-all'
+                    onClick={() => addOption(problemIndex, problem.options.length)}
+                  >
+                    <span>+</span>
+                  </button>
+                </div>
               
-            </li>
-          ))}
-        </ul>
+              </li>
+            ))}
+          </ul>)}
         <div className='problemPlusDiv mt-[30px]'>
           <button
             className='w-full py-[10px] rounded-md shadow-sm shadow-slate-400 hover:bg-slate-400 transition-all'

@@ -6,10 +6,6 @@ export default function PushedSurvey() {
   const [isChecked, setChecked] = useState(false);
   const [selectedButtons, setSelectedButtons] = useState<number[]>([]);
 
-  const handleCheckboxChange = () => {
-    setChecked(!isChecked);
-  };
-
   const handleButtonToggle = (problemIndex: number, buttonIndex: number) => {
     const newSelectedButtons = [...selectedButtons];
     newSelectedButtons[problemIndex] = buttonIndex;
