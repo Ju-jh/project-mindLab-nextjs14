@@ -47,7 +47,7 @@ export default function Home({ params }: {
       }
     `;
     try {
-      const result = await sendGraphQLQuery(query, {surveyId, newTitle: surveyTitle});
+      const result = await sendGraphQLQuery(query, {surveyId, newTitle: newTitle});
       if (result.data.createSurvey) {
       }
     } catch (error) {
@@ -140,7 +140,7 @@ export default function Home({ params }: {
           />
           <button
             className='absolute translate-x-[300px] w-[80px] p-[5px] rounded-md shadow-md bg-slate-200 hover:bg-blue-400'
-            onClick={() => { PushSurveyTitle }}
+            onClick={() => PushSurveyTitle(surveyId, surveyTitle)}
           >
             제목 저장
           </button>
