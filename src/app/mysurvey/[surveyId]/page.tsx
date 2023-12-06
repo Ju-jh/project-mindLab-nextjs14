@@ -54,10 +54,8 @@ export default function Home({ params }: {
     `
     try {
       const result = await getSurveyDataGraphQLQuery(query, surveyId);
-      setSurveyTitle(result.title)
-      setSurveyDescription(result.description)
-      setSurveyDATA(result)
-      console.log(result)
+      setSurveyTitle(result.data.getSurveyData.title)
+      setSurveyDescription(result.data.getSurveyData.description)
     } catch (error) {
       console.error('설문지 데이터 로딩 실패:', error);
     }
