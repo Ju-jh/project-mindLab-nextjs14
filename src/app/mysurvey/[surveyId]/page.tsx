@@ -288,7 +288,7 @@ export default function Home({ params }: {
                 >
                   <span className='text-white text-[40px]'>-</span>
                 </button>
-                <div className='px-[20px] py-[10px] shadow-sm shadow-slate-400 rounded-sm flex items-center'>
+                <div className='px-[20px] w-[600px] py-[10px] shadow-sm shadow-slate-400 rounded-sm flex items-center'>
                   <input
                     type="text"
                     placeholder={`${Question.text}`}
