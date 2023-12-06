@@ -3,6 +3,7 @@
 import { sendGraphQLQuery } from '@/graphql/Problem/createProblem';
 import { mapQuestionsToProblems } from '@/graphql/Problem/getProblems';
 import { getGraphQLQuery } from '@/graphql/Survey/getMySurvey';
+import { updateGraphQLQuery } from '@/graphql/Survey/updateSurveyTitle';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useState } from 'react';
@@ -47,7 +48,7 @@ export default function Home({ params }: {
       }
     `;
     try {
-      const result = await sendGraphQLQuery(query, {surveyId, newTitle: newTitle});
+      const result = await updateGraphQLQuery(query, {surveyId, newTitle});
       if (result.data.PushSurveyTitle) {
       }
     } catch (error) {
