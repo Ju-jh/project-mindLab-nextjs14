@@ -158,7 +158,7 @@ export default function Home({ params }: {
         <div className='titleDiv w-[500px]  flex items-center justify-center'>
           <input
             type="text"
-            placeholder={`${surveyTitle}`}
+            placeholder={`${originTitle}`}
             className='text-center text-[30px] w-full font-bold'
             value={surveyTitle}
             onChange={(e) => setSurveyTitle(e.target.value)}
@@ -175,7 +175,7 @@ export default function Home({ params }: {
         <div className='descriptoionDiv w-[800px] h-[130px] flex shadow-sm shadow-slate-400 rounded-md p-[30px] cursor-pointer'>
           <input
             type='text'
-            placeholder={`${surveyDescription}`}
+            placeholder={`${originDescription}`}
             className='w-full h-full bg-transparent border-none'
             value={surveyDescription}
             onChange={(e) => setSurveyDescription(e.target.value)}
