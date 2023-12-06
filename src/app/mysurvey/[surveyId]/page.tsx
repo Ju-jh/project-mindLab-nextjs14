@@ -1,5 +1,6 @@
 'use client'
 
+import { sendGraphQLQuery } from '@/graphql/Problem/createProblem';
 import { getGraphQLQuery } from '@/graphql/Survey/getMySurvey';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -51,7 +52,7 @@ export default function Home({ params }: {
     setProblems(updatedProblems);
   };
 
-    const getMyWhichSurvey = async () => {
+  const getMyWhichSurvey = async () => {
       const query = `
         query GetMySurvey {
           getMySurvey {
@@ -70,6 +71,28 @@ export default function Home({ params }: {
         console.error(`나의 ${surveyId}설문지 가져오기 실패:`, error);
       }
   };
+
+  const createQuestion = async (surveyId: string) => {
+    const mutation = `
+      mutation CreateQuestion($surveyId: String!) {
+        createQuestion(surveyId: $surveyId) {
+          q_id
+        }
+      }
+    `;
+    const variables = {
+      surveyId: surveyId,
+    };
+
+    try {
+      const result = await sendGraphQLQuery(mutation, variables);
+      if (result.data.createQuestion) {
+      }
+    } catch (error) {
+      console.error('Question creation failed:', error);
+    }
+  };
+
 
   return (
     <main className='flex-col w-full h-full p-[30px] pt-[60px]'>
@@ -141,7 +164,7 @@ export default function Home({ params }: {
         <div className='problemPlusDiv mt-[30px]'>
           <button
             className='w-full py-[10px] rounded-md shadow-sm shadow-slate-400 hover:bg-slate-400 transition-all'
-            onClick={addProblem}
+            onClick={()=>createQuestion(surveyId)}
           >
             문항 추가하기 +
           </button>
