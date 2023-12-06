@@ -1,5 +1,6 @@
 'use client'
 
+import { createOptionGraphQLQuery } from '@/graphql/Option/createOption';
 import { sendGraphQLQuery } from '@/graphql/Problem/createProblem';
 import { mapQuestionsToProblems } from '@/graphql/Problem/getProblems';
 import { deleteGraphQLQuery } from '@/graphql/Survey/deleteSurvey';
@@ -28,8 +29,6 @@ interface Option {
   o_id: string;
   text: string;
   score: number;
-  survey: Survey;
-  question: Question;
 }
 
 export default function Home({ params }: {
@@ -124,6 +123,11 @@ export default function Home({ params }: {
         getAllQuestions(surveyId: $surveyId) {
           q_id
           text
+          options {
+            o_id
+            text
+            score
+          }
         }
       }
     `;
@@ -161,6 +165,30 @@ export default function Home({ params }: {
     }
   };
 
+  const addOption = async (surveyId: string, questionId: string) => {
+    const mutation = `
+      mutation CreateOption($surveyId: String!, $questionId: String!) {
+        createOption(surveyId: $surveyId, questionId: $questionId) {
+          o_id
+        }
+      }
+    `;
+    const variables = {
+      surveyId: surveyId,
+      questionId: questionId
+    };
+    try {
+      const result = await createOptionGraphQLQuery(mutation, variables);
+      if (result.data.createOption) {
+        alert('옵션 생성 완료되었습니다.');
+      }
+    } catch (error) {
+      console.error('Option creation failed:', error);
+    }
+  };
+
+  // const removeOption = (questionIndex: number, optionIndex: number) => {
+  // };
 
   useEffect(() => {
     getQuestions(surveyId)
@@ -223,33 +251,33 @@ export default function Home({ params }: {
                   placeholder={`${Question.text}`}
                   className='ml-[10px] pl-[10px] w-[500px]'
                 />
-                {/* <div className='flex mt-[20px]'>
-                  {Question.options.map((option, optionIndex) => (
+                <button>제목 저장</button>
+                <div className='flex mt-[20px]'>
+                  {/* {Question.options.map((option, optionIndex) => (
                     <div
-                      key={option.id}
+                      key={option.o_id}
                       className='mr-[30px] px-[20px] py-[10px] shadow-sm shadow-slate-400 rounded-sm transition-all flex items-center'
                     >
                       <div className='bg-slate-300 flex items-center justify-center w-[23px] h-[23px] rounded-full mr-[10px]'>
-                        <span>{option.id}</span>
+                        <span>{option.o_id}</span>
                       </div>
                       <input type='text' placeholder='문항을 입력하세요.' className='bg-transparent' />
                       <input type='number' placeholder='점수를 입력하세요.' className='bg-transparent' />
                       <button
                         className='w-[50px] text-[20px] h-full rounded-sm shadow-sm hover:bg-red-600 hover:text-white'
-                        onClick={() => removeOption(problemIndex, optionIndex)}
+                        onClick={() => removeOption(QuestionIndex, optionIndex)}
                       >
                         <FontAwesomeIcon icon={faTrash} className='text-[20px]'/>
                       </button>
                     </div>
-
-                  ))}
+                  ))} */}
                   <button
                     className='mr-[30px] p-[10px] w-[50px] h-[50px] shadow-sm shadow-slate-400 rounded-sm hover:bg-slate-400 transition-all'
-                    onClick={() => addOption(QuestionIndex, Question.options.length)}
+                    onClick={() => addOption(surveyId, Question.q_id)}
                   >
                     <span>+</span>
                   </button>
-                </div> */}
+                </div>
               
               </li>
             ))}
