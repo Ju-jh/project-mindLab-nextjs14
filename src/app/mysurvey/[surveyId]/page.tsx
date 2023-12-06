@@ -140,7 +140,7 @@ export default function Home({ params }: {
     }
   };
 
-  const removeQuestion = async (questionId: string, surveyId: string) => {
+  const removeQuestion = async (surveyId: string, questionId: string) => {
     const mutation = `
       mutation DeleteQuestion($surveyId: String!, $questionId: String!) {
         deleteQuestion(surveyId: $surveyId, questionId: $questionId) {
