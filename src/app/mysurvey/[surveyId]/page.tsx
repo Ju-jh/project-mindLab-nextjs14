@@ -281,7 +281,7 @@ export default function Home({ params }: {
         {Questions.length > 0 && (
           <ul className='problemUl flex-col list-decimal  pl-[30px]'>
             {Questions.map((Question, QuestionIndex) => (
-              <li key={Question.q_id} className='mb-[30px] ml-[30px]'>
+              <li key={Question.q_id} className='mb-[60px] ml-[30px]'>
                 <button
                   onClick={() => removeQuestion(surveyId, Question.q_id)}
                   className='bg-red-600 flex items-center justify-center absolute w-[30px] h-[30px] rounded-full translate-x-[-60px] translate-y-[-4px] hover:bg-slate-400 transition-all'
@@ -301,11 +301,11 @@ export default function Home({ params }: {
                       className='mr-[30px] px-[20px] py-[10px] shadow-sm shadow-slate-400 rounded-sm transition-all flex items-center'
                     >
                       <div className='bg-slate-300 flex items-center justify-center w-[35px] h-[35px] rounded-full mr-[10px]'>
-                        <span>{optionIndex}</span>
+                        <span>{optionIndex + 1}</span>
                       </div>
                       <div className='flex flex-col items-center justify-between'>
                         <input type='text' placeholder={`${option.text}`} className='bg-transparent' />
-                        <input type='number' placeholder='점수를 입력하세요.' className='bg-transparent text-end' />
+                        <input type='number' placeholder='점수를 입력하세요.' className='bg-transparent pl-[60px]' />
                       </div>
                       <button
                         className='w-[40px] text-[20px] h-full rounded-sm shadow-sm hover:bg-blue-600 hover:text-white'
