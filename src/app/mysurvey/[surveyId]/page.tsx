@@ -26,56 +26,36 @@ export default function Home({ params }: {
   params: { surveyId:string}
 }) {
   const [mySurveys, setMySurveys] = useState<Survey[]>([]);
-  const [problems, setProblems] = useState<Question[]>([]);
+  const [Questions, setQuestions] = useState<Question[]>([]);
 
   const surveyId = params.surveyId;
 
-  console.log(problems)
+  console.log(Questions)
 
 
-  const removeProblem = (problemIndex: number) => {
-    const updatedProblems = [...problems];
-    updatedProblems.splice(problemIndex, 1);
-    setProblems(updatedProblems);
+  const removeQuestion = (QuestionIndex: number) => {
+    const updatedQuestions = [...Questions];
+    updatedQuestions.splice(QuestionIndex, 1);
+    setQuestions(updatedQuestions);
   };
 
 
-  const addOption = (problemIndex: number, optionIndex: number) => {
-    const newOption = { id: problems[problemIndex].options.length + 1, text: '' };
-    const updatedOptions = [...problems[problemIndex].options, newOption];
-    const updatedProblems = [...problems];
-    updatedProblems[problemIndex].options = updatedOptions;
-    setProblems(updatedProblems);
+  const addOption = (QuestionIndex: number, optionIndex: number) => {
+    const newOption = { id: Questions[QuestionIndex].options.length + 1, text: '' };
+    const updatedOptions = [...Questions[QuestionIndex].options, newOption];
+    const updatedProblems = [...Questions];
+    updatedProblems[QuestionIndex].options = updatedOptions;
+    setQuestions(updatedProblems);
   };
 
-  const removeOption = (problemIndex: number, optionIndex: number) => {
-    const updatedOptions = [...problems[problemIndex].options];
+  const removeOption = (QuestionIndex: number, optionIndex: number) => {
+    const updatedOptions = [...Questions[QuestionIndex].options];
     updatedOptions.splice(optionIndex, 1);
 
-    const updatedProblems = [...problems];
-    updatedProblems[problemIndex].options = updatedOptions;
+    const updatedProblems = [...Questions];
+    updatedProblems[QuestionIndex].options = updatedOptions;
 
-    setProblems(updatedProblems);
-  };
-
-  const getMyWhichSurvey = async () => {
-      const query = `
-        query GetMySurvey {
-          getMySurvey {
-            s_id
-            title
-            description
-            user
-          }
-        }
-      `;
-      try {
-        const result = await getGraphQLQuery({ query });
-        const mySurveysData = result.data.getMySurvey || [];
-        setMySurveys(mySurveysData);
-      } catch (error) {
-        console.error(`나의 ${surveyId}설문지 가져오기 실패:`, error);
-      }
+    setQuestions(updatedProblems);
   };
 
   const createQuestion = async (surveyId: string) => {
@@ -114,8 +94,8 @@ export default function Home({ params }: {
     };
 
     try {
-      const mappedQuestions = mapQuestionsToProblems(query, variables);
-      setProblems(await mappedQuestions);
+      const result = await mapQuestionsToProblems(query, variables);
+      setQuestions(result.data.getAllQuestions || []);
     } catch (error) {
       console.error('Failed to fetch questions:', error);
     }
@@ -147,19 +127,19 @@ export default function Home({ params }: {
         </div>
       </section>
       <section className='problemSection w-full min-h-[400px]  '>
-        {problems.length > 0 && (
+        {Questions.length > 0 && (
           <ul className='problemUl flex-col list-decimal  pl-[30px]'>
-            {problems.map((problem, problemIndex) => (
-              <li key={problem.q_id} className='mb-[30px] ml-[30px]'>
+            {Questions.map((Question, QuestionIndex) => (
+              <li key={Question.q_id} className='mb-[30px] ml-[30px]'>
                 <button
-                  onClick={() => removeProblem(problemIndex)}
+                  onClick={() => removeQuestion(QuestionIndex)}
                   className='bg-red-600 flex items-center justify-center absolute w-[30px] h-[30px] rounded-full translate-x-[-60px] translate-y-[-4px] hover:bg-slate-400 transition-all'
                 >
                   <span className='text-white text-[40px]'>-</span>
                 </button>
                 <input
                   type="text"
-                  placeholder={`문제 ${problemIndex + 1} 제목을 입력해주세요`}
+                  placeholder={`${Question.text}`}
                   className='ml-[10px] pl-[10px] w-[500px]'
                 />
                 {/* <div className='flex mt-[20px]'>
