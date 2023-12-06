@@ -3,6 +3,7 @@
 import { createOptionGraphQLQuery } from '@/graphql/Option/createOption';
 import { sendGraphQLQuery } from '@/graphql/Problem/createProblem';
 import { mapQuestionsToProblems } from '@/graphql/Problem/getProblems';
+import { updateTextGraphQLQuery } from '@/graphql/Problem/pushQuestionText';
 import { deleteGraphQLQuery } from '@/graphql/Survey/deleteSurvey';
 import { getGraphQLQuery } from '@/graphql/Survey/getMySurvey';
 import { getSurveyDataGraphQLQuery } from '@/graphql/Survey/getSurveyData';
@@ -135,6 +136,27 @@ export default function Home({ params }: {
       console.error('Question creation failed:', error);
     }
   };
+
+  const pushQuestionText = async (surveyId: string, questionId: string, newTitle: string) => {
+    const query = `
+      mutation UpdateQuestionTitle($surveyId: String!, $questionId: String!, $newTitle: String!) {
+        updateQuestionTitle(surveyId: $surveyId, questionId: $questionId, newTitle: $newTitle) {
+          text
+        }
+      }
+    `;
+    try {
+      const result = await updateTextGraphQLQuery({
+        query,
+        variables: { surveyId, questionId, newTitle },
+      });
+      if (result.data.updateQuestionTitle) {
+        alert('질문 제목 수정 완료되었습니다.');
+      }
+    } catch (error) {
+      console.error('질문 제목 수정 실패:', error);
+    }
+  }
 
   const getQuestions = async (surveyId: string) => {
     const query = `
@@ -302,8 +324,21 @@ export default function Home({ params }: {
                     type="text"
                     placeholder={`${Question.text}`}
                     className='ml-[10px] pl-[10px] w-[500px]'
+                    value={Question.text}
+                    onChange={(e) => {
+                      const newText = e.target.value;
+                      setQuestions((prevQuestions) => {
+                        const updatedQuestions = [...prevQuestions];
+                        const updatedQuestion = { ...updatedQuestions[QuestionIndex], text: newText };
+                        updatedQuestions[QuestionIndex] = updatedQuestion;
+                        return updatedQuestions;
+                      });
+                    }}
                   />
-                  <button className='w-[50px] h-full shadow-sm rounded-md hover:slate-300'>
+                  <button
+                    className='w-[50px] h-full shadow-sm rounded-md hover:slate-300'
+                    onClick={() => pushQuestionText(surveyId, Question.q_id, Question.text)}
+                  >
                     저장
                   </button>
                 </div>
