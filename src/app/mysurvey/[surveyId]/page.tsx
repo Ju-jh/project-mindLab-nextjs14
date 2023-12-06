@@ -44,14 +44,18 @@ export default function Home({ params }: {
 
   const getSurveyData = async (surveyId: string) => {
     const query = `
-		mutation GetSurveyData($surveyId: String!) {
+    mutation GetSurveyData($surveyId: String!) {
       getSurveyData(surveyId: $surveyId) {
         title
         description
-        options {
-          o_id
+        questions {
+          q_id
           text
-          score
+          options {
+            o_id
+            text
+            score
+          }
         }
       }
     }
@@ -60,6 +64,7 @@ export default function Home({ params }: {
       const result = await getSurveyDataGraphQLQuery(query, surveyId);
       setOriginTitle(result.data.getSurveyData.title)
       setOriginDescription(result.data.getSurveyData.description)
+      console.log(result.data.getSurveyData)
     } catch (error) {
       console.error('설문지 데이터 로딩 실패:', error);
     }
