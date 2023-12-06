@@ -137,10 +137,10 @@ export default function Home({ params }: {
     }
   };
 
-  const pushQuestionText = async (surveyId: string, questionId: string, newTitle: string) => {
+  const pushQuestionText = async (surveyId: string, questionId: string, newText: string) => {
     const query = `
-      mutation UpdateQuestionTitle($surveyId: String!, $questionId: String!, $newTitle: String!) {
-        updateQuestionTitle(surveyId: $surveyId, questionId: $questionId, newTitle: $newTitle) {
+      mutation UpdateQuestionText($surveyId: String!, $questionId: String!, $newText: String!) {
+        updateQuestionText(surveyId: $surveyId, questionId: $questionId, newText: $newText) {
           text
         }
       }
@@ -148,9 +148,9 @@ export default function Home({ params }: {
     try {
       const result = await updateTextGraphQLQuery({
         query,
-        variables: { surveyId, questionId, newTitle },
+        variables: { surveyId, questionId, newText },
       });
-      if (result.data.updateQuestionTitle) {
+      if (result.data.updateQuestionText) {
         alert('질문 제목 수정 완료되었습니다.');
       }
     } catch (error) {
