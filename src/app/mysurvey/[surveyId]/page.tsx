@@ -48,6 +48,11 @@ export default function Home({ params }: {
       getSurveyData(surveyId: $surveyId) {
         title
         description
+        options {
+          o_id
+          text
+          score
+        }
       }
     }
     `
@@ -182,8 +187,6 @@ export default function Home({ params }: {
     }
   };
 
-  // const removeOption = (questionIndex: number, optionIndex: number) => {
-  // };
 
   useEffect(() => {
     getQuestions(surveyId)
@@ -246,9 +249,9 @@ export default function Home({ params }: {
                   placeholder={`${Question.text}`}
                   className='ml-[10px] pl-[10px] w-[500px]'
                 />
-                <button>제목 저장</button>
+                <button>문제 제목 저장</button>
                 <div className='flex mt-[20px]'>
-                  {/* {Question.options.map((option, optionIndex) => (
+                  {/* {question.options.map((option, optionIndex) => (
                     <div
                       key={option.o_id}
                       className='mr-[30px] px-[20px] py-[10px] shadow-sm shadow-slate-400 rounded-sm transition-all flex items-center'
@@ -270,7 +273,7 @@ export default function Home({ params }: {
                     className='mr-[30px] p-[10px] w-[50px] h-[50px] shadow-sm shadow-slate-400 rounded-sm hover:bg-slate-400 transition-all'
                     onClick={() => addOption(surveyId, Question.q_id)}
                   >
-                    <span>+</span>
+                    <span>문항 추가 +</span>
                   </button>
                 </div>
               
