@@ -55,30 +55,22 @@ export default function Home({ params }: {
     }
   };
 
-  const removeQuestion = (QuestionIndex: number) => {
-    const updatedQuestions = [...Questions];
-    updatedQuestions.splice(QuestionIndex, 1);
-    setQuestions(updatedQuestions);
+  const PushSurveyDescription = async () => {
+    const query = `
+      mutation CreateSurvey {
+        createSurvey {
+          s_id
+        }
+      }
+    `;
+    try {
+      const result = await sendGraphQLQuery(query, {});
+      if (result.data.createSurvey) {
+      }
+    } catch (error) {
+      console.error('새 설문지 생성 실패:', error);
+    }
   };
-
-
-  // const addOption = (QuestionIndex: number, optionIndex: number) => {
-  //   const newOption = { id: Questions[QuestionIndex].options.length + 1, text: '' };
-  //   const updatedOptions = [...Questions[QuestionIndex].options, newOption];
-  //   const updatedProblems = [...Questions];
-  //   updatedProblems[QuestionIndex].options = updatedOptions;
-  //   setQuestions(updatedProblems);
-  // };
-
-  // const removeOption = (QuestionIndex: number, optionIndex: number) => {
-  //   const updatedOptions = [...Questions[QuestionIndex].options];
-  //   updatedOptions.splice(optionIndex, 1);
-
-  //   const updatedProblems = [...Questions];
-  //   updatedProblems[QuestionIndex].options = updatedOptions;
-
-  //   setQuestions(updatedProblems);
-  // };
 
   const createQuestion = async (surveyId: string) => {
     const mutation = `
@@ -100,8 +92,6 @@ export default function Home({ params }: {
       console.error('Question creation failed:', error);
     }
   };
-
-
 
   const getQuestions = async (surveyId: string) => {
     const query = `
@@ -125,6 +115,9 @@ export default function Home({ params }: {
     }
   };
 
+  const removeQuestion = (qustionId: string) => {
+
+  };
 
   useEffect(() => {
     getQuestions(surveyId)
@@ -132,30 +125,42 @@ export default function Home({ params }: {
 
   return (
     <main className='flex-col w-full h-full p-[30px] pt-[60px]'>
-      <section className='w-full h-[80px]  flex items-center justify-end pr-[50px]'>
-        <button className='w-[80px] p-[5px] rounded-md shadow-md bg-slate-200 hover:bg-blue-400'>Save</button>
-        <button className='w-[80px] p-[5px] rounded-md shadow-md ml-[20px] bg-slate-200 hover:bg-blue-400'>Puplic</button>
+      <section className='w-full h-[100px]  flex items-center justify-end pr-[50px]'>
+        { true ? <button className='w-[150px] h-[50px] p-[5px] rounded-md shadow-md ml-[20px] bg-slate-200 hover:bg-blue-400'><span className='font-bold text-[20px]'>Puplic</span></button> : null } 
+        { false ? <button className='w-[150px] h-[50px] p-[5px] rounded-md shadow-md ml-[20px] bg-slate-200 hover:bg-blue-400'><span className='font-bold text-[20px]'>Private</span></button> : null }
       </section>
       <section className='titleSection w-full h-[200px]  flex items-center justify-center '>
-        <div className='titleDiv w-[500px]  flex-col items-center justify-center'>
+        <div className='titleDiv w-[500px]  flex items-center justify-center'>
           <input
             type="text"
-            placeholder={`${surveyTitle}`}
+            placeholder={`설문지 제목을 입력해주세요.`}
             className='text-center text-[30px] w-full font-bold'
             value={surveyTitle}
             onChange={(e) => setSurveyTitle(e.target.value)}
           />
-          <button
-            className='w-[80px] p-[5px] rounded-md shadow-md bg-slate-200 hover:bg-blue-400'
+          { true && <button
+            className='absolute translate-x-[300px] w-[80px] p-[5px] rounded-md shadow-md bg-slate-200 hover:bg-blue-400'
             onClick={PushSurveyTitle}
           >
-            Save
-          </button>
+            제목 저장
+          </button>}
+          { false && <button
+            className='absolute translate-x-[300px] w-[80px] p-[5px] rounded-md shadow-md bg-slate-200 hover:bg-blue-400'
+            onClick={PushSurveyTitle}
+          >
+            제목 수정
+          </button>}
         </div>
       </section>
       <section className='descriptoionSection w-full h-full  flex items-center justify-center mb-[120px]'>
         <div className='descriptoionDiv w-[800px] h-[130px] shadow-sm shadow-slate-400 rounded-md p-[30px] cursor-pointer'>
           <input type='text' placeholder='설문지를 설명해주세요.' className='w-full h-full bg-transparent border-none'/>
+          <button
+            className='absolute translate-x-[50px] w-[80px] h-[70px] p-[5px] rounded-md shadow-md bg-slate-200 hover:bg-blue-400'
+            onClick={PushSurveyDescription}
+          >
+            설명 저장
+          </button>
         </div>
       </section>
       <section className='problemSection w-full min-h-[400px]  '>
@@ -164,7 +169,7 @@ export default function Home({ params }: {
             {Questions.map((Question, QuestionIndex) => (
               <li key={Question.q_id} className='mb-[30px] ml-[30px]'>
                 <button
-                  onClick={() => removeQuestion(QuestionIndex)}
+                  onClick={() => removeQuestion}
                   className='bg-red-600 flex items-center justify-center absolute w-[30px] h-[30px] rounded-full translate-x-[-60px] translate-y-[-4px] hover:bg-slate-400 transition-all'
                 >
                   <span className='text-white text-[40px]'>-</span>
