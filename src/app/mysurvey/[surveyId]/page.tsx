@@ -22,7 +22,7 @@ interface Question {
   q_id: string;
   text: string;
   survey: Survey;
-  options: Option;
+  options: Option[];
 }
 
 interface Option {
@@ -194,9 +194,48 @@ export default function Home({ params }: {
 
 
   useEffect(() => {
-    getQuestions(surveyId)
-    getSurveyData(surveyId)
-  },[surveyId, Questions])
+    const fetchData = async () => {
+        const query = `
+          mutation GetSurveyData($surveyId: String!) {
+            getSurveyData(surveyId: $surveyId) {
+              title
+              description
+              questions {
+                q_id
+                text
+                options {
+                  o_id
+                  text
+                  score
+                }
+              }
+            }
+          }
+          `
+    try {
+      const result = await getSurveyDataGraphQLQuery(query, surveyId);
+      const surveyData = result.data.getSurveyData;
+
+      setOriginTitle(surveyData.title);
+      setOriginDescription(surveyData.description);
+
+      const mappedQuestions = surveyData.questions.map((question: { q_id: string; text: string; options: any; }) => {
+        return {
+          q_id: question.q_id,
+          text: question.text,
+          survey: surveyData,
+          options: question.options || [],
+        };
+      });
+
+      setQuestions(mappedQuestions);
+    } catch (error) {
+      console.error('설문지 데이터 로딩 실패:', error);
+    }
+  };
+
+    fetchData(); 
+  }, [surveyId, Questions]);
 
   return (
     <main className='flex-col w-full h-full p-[30px] pt-[60px]'>
@@ -256,7 +295,7 @@ export default function Home({ params }: {
                 />
                 <button>문제 제목 저장</button>
                 <div className='flex mt-[20px]'>
-                  {/* {question.options.map((option, optionIndex) => (
+                  {Question.options.map((option, optionIndex) => (
                     <div
                       key={option.o_id}
                       className='mr-[30px] px-[20px] py-[10px] shadow-sm shadow-slate-400 rounded-sm transition-all flex items-center'
@@ -268,12 +307,12 @@ export default function Home({ params }: {
                       <input type='number' placeholder='점수를 입력하세요.' className='bg-transparent' />
                       <button
                         className='w-[50px] text-[20px] h-full rounded-sm shadow-sm hover:bg-red-600 hover:text-white'
-                        onClick={() => removeOption(QuestionIndex, optionIndex)}
+                        // onClick={() => removeOption(QuestionIndex, optionIndex)}
                       >
                         <FontAwesomeIcon icon={faTrash} className='text-[20px]'/>
                       </button>
                     </div>
-                  ))} */}
+                  ))}
                   <button
                     className='mr-[30px] p-[10px] w-[50px] h-[50px] shadow-sm shadow-slate-400 rounded-sm hover:bg-slate-400 transition-all'
                     onClick={() => addOption(surveyId, Question.q_id)}
