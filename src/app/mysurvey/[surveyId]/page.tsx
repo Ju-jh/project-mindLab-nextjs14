@@ -2,6 +2,7 @@
 
 import { sendGraphQLQuery } from '@/graphql/Problem/createProblem';
 import { mapQuestionsToProblems } from '@/graphql/Problem/getProblems';
+import { deleteGraphQLQuery } from '@/graphql/Survey/deleteSurvey';
 import { getGraphQLQuery } from '@/graphql/Survey/getMySurvey';
 import { getSurveyDataGraphQLQuery } from '@/graphql/Survey/getSurveyData';
 import { updateGraphQLQuery } from '@/graphql/Survey/updateSurveyTitle';
@@ -139,9 +140,28 @@ export default function Home({ params }: {
     }
   };
 
-  const removeQuestion = (qustionId: string) => {
+  const removeQuestion = async (questionId: string, surveyId: string) => {
+    const mutation = `
+      mutation DeleteQuestion($surveyId: String!, $questionId: String!) {
+        deleteQuestion(surveyId: $surveyId, questionId: $questionId) {
+          q_id
+        }
+      }
+    `;
 
+    const variables = {
+      surveyId: surveyId,
+      questionId: questionId,
+    };
+
+    try {
+      const result = await deleteGraphQLQuery(mutation, variables);
+      setQuestions(result.data.getAllQuestions || []);
+    } catch (error) {
+      console.error('Failed to delete questions:', error);
+    }
   };
+
 
   useEffect(() => {
     getQuestions(surveyId)
@@ -194,7 +214,7 @@ export default function Home({ params }: {
             {Questions.map((Question, QuestionIndex) => (
               <li key={Question.q_id} className='mb-[30px] ml-[30px]'>
                 <button
-                  onClick={() => removeQuestion}
+                  onClick={() => removeQuestion(surveyId, Question.q_id)}
                   className='bg-red-600 flex items-center justify-center absolute w-[30px] h-[30px] rounded-full translate-x-[-60px] translate-y-[-4px] hover:bg-slate-400 transition-all'
                 >
                   <span className='text-white text-[40px]'>-</span>
