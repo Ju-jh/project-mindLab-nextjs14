@@ -30,9 +30,6 @@ export default function Home({ params }: {
 
   const surveyId = params.surveyId;
 
-  console.log(Questions)
-
-
   const removeQuestion = (QuestionIndex: number) => {
     const updatedQuestions = [...Questions];
     updatedQuestions.splice(QuestionIndex, 1);
@@ -142,8 +139,8 @@ export default function Home({ params }: {
                   placeholder={`${Question.text}`}
                   className='ml-[10px] pl-[10px] w-[500px]'
                 />
-                {/* <div className='flex mt-[20px]'>
-                  {problem.options.map((option, optionIndex) => (
+                <div className='flex mt-[20px]'>
+                  {Question.options.map((option, optionIndex) => (
                     <div
                       key={option.id}
                       className='mr-[30px] px-[20px] py-[10px] shadow-sm shadow-slate-400 rounded-sm transition-all flex items-center'
@@ -164,11 +161,11 @@ export default function Home({ params }: {
                   ))}
                   <button
                     className='mr-[30px] p-[10px] w-[50px] h-[50px] shadow-sm shadow-slate-400 rounded-sm hover:bg-slate-400 transition-all'
-                    onClick={() => addOption(problemIndex, problem.options.length)}
+                    onClick={() => addOption(QuestionIndex, Question.options.length)}
                   >
                     <span>+</span>
                   </button>
-                </div> */}
+                </div>
               
               </li>
             ))}
