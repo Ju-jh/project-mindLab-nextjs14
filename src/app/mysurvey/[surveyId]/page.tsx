@@ -288,12 +288,16 @@ export default function Home({ params }: {
                 >
                   <span className='text-white text-[40px]'>-</span>
                 </button>
-                <input
-                  type="text"
-                  placeholder={`${Question.text}`}
-                  className='ml-[10px] pl-[10px] w-[500px]'
-                />
-                <button>문제 제목 저장</button>
+                <div className='px-[20px] py-[10px] shadow-sm shadow-slate-400 rounded-sm flex items-center'>
+                  <input
+                    type="text"
+                    placeholder={`${Question.text}`}
+                    className='ml-[10px] pl-[10px] w-[500px]'
+                  />
+                  <button className='w-[50px] h-full'>
+                    <FontAwesomeIcon icon={faCheck} className='text-[20px]' />
+                  </button>
+                </div>
                 <div className='flex mt-[20px] h-[80px]'>
                   {Question.options && Question.options.map((option, optionIndex) => (
                     <div
