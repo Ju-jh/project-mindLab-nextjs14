@@ -45,7 +45,7 @@ export default function Home({ params }: {
 
   const getSurveyData = async (surveyId: string) => {
     const query = `
-    query GetSurveyData($surveyId: String!) {
+		mutation GetSurveyData($surveyId: String!) {
       getSurveyData(surveyId: $surveyId) {
         title
         description
