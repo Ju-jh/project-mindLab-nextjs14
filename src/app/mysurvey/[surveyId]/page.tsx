@@ -33,9 +33,27 @@ export default function Home({ params }: {
   params: { surveyId:string}
 }) {
   const [mySurveys, setMySurveys] = useState<Survey[]>([]);
+  const [surveyTitle, setSurveyTitle] = useState<string>('');
   const [Questions, setQuestions] = useState<Question[]>([]);
 
   const surveyId = params.surveyId;
+
+  const PushSurveyTitle = async () => {
+    const query = `
+      mutation CreateSurvey {
+        createSurvey {
+          s_id
+        }
+      }
+    `;
+    try {
+      const result = await sendGraphQLQuery(query, {});
+      if (result.data.createSurvey) {
+      }
+    } catch (error) {
+      console.error('새 설문지 생성 실패:', error);
+    }
+  };
 
   const removeQuestion = (QuestionIndex: number) => {
     const updatedQuestions = [...Questions];
@@ -83,6 +101,8 @@ export default function Home({ params }: {
     }
   };
 
+
+
   const getQuestions = async (surveyId: string) => {
     const query = `
       query GetAllQuestions($surveyId: String!) {
@@ -120,9 +140,17 @@ export default function Home({ params }: {
         <div className='titleDiv w-[500px]  flex-col items-center justify-center'>
           <input
             type="text"
-            placeholder={`설문지 제목을 적어주세요.`}
+            placeholder={`${surveyTitle}`}
             className='text-center text-[30px] w-full font-bold'
+            value={surveyTitle}
+            onChange={(e) => setSurveyTitle(e.target.value)}
           />
+          <button
+            className='w-[80px] p-[5px] rounded-md shadow-md bg-slate-200 hover:bg-blue-400'
+            onClick={PushSurveyTitle}
+          >
+            Save
+          </button>
         </div>
       </section>
       <section className='descriptoionSection w-full h-full  flex items-center justify-center mb-[120px]'>
