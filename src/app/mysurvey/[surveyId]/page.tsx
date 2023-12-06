@@ -123,11 +123,6 @@ export default function Home({ params }: {
         getAllQuestions(surveyId: $surveyId) {
           q_id
           text
-          options {
-            o_id
-            text
-            score
-          }
         }
       }
     `;
