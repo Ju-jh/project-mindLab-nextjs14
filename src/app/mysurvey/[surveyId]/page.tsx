@@ -295,17 +295,17 @@ export default function Home({ params }: {
                 />
                 <button>문제 제목 저장</button>
                 <div className='flex mt-[20px]'>
-                  {Question.options && Question.options.map((option, _optionIndex) => (
+                  {Question.options && Question.options.map((option, optionIndex) => (
                     <div
                       key={option.o_id}
                       className='mr-[30px] px-[20px] py-[10px] shadow-sm shadow-slate-400 rounded-sm transition-all flex items-center'
                     >
                       <div className='bg-slate-300 flex items-center justify-center w-[35px] h-[35px] rounded-full mr-[10px]'>
-                        <span>{option.text}</span>
+                        <span>{optionIndex}</span>
                       </div>
                       <div className='flex flex-col items-center justify-between'>
-                        <input type='text' placeholder='문항 제목을 입력하세요.' className='bg-transparent' />
-                        <input type='number' placeholder='점수를 입력하세요.' className='bg-transparent' />
+                        <input type='text' placeholder={`${option.text}`} className='bg-transparent' />
+                        <input type='number' placeholder={`${option.score}`} className='bg-transparent' />
                       </div>
                       <button
                         className='w-[40px] text-[20px] h-full rounded-sm shadow-sm hover:bg-blue-600 hover:text-white'
