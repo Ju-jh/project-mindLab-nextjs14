@@ -40,9 +40,9 @@ export default function Home({ params }: {
 
   const PushSurveyTitle = async (surveyId: string, newTitle: string) => {
     const query = `
-      mutation CreateSurvey {
-        createSurvey {
-          s_id
+      mutation UpdatMySurveyTitle($surveyId: String!, $newTitle: String!) {
+        updatMySurveyTitle(surveyId: $surveyId, newTitle: $newTitle) {
+        
         }
       }
     `;
