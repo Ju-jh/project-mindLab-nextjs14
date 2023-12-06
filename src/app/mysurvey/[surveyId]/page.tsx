@@ -22,6 +22,7 @@ export default function Home({ params }: {
 
   const surveyId = params.surveyId;
 
+  console.log(problems)
 
   const addProblem = () => {
     const newProblem = { id: problems.length + 1, title: '', options: [{ id: 1, text: '' }] };
