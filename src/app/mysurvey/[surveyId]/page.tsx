@@ -18,9 +18,16 @@ interface Question {
   q_id: string;
   text: string;
   survey: Survey;
-  options: any;
+  options: Option;
 }
 
+interface Option {
+  o_id: string;
+  text: string;
+  score: number;
+  survey: Survey;
+  question: Question;
+}
 
 export default function Home({ params }: {
   params: { surveyId:string}
@@ -37,23 +44,23 @@ export default function Home({ params }: {
   };
 
 
-  const addOption = (QuestionIndex: number, optionIndex: number) => {
-    const newOption = { id: Questions[QuestionIndex].options.length + 1, text: '' };
-    const updatedOptions = [...Questions[QuestionIndex].options, newOption];
-    const updatedProblems = [...Questions];
-    updatedProblems[QuestionIndex].options = updatedOptions;
-    setQuestions(updatedProblems);
-  };
+  // const addOption = (QuestionIndex: number, optionIndex: number) => {
+  //   const newOption = { id: Questions[QuestionIndex].options.length + 1, text: '' };
+  //   const updatedOptions = [...Questions[QuestionIndex].options, newOption];
+  //   const updatedProblems = [...Questions];
+  //   updatedProblems[QuestionIndex].options = updatedOptions;
+  //   setQuestions(updatedProblems);
+  // };
 
-  const removeOption = (QuestionIndex: number, optionIndex: number) => {
-    const updatedOptions = [...Questions[QuestionIndex].options];
-    updatedOptions.splice(optionIndex, 1);
+  // const removeOption = (QuestionIndex: number, optionIndex: number) => {
+  //   const updatedOptions = [...Questions[QuestionIndex].options];
+  //   updatedOptions.splice(optionIndex, 1);
 
-    const updatedProblems = [...Questions];
-    updatedProblems[QuestionIndex].options = updatedOptions;
+  //   const updatedProblems = [...Questions];
+  //   updatedProblems[QuestionIndex].options = updatedOptions;
 
-    setQuestions(updatedProblems);
-  };
+  //   setQuestions(updatedProblems);
+  // };
 
   const createQuestion = async (surveyId: string) => {
     const mutation = `
@@ -139,7 +146,7 @@ export default function Home({ params }: {
                   placeholder={`${Question.text}`}
                   className='ml-[10px] pl-[10px] w-[500px]'
                 />
-                <div className='flex mt-[20px]'>
+                {/* <div className='flex mt-[20px]'>
                   {Question.options.map((option, optionIndex) => (
                     <div
                       key={option.id}
@@ -165,7 +172,7 @@ export default function Home({ params }: {
                   >
                     <span>+</span>
                   </button>
-                </div>
+                </div> */}
               
               </li>
             ))}
