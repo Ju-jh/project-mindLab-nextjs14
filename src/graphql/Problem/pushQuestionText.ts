@@ -7,7 +7,7 @@ export const updateTextGraphQLQuery = async (params: UpdateGraphQLQueryParams) =
   const { query, variables } = params;
 
   try {
-    const response = await fetch('/your-graphql-endpoint', {
+    const response = await fetch('https://mind-lab-be-bffdf1dcb8ba.herokuapp.com/graphql', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
