@@ -7,7 +7,7 @@ import { deleteGraphQLQuery } from '@/graphql/Survey/deleteSurvey';
 import { getGraphQLQuery } from '@/graphql/Survey/getMySurvey';
 import { getSurveyDataGraphQLQuery } from '@/graphql/Survey/getSurveyData';
 import { updateGraphQLQuery } from '@/graphql/Survey/updateSurveyTitle';
-import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faCheck, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useState } from 'react';
 
@@ -295,29 +295,35 @@ export default function Home({ params }: {
                 />
                 <button>문제 제목 저장</button>
                 <div className='flex mt-[20px]'>
-                    {Question.options && Question.options.map((option, optionIndex) => (
+                  {Question.options && Question.options.map((option, _optionIndex) => (
                     <div
                       key={option.o_id}
                       className='mr-[30px] px-[20px] py-[10px] shadow-sm shadow-slate-400 rounded-sm transition-all flex items-center'
                     >
-                      <div className='bg-slate-300 flex items-center justify-center w-[23px] h-[23px] rounded-full mr-[10px]'>
+                      <div className='bg-slate-300 flex items-center justify-center w-[35px] h-[35px] rounded-full mr-[10px]'>
                         <span>{option.text}</span>
                       </div>
-                      <input type='text' placeholder='문항을 입력하세요.' className='bg-transparent' / >
-                      <input type='number' placeholder='점수를 입력하세요.' className='bg-transparent' / >
+                      <div className='flex flex-col items-center justify-between'>
+                        <input type='text' placeholder='문항 제목을 입력하세요.' className='bg-transparent' />
+                        <input type='number' placeholder='점수를 입력하세요.' className='bg-transparent' />
+                      </div>
                       <button
-                        className='w-[50px] text-[20px] h-full rounded-sm shadow-sm hover:bg-red-600 hover:text-white'
-                        // onClick={() => removeOption(QuestionIndex, optionIndex)}
+                        className='w-[40px] text-[20px] h-full rounded-sm shadow-sm hover:bg-blue-600 hover:text-white'
                       >
-                        <FontAwesomeIcon icon={faTrash} className='text-[20px]'/>
+                        <FontAwesomeIcon icon={faCheck} className='text-[20px]' />
+                      </button>
+                      <button
+                        className='w-[40px] text-[20px] h-full rounded-sm shadow-sm hover:bg-red-600 hover:text-white'
+                      >
+                        <FontAwesomeIcon icon={faTrash} className='text-[20px]' />
                       </button>
                     </div>
                   ))}
                   <button
-                    className='mr-[30px] p-[10px] w-[50px] h-[50px] shadow-sm shadow-slate-400 rounded-sm hover:bg-slate-400 transition-all'
+                    className='mr-[30px] p-[10px] w-[100px] h-full shadow-sm shadow-slate-400 rounded-sm hover:bg-slate-400 transition-all'
                     onClick={() => addOption(surveyId, Question.q_id)}
                   >
-                    <span>문항 추가 +</span>
+                    <span className=''>문항 추가 +</span>
                   </button>
                 </div>
               
