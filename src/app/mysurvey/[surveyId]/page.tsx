@@ -35,6 +35,7 @@ export default function Home({ params }: {
 }) {
   const [mySurveys, setMySurveys] = useState<Survey[]>([]);
   const [surveyTitle, setSurveyTitle] = useState<string>('');
+  const [surveyDescription, setSurveyDescription] = useState<string>('');
   const [Questions, setQuestions] = useState<Question[]>([]);
 
   const surveyId = params.surveyId;
@@ -56,20 +57,20 @@ export default function Home({ params }: {
     }
   };
 
-  const PushSurveyDescription = async () => {
+  const PushSurveyDescription = async (surveyId: string, newDescription: string) => {
     const query = `
-      mutation CreateSurvey {
-        createSurvey {
-          s_id
+      mutation UpdatMySurveyDescription($surveyId: String!, $newDescription: String!) {
+        updatMySurveyDescription(surveyId: $surveyId, newDescription: $newDescription) {
+          description
         }
       }
     `;
     try {
-      const result = await sendGraphQLQuery(query, {});
-      if (result.data.createSurvey) {
+      const result = await updateGraphQLQuery(query, {surveyId, newDescription});
+      if (result.data.PushSurveyDescription) {
       }
     } catch (error) {
-      console.error('새 설문지 생성 실패:', error);
+      console.error('설문지 설명 수정 실패:', error);
     }
   };
 
@@ -149,10 +150,16 @@ export default function Home({ params }: {
       </section>
       <section className='descriptoionSection w-full h-full  flex items-center justify-center mb-[120px]'>
         <div className='descriptoionDiv w-[800px] h-[130px] flex shadow-sm shadow-slate-400 rounded-md p-[30px] cursor-pointer'>
-          <input type='text' placeholder='설문지를 설명해주세요.' className='w-full h-full bg-transparent border-none'/>
+          <input
+            type='text'
+            placeholder={`${surveyDescription}`}
+            className='w-full h-full bg-transparent border-none'
+            value={surveyDescription}
+            onChange={(e) => setSurveyDescription(e.target.value)}
+          />
           <button
             className='w-[80px] h-full p-[5px] rounded-md shadow-md bg-slate-200 hover:bg-blue-400'
-            onClick={PushSurveyDescription}
+            onClick={() => PushSurveyDescription(surveyId, surveyDescription)}
           >
             설명 저장
           </button>
