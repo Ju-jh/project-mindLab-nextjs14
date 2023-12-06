@@ -303,8 +303,8 @@ export default function Home({ params }: {
                     placeholder={`${Question.text}`}
                     className='ml-[10px] pl-[10px] w-[500px]'
                   />
-                  <button className='w-[50px] h-full'>
-                    <FontAwesomeIcon icon={faCheck} className='text-[20px]' />
+                  <button className='w-[50px] h-full shadow-sm rounded-md hover:slate-300'>
+                    저장
                   </button>
                 </div>
                 <div className='flex mt-[20px] h-[80px]'>
