@@ -14,20 +14,24 @@ interface Survey {
   user: string;
 }
 
+interface Question {
+  q_id: string;
+  text: string;
+  survey: Survey;
+  options: any;
+}
+
+
 export default function Home({ params }: {
   params: { surveyId:string}
 }) {
   const [mySurveys, setMySurveys] = useState<Survey[]>([]);
-  const [problems, setProblems] = useState([{ id: 1, title: '', options: [{ id: 1, text: '' }] }]);
+  const [problems, setProblems] = useState<Question[]>([]);
 
   const surveyId = params.surveyId;
 
   console.log(problems)
 
-  const addProblem = () => {
-    const newProblem = { id: problems.length + 1, title: '', options: [{ id: 1, text: '' }] };
-    setProblems([...problems, newProblem]);
-  };
 
   const removeProblem = (problemIndex: number) => {
     const updatedProblems = [...problems];
@@ -120,7 +124,7 @@ export default function Home({ params }: {
 
   useEffect(() => {
     getQuestions(surveyId)
-  })
+  },[surveyId])
 
   return (
     <main className='flex-col w-full h-full p-[30px] pt-[60px]'>
@@ -146,7 +150,7 @@ export default function Home({ params }: {
         {problems.length > 0 && (
           <ul className='problemUl flex-col list-decimal  pl-[30px]'>
             {problems.map((problem, problemIndex) => (
-              <li key={problem.id} className='mb-[30px] ml-[30px]'>
+              <li key={problem.q_id} className='mb-[30px] ml-[30px]'>
                 <button
                   onClick={() => removeProblem(problemIndex)}
                   className='bg-red-600 flex items-center justify-center absolute w-[30px] h-[30px] rounded-full translate-x-[-60px] translate-y-[-4px] hover:bg-slate-400 transition-all'
@@ -158,7 +162,7 @@ export default function Home({ params }: {
                   placeholder={`문제 ${problemIndex + 1} 제목을 입력해주세요`}
                   className='ml-[10px] pl-[10px] w-[500px]'
                 />
-                <div className='flex mt-[20px]'>
+                {/* <div className='flex mt-[20px]'>
                   {problem.options.map((option, optionIndex) => (
                     <div
                       key={option.id}
@@ -184,7 +188,7 @@ export default function Home({ params }: {
                   >
                     <span>+</span>
                   </button>
-                </div>
+                </div> */}
               
               </li>
             ))}
