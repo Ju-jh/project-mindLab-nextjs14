@@ -34,14 +34,11 @@ interface Option {
 export default function Home({ params }: {
   params: { surveyId:string}
 }) {
-  const [SurveyDATA, setSurveyDATA] = useState<Survey[]>([]);
   const [surveyTitle, setSurveyTitle] = useState<string>('');
   const [surveyDescription, setSurveyDescription] = useState<string>('');
   const [Questions, setQuestions] = useState<Question[]>([]);
 
   const surveyId = params.surveyId;
-
-  console.log(SurveyDATA)
 
   const getSurveyData = async (surveyId: string) => {
     const query = `
