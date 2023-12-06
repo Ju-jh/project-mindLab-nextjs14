@@ -323,9 +323,8 @@ export default function Home({ params }: {
                 <div className='px-[20px] w-[600px] py-[10px] shadow-sm shadow-slate-400 rounded-sm flex items-center'>
                   <input
                     type="text"
-                    placeholder={`${Question.text}`}
+                    placeholder={Question.text}
                     className='ml-[10px] pl-[10px] w-[500px]'
-                    value={Question.text}
                     onChange={(e) => {
                       const newText = e.target.value;
                       setQuestions((prevQuestions) => {
