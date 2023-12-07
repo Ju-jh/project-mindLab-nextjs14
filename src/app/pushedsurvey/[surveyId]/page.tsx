@@ -21,6 +21,7 @@ interface Question {
   text: string;
   survey: Survey;
   options: Option[];
+  selectedOption?: Option;
 }
 
 interface Option {
@@ -34,15 +35,49 @@ interface Option {
 export default function Home({ params }: {
   params: { surveyId:string}
 }) {
+  const surveyId = params.surveyId;
   const [isThisSurveyPublic, setIsThisSurveyPublic] = useState<boolean>()
   const [isClicked, setIsClicked] = useState<boolean>(false)
   const [originTitle, setOriginTitle] = useState<string>('')
   const [originDescription, setOriginDescription] = useState<string>('');
   const [Questions, setQuestions] = useState<Question[]>([]);
+  
+  const saveAnswers = async () => {
+    const answers: { questionId: string; optionId: any; }[] = [];
 
-  
-  const surveyId = params.surveyId;
-  
+    Questions.forEach((question) => {
+      if (question.selectedOption) {
+        answers.push({
+          questionId: question.q_id,
+          optionId: question.selectedOption.o_id,
+        });
+      }
+    });
+
+    const mutation = `
+      mutation SaveAnswers($surveyId: String!, $answers: [AnswerInput]!) {
+        saveAnswers(surveyId: $surveyId, answers: $answers) {
+          success
+          message
+        }
+      }
+    `;
+
+    try {
+      const result = await sendGraphQLQuery(mutation, {
+        surveyId: surveyId,
+        answers: answers,
+      });
+
+      if (result.data.saveAnswers.success) {
+
+      } else {
+        console.error('답변 저장 실패:', result.data.saveAnswers.message);
+      }
+    } catch (error) {
+      console.error('답변 저장 실패:', error);
+    }
+  };
   
   useEffect(() => {
     const fetchData = async () => {
@@ -122,8 +157,27 @@ export default function Home({ params }: {
                   {Question.options && Question.options.map((option, optionIndex) => (
                     <div
                       key={option.o_id}
-                      // value={option.newScore}
-                      className='mr-[30px] px-[20px] py-[10px] shadow-sm shadow-slate-400 hover:bg-slate-300 rounded-sm transition-all flex items-center'
+                      className={`mr-[30px] px-[20px] py-[10px] shadow-sm shadow-slate-400 hover:bg-slate-300 rounded-sm transition-all flex items-center ${
+                        Question.selectedOption && Question.selectedOption.o_id === option.o_id
+                          ? 'bg-blue-200'  // 선택된 옵션 표시 스타일
+                          : ''
+                      }`}
+                      onClick={() => {
+                        // 옵션을 클릭하면 선택 상태를 업데이트
+                        const updatedOptions = Question.options.map((o) => ({
+                          ...o,
+                          selected: o.o_id === option.o_id,
+                        }));
+                        setQuestions((prevQuestions) => {
+                          const updatedQuestions = [...prevQuestions];
+                          const targetQuestionIndex = updatedQuestions.findIndex(
+                            (q) => q.q_id === Question.q_id
+                          );
+                          updatedQuestions[targetQuestionIndex].options = updatedOptions;
+                          updatedQuestions[targetQuestionIndex].selectedOption = option;
+                          return updatedQuestions;
+                        });
+                      }}
                     >
                       <div className='bg-slate-300 flex items-center justify-center w-[35px] h-[35px] rounded-full mr-[10px]'>
                         <span>{optionIndex + 1}</span>
