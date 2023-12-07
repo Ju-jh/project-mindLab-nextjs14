@@ -235,8 +235,8 @@ export default function Home({ params }: {
   };
 
   const deleteOption = async (optionId: string) => {
-    if (isClicked === false) {
-      setIsClicked(true);
+    if (isClicked) {
+      setIsClicked(false);
     } else {
       setIsClicked(true);
     }
