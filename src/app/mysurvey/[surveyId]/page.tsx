@@ -52,11 +52,6 @@ export default function Home({ params }: {
   const surveyId = params.surveyId;
 
   const PushSurveyTitle = async (surveyId: string, newTitle: string) => {
-    if (isClicked === false) {
-      setIsClicked(true)
-    } else {
-      setIsClicked(true)
-    }
     const query = `
       mutation UpdateMySurveyTitle($surveyId: String!, $newTitle: String!) {
         updateMySurveyTitle(surveyId: $surveyId, newTitle: $newTitle) {
@@ -75,11 +70,6 @@ export default function Home({ params }: {
   };
 
   const PushSurveyDescription = async (surveyId: string, newDescription: string) => {
-    if (isClicked === false) {
-      setIsClicked(true)
-    } else {
-      setIsClicked(true)
-    }
     const query = `
       mutation UpdateMySurveyDescription($surveyId: String!, $newDescription: String!) {
         updateMySurveyDescription(surveyId: $surveyId, newDescription: $newDescription) {
@@ -133,8 +123,8 @@ export default function Home({ params }: {
   };
 
   const pushQuestionText = async (surveyId: string, questionId: string, newText: string) => {
-    if (isClicked === false) {
-      setIsClicked(true)
+    if (isClicked) {
+      setIsClicked(false)
     } else {
       setIsClicked(true)
     }
@@ -159,8 +149,8 @@ export default function Home({ params }: {
   }
 
   const removeQuestion = async (surveyId: string, questionId: string) => {
-    if (isClicked === false) {
-      setIsClicked(true)
+    if (isClicked) {
+      setIsClicked(false)
     } else {
       setIsClicked(true)
     }
@@ -185,11 +175,11 @@ export default function Home({ params }: {
   };
 
   const addOption = async (surveyId: string, questionId: string) => {
-    if (isClicked === false) {
-      setIsClicked(true)
-    } else {
-      setIsClicked(true)
-    }
+      if (isClicked) {
+        setIsClicked(false)
+      } else {
+        setIsClicked(true)
+      }
     const mutation = `
       mutation CreateOption($surveyId: String!, $questionId: String!) {
         createOption(surveyId: $surveyId, questionId: $questionId) {
@@ -212,8 +202,8 @@ export default function Home({ params }: {
   };
 
   const pushOption = async (optionId: string, newText: string, newScore: number) => {
-    if (isClicked === false) {
-      setIsClicked(true)
+    if (isClicked) {
+      setIsClicked(false)
     } else {
       setIsClicked(true)
     }
