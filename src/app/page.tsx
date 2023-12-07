@@ -90,7 +90,7 @@ export default function Home() {
       `;
       try {
         const result = await getGraphQLQuery({ query });
-        const publicSurveysData = result.data.getPublicSurvey || [];
+        const publicSurveysData = result.data || [];
         setPublicSurveys(publicSurveysData);
       } catch (error) {
         console.error('나의 설문지 가져오기 실패:', error);
