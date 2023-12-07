@@ -1,6 +1,7 @@
 'use client'
 
 import { createOptionGraphQLQuery } from '@/graphql/Option/createOption';
+import { updateTextAndScoreGraphQLQuery } from '@/graphql/Option/pushOptionTextAndScore';
 import { sendGraphQLQuery } from '@/graphql/Problem/createProblem';
 import { mapQuestionsToProblems } from '@/graphql/Problem/getProblems';
 import { updateTextGraphQLQuery } from '@/graphql/Problem/pushQuestionText';
@@ -30,6 +31,8 @@ interface Option {
   o_id: string;
   text: string;
   score: number;
+  newText: string; 
+  newScore: number;
 }
 
 export default function Home({ params }: {
@@ -39,6 +42,11 @@ export default function Home({ params }: {
   const [surveyTitle, setSurveyTitle] = useState<string>(originTitle);
   const [originDescription, setOriginDescription] = useState<string>('');
   const [surveyDescription, setSurveyDescription] = useState<string>(originDescription);
+  const [option, setOption] = useState({
+    newText: '',
+    newScore: 0,
+  });
+
 
   const [Questions, setQuestions] = useState<Question[]>([]);
 
@@ -224,6 +232,38 @@ export default function Home({ params }: {
     }
   };
 
+  const pushOption = async (optionId: string, newText: string, newScore: number) => {
+    const mutation = `
+      mutation UpdateOptionTextAndScore($optionId: String!, $newText: String!, $newScore: Float!) {
+        updateOptionTextAndScore(optionId: $optionId, newText: $newText, newScore: $newScore) {
+          o_id
+          text
+          score
+        }
+      }
+    `;
+
+    const variables = {
+      optionId: optionId,
+      newText: newText,
+      newScore: newScore,
+    };
+
+    try {
+      const result = await updateTextAndScoreGraphQLQuery({
+        query: mutation,
+        variables: variables,
+      });
+
+      if (result.data.updateOptionTextAndScore) {
+        alert('옵션 업데이트 완료되었습니다.');
+      }
+    } catch (error) {
+      console.error('옵션 업데이트 실패:', error);
+    }
+  };
+
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -358,10 +398,34 @@ export default function Home({ params }: {
                         <span>{optionIndex + 1}</span>
                       </div>
                       <div className='flex flex-col items-center justify-between'>
-                        <input type='text' placeholder={`${option.text}`} className='bg-transparent' />
-                        <input type='number' placeholder='점수를 입력하세요.' className='bg-transparent pl-[60px]' />
+                        <input
+                          type='text'
+                          placeholder={`${option.text}`}
+                          value={option.newText}
+                          onChange={(e) => {
+                            setOption((prevOption) => ({
+                              ...prevOption,
+                              newText: e.target.value,
+                            }));
+                          }}
+                          className='bg-transparent'
+                        />
+                        <input
+                          type='number'
+                          placeholder='점수를 입력하세요.'
+                          value={option.newScore}
+                          onChange={(e) => {
+                            setOption((prevOption) => ({
+                              ...prevOption,
+                              newScore: parseFloat(e.target.value),
+                            }));
+
+                          }}
+                          className='bg-transparent pl-[60px]'
+                        />
                       </div>
                       <button
+                        onClick={()=>pushOption(option.o_id, option.newText, option.newScore)}
                         className='w-[40px] text-[20px] h-full rounded-sm shadow-sm hover:bg-blue-600 hover:text-white'
                       >
                         <FontAwesomeIcon icon={faCheck} className='text-[20px]' />
