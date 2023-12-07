@@ -3,7 +3,7 @@ interface UpdateGraphQLQueryParams {
   variables: Record<string, any>;
 }
 
-export const updateTextGraphQLQuery = async (params: UpdateGraphQLQueryParams) => {
+export const updateTextAndScoreGraphQLQuery = async (params: UpdateGraphQLQueryParams) => {
   const { query, variables } = params;
 
   try {
