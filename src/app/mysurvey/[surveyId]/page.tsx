@@ -234,6 +234,35 @@ export default function Home({ params }: {
     }
   };
 
+  const deleteOption = async (optionId: string) => {
+    if (isClicked === false) {
+      setIsClicked(true);
+    } else {
+      setIsClicked(true);
+    }
+
+    const mutation = `
+      mutation DeleteOption($optionId: String!) {
+        deleteOption(optionId: $optionId) {
+          o_id
+        }
+      }
+    `;
+
+    const variables = {
+      optionId: optionId,
+    };
+
+    try {
+      const result = await deleteGraphQLQuery(mutation, variables);
+      if (result.data.deleteOption) {
+      }
+    } catch (error) {
+      console.error('Failed to delete option:', error);
+    }
+  };
+
+
   useEffect(() => {
     const fetchData = async () => {
         const query = `
@@ -406,6 +435,7 @@ export default function Home({ params }: {
                       </button>
                       <button
                         className='w-[40px] text-[20px] h-full rounded-sm shadow-sm hover:bg-red-600 hover:text-white'
+                        onClick={()=>deleteOption(option.o_id)}
                       >
                         <FontAwesomeIcon icon={faTrash} className='text-[20px]' />
                       </button>
