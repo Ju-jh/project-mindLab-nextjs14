@@ -263,6 +263,33 @@ export default function Home({ params }: {
     }
   };
 
+  const updateMySurveyIsPublic = async (surveyId: string) => {
+    const mutation = `
+      mutation UpdateMySurveyIsPublic($surveyId: String!) {
+        updateMySurveyIsPublic(surveyId: $surveyId) {
+          s_id
+          title
+          description
+          public
+          # Add other fields you want to retrieve
+        }
+      }
+    `;
+
+    const variables = {
+      surveyId,
+    };
+
+    try {
+      const result = await sendGraphQLQuery(mutation, variables);
+      return result.data.updateMySurveyIsPublic;
+    } catch (error) {
+      console.error('Failed to update survey public status:', error);
+      throw error;
+    }
+  };
+
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -319,7 +346,13 @@ export default function Home({ params }: {
   return (
     <main className='flex-col w-full h-full p-[30px] pt-[60px]'>
       <section className='w-full h-[100px]  flex items-center justify-end pr-[50px]'>
-        { true ? <button className='w-[150px] h-[50px] p-[5px] rounded-md shadow-md ml-[20px] bg-slate-200 hover:bg-blue-400'><span className='font-bold text-[20px]'>Puplic</span></button> : null } 
+        {true ?
+          <button
+            className='w-[150px] h-[50px] p-[5px] rounded-md shadow-md ml-[20px] bg-slate-200 hover:bg-blue-400'
+            onClick={()=>updateMySurveyIsPublic(surveyId)}
+          >
+            <span className='font-bold text-[20px]'>Puplic</span>
+          </button> : null} 
         { false ? <button className='w-[150px] h-[50px] p-[5px] rounded-md shadow-md ml-[20px] bg-slate-200 hover:bg-blue-400'><span className='font-bold text-[20px]'>Private</span></button> : null }
       </section>
       <section className='titleSection w-full h-[200px]  flex items-center justify-center '>
