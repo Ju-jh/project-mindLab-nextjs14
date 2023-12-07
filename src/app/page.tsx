@@ -3,7 +3,7 @@
 import { sendGraphQLQuery } from '@/graphql/Survey/createMySurvey';
 import { deleteGraphQLQuery } from '@/graphql/Survey/deleteSurvey';
 import { getGraphQLQuery } from '@/graphql/Survey/getMySurvey';
-import { faX } from '@fortawesome/free-solid-svg-icons';
+import { faClipboard, faPeopleGroup, faX } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
@@ -137,7 +137,8 @@ export default function Home() {
       </div>
       }
       <div className='my-[20px]'>
-        <span className='font-bold text-[22px]'>참여하는 설문지</span>
+        <FontAwesomeIcon icon={faClipboard} className='text-[22px]'/>
+        <span className='font-bold text-[22px] ml-[10px]'>참여하는 설문지</span>
       </div>
       <div className='cardsDiv flex items-start justify-start flex-wrap gap-[30px] w-full h-[300px] shadow-sm shadow-slate-400 rounded-md p-[30px] mt-[20px] bg-white'>
         { publicSurveys.map((survey) => (
