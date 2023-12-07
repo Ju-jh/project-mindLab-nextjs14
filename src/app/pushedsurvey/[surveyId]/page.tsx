@@ -371,59 +371,14 @@ export default function Home({ params }: {
   
   return (
     <main className='flex-col w-full h-full p-[30px] pt-[60px]'>
-      <section className='w-full h-[100px]  flex items-center justify-end pr-[50px]'>
-        {
-          (isThisSurveyPublic === false) &&
-          <button
-            className='w-[150px] h-[50px] p-[5px] rounded-md shadow-md ml-[20px] bg-slate-200 hover:bg-blue-400'
-            onClick={()=>updateMySurveyIsPublic(surveyId)}
-          >
-              <span className='font-bold text-[20px] mr-[10px]'>Puplic</span>
-              <FontAwesomeIcon icon={faShareFromSquare} />
-          </button> } 
-        {
-          (isThisSurveyPublic === true) &&
-          <button
-          className='w-[150px] h-[50px] p-[5px] rounded-md shadow-md ml-[20px] bg-slate-200 hover:bg-blue-400'
-          onClick={() => updateMySurveyIsPublic(surveyId)}
-          >
-              <span className='font-bold text-[20px] mr-[10px]'>Private</span>
-              <FontAwesomeIcon icon={faLock} />
-            </button> 
-        }
-      </section>
       <section className='titleSection w-full h-[200px]  flex items-center justify-center '>
         <div className='titleDiv w-[500px]  flex items-center justify-center'>
-          <input
-            type="text"
-            placeholder={`${originTitle}`}
-            className='text-center text-[30px] w-full font-bold'
-            value={surveyTitle}
-            onChange={(e) => setSurveyTitle(e.target.value)}
-          />
-          <button
-            className='absolute translate-x-[300px] w-[80px] p-[5px] rounded-md shadow-md bg-slate-200 hover:bg-blue-400'
-            onClick={() => PushSurveyTitle(surveyId, surveyTitle)}
-          >
-            제목 저장
-          </button>
+          <span>{originTitle}</span>
         </div>
       </section>
       <section className='descriptoionSection w-full h-full  flex items-center justify-center mb-[120px]'>
         <div className='descriptoionDiv min-w-[800px] h-[130px] flex shadow-sm shadow-slate-400 rounded-md p-[30px] cursor-pointer'>
-          <input
-            type='text'
-            placeholder={`${originDescription}`}
-            className='w-full h-full bg-transparent border-none'
-            value={surveyDescription}
-            onChange={(e) => setSurveyDescription(e.target.value)}
-          />
-          <button
-            className='w-[120px] h-full p-[5px] rounded-md shadow-md bg-slate-200 hover:bg-blue-400'
-            onClick={() => PushSurveyDescription(surveyId, surveyDescription)}
-          >
-            설명 저장
-          </button>
+          <span className='w-full h-full bg-transparent border-none'>{originDescription}</span>
         </div>
       </section>
       <section className='problemSection w-full min-h-[400px]  '>
