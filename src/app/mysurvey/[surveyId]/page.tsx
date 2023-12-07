@@ -38,6 +38,7 @@ interface Option {
 export default function Home({ params }: {
   params: { surveyId:string}
 }) {
+  const [isClicked, setIsClicked] = useState(false)
   const [originTitle, setOriginTitle] = useState<string>('')
   const [surveyTitle, setSurveyTitle] = useState<string>(originTitle);
   const [originDescription, setOriginDescription] = useState<string>('');
@@ -81,6 +82,11 @@ export default function Home({ params }: {
   }
 
   const PushSurveyTitle = async (surveyId: string, newTitle: string) => {
+    if (isClicked === false) {
+      setIsClicked(true)
+    } else {
+      setIsClicked(true)
+    }
     const query = `
       mutation UpdateMySurveyTitle($surveyId: String!, $newTitle: String!) {
         updateMySurveyTitle(surveyId: $surveyId, newTitle: $newTitle) {
@@ -99,6 +105,11 @@ export default function Home({ params }: {
   };
 
   const PushSurveyDescription = async (surveyId: string, newDescription: string) => {
+    if (isClicked === false) {
+      setIsClicked(true)
+    } else {
+      setIsClicked(true)
+    }
     const query = `
       mutation UpdateMySurveyDescription($surveyId: String!, $newDescription: String!) {
         updateMySurveyDescription(surveyId: $surveyId, newDescription: $newDescription) {
@@ -117,6 +128,11 @@ export default function Home({ params }: {
   };
 
   const createQuestion = async (surveyId: string) => {
+    if (isClicked === false) {
+      setIsClicked(true)
+    } else {
+      setIsClicked(true)
+    }
     const mutation = `
       mutation CreateQuestion($surveyId: String!) {
         createQuestion(surveyId: $surveyId) {
@@ -147,6 +163,11 @@ export default function Home({ params }: {
   };
 
   const pushQuestionText = async (surveyId: string, questionId: string, newText: string) => {
+    if (isClicked === false) {
+      setIsClicked(true)
+    } else {
+      setIsClicked(true)
+    }
     const query = `
       mutation UpdateQuestionText($surveyId: String!, $questionId: String!, $newText: String!) {
         updateQuestionText(surveyId: $surveyId, questionId: $questionId, newText: $newText) {
@@ -190,6 +211,11 @@ export default function Home({ params }: {
   };
 
   const removeQuestion = async (surveyId: string, questionId: string) => {
+    if (isClicked === false) {
+      setIsClicked(true)
+    } else {
+      setIsClicked(true)
+    }
     const mutation = `
       mutation DeleteQuestion($surveyId: String!, $questionId: String!) {
         deleteQuestion(surveyId: $surveyId, questionId: $questionId) {
@@ -211,6 +237,11 @@ export default function Home({ params }: {
   };
 
   const addOption = async (surveyId: string, questionId: string) => {
+    if (isClicked === false) {
+      setIsClicked(true)
+    } else {
+      setIsClicked(true)
+    }
     const mutation = `
       mutation CreateOption($surveyId: String!, $questionId: String!) {
         createOption(surveyId: $surveyId, questionId: $questionId) {
@@ -233,6 +264,11 @@ export default function Home({ params }: {
   };
 
   const pushOption = async (optionId: string, newText: string, newScore: number) => {
+    if (isClicked === false) {
+      setIsClicked(true)
+    } else {
+      setIsClicked(true)
+    }
     console.log(optionId, newText, newScore, '@@@')
     const mutation = `
       mutation UpdateOptionTextAndScore($optionId: String!, $newText: String!, $newScore: Float!) {
@@ -307,10 +343,12 @@ export default function Home({ params }: {
     } catch (error) {
       console.error('설문지 데이터 로딩 실패:', error);
     }
-  };
+    };
 
-    fetchData(); 
-  }, [surveyId]);
+    if (surveyId) {
+      fetchData();
+    }
+  }, [surveyId, isClicked]);
 
   return (
     <main className='flex-col w-full h-full p-[30px] pt-[60px]'>
