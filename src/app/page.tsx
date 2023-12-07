@@ -102,7 +102,7 @@ export default function Home() {
   },[])
 
   return (
-    <main className='main flex-col w-full min-h-[1400px] p-[30px] pt-[90px] text-center'>
+    <main className='main flex-col w-full min-h-[1400px] p-[30px] pt-[90px] text-center bg-[#e5ccbe]'>
       {
         accessToken &&
         <div className='my-[20px]'>
