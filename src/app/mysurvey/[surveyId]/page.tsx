@@ -357,9 +357,9 @@ export default function Home({ params }: {
 
     try {
       const result = await sendGraphQLQuery(query, variables);
-      setIsThisSurveyPublic(result)
-      console.log(result.data, 'result.data')
-      return result.data;
+      setIsThisSurveyPublic(result.data.public)
+      console.log(result.data.public, 'result.data')
+      return result.data.public;
     } catch (error) {
       console.error('Failed to fetch survey information:', error);
       throw error;
