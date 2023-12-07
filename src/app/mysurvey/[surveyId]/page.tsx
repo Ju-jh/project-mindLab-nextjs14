@@ -47,8 +47,6 @@ export default function Home({ params }: {
     newScore: 0,
   });
 
-
-
   const surveyId = params.surveyId;
 
   const PushSurveyTitle = async (surveyId: string, newTitle: string) => {
@@ -112,8 +110,8 @@ export default function Home({ params }: {
             options: [],
           },
         ]);
-        if (isClicked === false) {
-          setIsClicked(true)
+        if (isClicked) {
+          setIsClicked(false)
         } else {
           setIsClicked(true)
         }
@@ -137,8 +135,8 @@ export default function Home({ params }: {
         variables: { surveyId, questionId, newText },
       });
       if (result.data.updateQuestionText) {
-        if (isClicked === false) {
-          setIsClicked(true)
+        if (isClicked) {
+          setIsClicked(false)
         } else {
           setIsClicked(true)
         }
@@ -165,8 +163,8 @@ export default function Home({ params }: {
     try {
       const result = await deleteGraphQLQuery(mutation, variables);
       if (result) {
-        if (isClicked === false) {
-          setIsClicked(true)
+        if (isClicked) {
+          setIsClicked(false)
         } else {
           setIsClicked(true)
         }
@@ -191,8 +189,8 @@ export default function Home({ params }: {
     try {
       const result = await createOptionGraphQLQuery(mutation, variables);
       if (result.data.createOption) {
-        if (isClicked === false) {
-          setIsClicked(true)
+        if (isClicked) {
+          setIsClicked(false)
         } else {
           setIsClicked(true)
         }
@@ -226,8 +224,8 @@ export default function Home({ params }: {
       });
 
       if (result.data.updateOptionTextAndScore) {
-        if (isClicked === false) {
-          setIsClicked(true)
+        if (isClicked) {
+          setIsClicked(false)
         } else {
           setIsClicked(true)
         }
@@ -254,8 +252,8 @@ export default function Home({ params }: {
     try {
       const result = await deleteGraphQLQuery(mutation, variables);
       if (result.data.deleteOption) {
-        if (isClicked === false) {
-          setIsClicked(true)
+        if (isClicked) {
+          setIsClicked(false)
         } else {
           setIsClicked(true)
         }
