@@ -233,6 +233,7 @@ export default function Home({ params }: {
   };
 
   const pushOption = async (optionId: string, newText: string, newScore: number) => {
+    console.log(optionId, newText, newScore, '@@@')
     const mutation = `
       mutation UpdateOptionTextAndScore($optionId: String!, $newText: String!, $newScore: Float!) {
         updateOptionTextAndScore(optionId: $optionId, newText: $newText, newScore: $newScore) {
