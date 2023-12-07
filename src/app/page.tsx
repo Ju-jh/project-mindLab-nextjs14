@@ -137,7 +137,7 @@ export default function Home() {
       </div>
       }
       <div className='my-[20px]'>
-        <FontAwesomeIcon icon={faClipboard} className='text-[22px]'/>
+        <FontAwesomeIcon icon={faClipboard} className='text-[22px]' style={{ fontSize: '22px' }}/>
         <span className='font-bold text-[22px] ml-[10px]'>참여하는 설문지</span>
       </div>
       <div className='cardsDiv flex items-start justify-start flex-wrap gap-[30px] w-full h-[300px] shadow-sm shadow-slate-400 rounded-md p-[30px] mt-[20px] bg-white'>
