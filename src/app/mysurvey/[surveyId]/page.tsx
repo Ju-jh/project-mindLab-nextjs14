@@ -42,7 +42,7 @@ export default function Home({ params }: {
   const [surveyTitle, setSurveyTitle] = useState<string>(originTitle);
   const [originDescription, setOriginDescription] = useState<string>('');
   const [surveyDescription, setSurveyDescription] = useState<string>(originDescription);
-  const [option, setOption] = useState({
+  const [newoption, setOption] = useState({
     newText: '',
     newScore: 0,
   });
@@ -424,7 +424,7 @@ export default function Home({ params }: {
                         />
                       </div>
                       <button
-                        onClick={()=>pushOption(option.o_id, option.newText, option.newScore)}
+                        onClick={()=>pushOption(option.o_id, newoption.newText, newoption.newScore)}
                         className='w-[40px] text-[20px] h-full rounded-sm shadow-sm hover:bg-blue-600 hover:text-white'
                       >
                         <FontAwesomeIcon icon={faCheck} className='text-[20px]' />
