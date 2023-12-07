@@ -12,8 +12,9 @@ export const updateTextAndScoreGraphQLQuery = async (params: UpdateGraphQLQueryP
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ query, variables }),
+      body: JSON.stringify({ query, variables: variables }),
     });
+
 
     const result = await response.json();
 
