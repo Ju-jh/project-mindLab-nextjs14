@@ -8,7 +8,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { useAuth } from './context/isLogined';
-import { publicSurveyGraphQLQuery } from '@/graphql/Survey/getPublicSurveys';
 
 interface Survey {
   s_id: string;
@@ -90,7 +89,7 @@ export default function Home() {
         }
       `;
       try {
-        const result = await publicSurveyGraphQLQuery({ query });
+        const result = await getGraphQLQuery({ query });
         console.log(result, '여기가 result')
         const publicSurveysData = result.data.getPublicSurvey || [];
         setPublicSurveys(publicSurveysData);
