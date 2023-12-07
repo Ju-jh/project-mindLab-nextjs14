@@ -28,15 +28,12 @@ interface Option {
   o_id: string;
   text: string;
   score: number;
-  newText: string; 
-  newScore: number;
 }
 
 export default function Home({ params }: {
   params: { surveyId:string}
 }) {
   const surveyId = params.surveyId;
-  const [isThisSurveyPublic, setIsThisSurveyPublic] = useState<boolean>()
   const [isClicked, setIsClicked] = useState<boolean>(false)
   const [originTitle, setOriginTitle] = useState<string>('')
   const [originDescription, setOriginDescription] = useState<string>('');
@@ -47,12 +44,13 @@ export default function Home({ params }: {
     const answers = Questions.map((question) => ({
       questionId: question.q_id,
       optionId: question.selectedOption ? question.selectedOption.o_id : null,
+      score: question.selectedOption ? question.selectedOption.score : null,
     }));
 
     console.log(answers)
 
     const mutation = `
-      mutation SaveAnswers($surveyId: String!, $answers: [AnswerInput]!) {
+      mutation SaveAnswers($surveyId: String!, $answers: [AnswerInput!]!) {
         saveAnswers(surveyId: $surveyId, answers: $answers) {
           success
           message
