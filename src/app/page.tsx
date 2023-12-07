@@ -111,7 +111,7 @@ export default function Home() {
       }
       {
         accessToken && 
-      <div className='cardsDiv flex items-start justify-start flex-wrap gap-[30px] w-full min-h-[300px] shadow-sm shadow-slate-400 rounded-md p-[30px] mt-[20px]'>
+      <div className='cardsDiv flex items-start justify-start flex-wrap gap-[30px] w-full min-h-[300px] shadow-sm shadow-slate-400 rounded-md p-[30px] mt-[20px] bg-white'>
         { mySurveys.map((survey) => (
           <div key={survey.s_id} className='w-[250px] h-[150px]'>
             <Link href={`/mysurvey/${survey.s_id}`}>
