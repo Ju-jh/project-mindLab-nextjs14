@@ -20,7 +20,6 @@ export default function Home() {
   const [mySurveys, setMySurveys] = useState<Survey[]>([]);
   const [publicSurveys, setPublicSurveys] = useState<Survey[]>([]);
   
-  console.log(publicSurveys, '여기가 publicsurveys');
   const getMySurvey = async () => {
       const query = `
         query GetMySurvey {
@@ -90,7 +89,6 @@ export default function Home() {
       `;
       try {
         const result = await getGraphQLQuery({ query });
-        console.log(result, '여기가 result')
         const publicSurveysData = result.data.getPublicSurvey || [];
         setPublicSurveys(publicSurveysData);
       } catch (error) {
