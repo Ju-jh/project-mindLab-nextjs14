@@ -226,27 +226,24 @@ export default function Home({ params }: {
 
 
   useEffect(() => {
-
-  const fetchData = async () => {
-    const query = `
-      mutation GetSurveyData($surveyId: String!) {
-        getSurveyData(surveyId: $surveyId) {
-          title
-          description
-          questions {
-            q_id
-            text
-            createdAt  // Assuming that createdAt is a property of each question
-            options {
-              o_id
-              text
-              score
+    const fetchData = async () => {
+        const query = `
+          mutation GetSurveyData($surveyId: String!) {
+            getSurveyData(surveyId: $surveyId) {
+              title
+              description
+              questions {
+                q_id
+                text
+                options {
+                  o_id
+                  text
+                  score
+                }
+              }
             }
           }
-        }
-      }
-    `;
-
+          `
     try {
       const result = await getSurveyDataGraphQLQuery(query, surveyId);
       const surveyData = result.data.getSurveyData;
@@ -254,17 +251,14 @@ export default function Home({ params }: {
       setOriginTitle(surveyData.title);
       setOriginDescription(surveyData.description);
 
-      const mappedQuestions = surveyData.questions
-        .map((question: { q_id: string; text: string; createdAt: string; options: any[] }) => {
-          return {
-            q_id: question.q_id,
-            text: question.text,
-            createdAt: question.createdAt, 
-            survey: surveyData,
-            options: question.options || [],
-          };
-        })
-        .sort((a: { createdAt: string | number | Date; }, b: { createdAt: string | number | Date; }) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+      const mappedQuestions = surveyData.questions.map((question: { q_id: string; text: string; options: any; }) => {
+        return {
+          q_id: question.q_id,
+          text: question.text,
+          survey: surveyData,
+          options: question.options || [],
+        };
+      });
 
       setQuestions(mappedQuestions);
     } catch (error) {
