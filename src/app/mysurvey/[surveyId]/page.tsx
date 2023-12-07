@@ -293,31 +293,8 @@ export default function Home({ params }: {
     }
   };
 
-  const checkMySurveyIsPublic = async (surveyId: string) => {
-    const query = `
-      mutation CheckMySurveyIsPublic($surveyId: String!) {
-        checkMySurveyIsPublic(surveyId: $surveyId) {
-          public
-        }
-      }
-    `;
-
-    const variables = {
-      surveyId,
-    };
-
-    try {
-      const result = await sendGraphQLQuery(query, variables);
-      setIsThisSurveyPublic(result)
-      console.log(result.data, 'result.data')
-      return result.data;
-    } catch (error) {
-      console.error('Failed to fetch survey information:', error);
-      throw error;
-    }
-  };
-
-
+  
+  
   useEffect(() => {
     const fetchData = async () => {
         const query = `
@@ -365,6 +342,30 @@ export default function Home({ params }: {
       }
     };
     
+    const checkMySurveyIsPublic = async (surveyId: string) => {
+    const query = `
+      mutation CheckMySurveyIsPublic($surveyId: String!) {
+        checkMySurveyIsPublic(surveyId: $surveyId) {
+          public
+        }
+      }
+    `;
+
+    const variables = {
+      surveyId,
+    };
+
+    try {
+      const result = await sendGraphQLQuery(query, variables);
+      setIsThisSurveyPublic(result)
+      console.log(result.data, 'result.data')
+      return result.data;
+    } catch (error) {
+      console.error('Failed to fetch survey information:', error);
+      throw error;
+    }
+    };
+
     if (surveyId) {
       fetchData();
       checkMySurveyIsPublic(surveyId);
