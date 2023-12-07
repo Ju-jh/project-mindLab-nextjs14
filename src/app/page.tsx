@@ -91,6 +91,7 @@ export default function Home() {
       `;
       try {
         const result = await publicSurveyGraphQLQuery({ query });
+        console.log(result, '여기가 result')
         const publicSurveysData = result.data.getPublicSurvey || [];
         setPublicSurveys(publicSurveysData);
       } catch (error) {
