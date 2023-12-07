@@ -274,6 +274,7 @@ export default function Home({ params }: {
               questions {
                 q_id
                 text
+                createdAt
                 options {
                   o_id
                   text
@@ -290,14 +291,17 @@ export default function Home({ params }: {
       setOriginTitle(surveyData.title);
       setOriginDescription(surveyData.description);
 
-      const mappedQuestions = surveyData.questions.map((question: { q_id: string; text: string; options: any; }) => {
-        return {
-          q_id: question.q_id,
-          text: question.text,
-          survey: surveyData,
-          options: question.options || [],
-        };
-      });
+      const mappedQuestions = surveyData.questions
+        .map((question: { q_id: string; text: string; options: any; createdAt: string }) => {
+          return {
+            q_id: question.q_id,
+            text: question.text,
+            survey: surveyData,
+            options: question.options || [],
+            createdAt: new Date(question.createdAt),
+          };
+        })
+        .sort((a: { createdAt: Date; }, b: { createdAt: Date; }) => a.createdAt.getTime() - b.createdAt.getTime());
 
       setQuestions(mappedQuestions);
     } catch (error) {
