@@ -299,10 +299,7 @@ export default function Home({ params }: {
         };
       });
 
-      setQuestions(prevQuestions => [
-        ...prevQuestions,
-        ...mappedQuestions,
-      ]);
+      setQuestions(mappedQuestions);
     } catch (error) {
       console.error('설문지 데이터 로딩 실패:', error);
     }
