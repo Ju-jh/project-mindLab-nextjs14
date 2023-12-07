@@ -250,7 +250,10 @@ export default function Home({ params }: {
     };
 
     try {
-      const result = await updateTextAndScoreGraphQLQuery(mutation, variables);
+      const result = await updateTextAndScoreGraphQLQuery({
+        query: mutation,
+        variables: variables,
+      });
 
       if (result.data.updateOptionTextAndScore) {
         alert('옵션 업데이트 완료되었습니다.');
