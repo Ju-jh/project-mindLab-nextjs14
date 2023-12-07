@@ -141,7 +141,6 @@ export default function Home({ params }: {
         variables: { surveyId, questionId, newText },
       });
       if (result.data.updateQuestionText) {
-        alert(newText)
       }
     } catch (error) {
       console.error('질문 제목 수정 실패:', error);
@@ -194,7 +193,6 @@ export default function Home({ params }: {
     try {
       const result = await createOptionGraphQLQuery(mutation, variables);
       if (result.data.createOption) {
-        alert('옵션 생성 완료되었습니다.');
       }
     } catch (error) {
       console.error('Option creation failed:', error);
@@ -207,7 +205,6 @@ export default function Home({ params }: {
     } else {
       setIsClicked(true)
     }
-    console.log(optionId, newText, newScore, '@@@')
     const mutation = `
       mutation UpdateOptionTextAndScore($optionId: String!, $newText: String!, $newScore: Float!) {
         updateOptionTextAndScore(optionId: $optionId, newText: $newText, newScore: $newScore) {
@@ -231,7 +228,6 @@ export default function Home({ params }: {
       });
 
       if (result.data.updateOptionTextAndScore) {
-        alert('옵션 업데이트 완료되었습니다.');
       }
     } catch (error) {
       console.error('옵션 업데이트 실패:', error);
