@@ -7,7 +7,7 @@ import { updateTextGraphQLQuery } from '@/graphql/Problem/pushQuestionText';
 import { deleteGraphQLQuery } from '@/graphql/Survey/deleteSurvey';
 import { getSurveyDataGraphQLQuery } from '@/graphql/Survey/getSurveyData';
 import { updateGraphQLQuery } from '@/graphql/Survey/updateSurveyTitle';
-import { faCheck, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faCheck, faLock, faShareFromSquare, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useState } from 'react';
 
@@ -378,15 +378,17 @@ export default function Home({ params }: {
             className='w-[150px] h-[50px] p-[5px] rounded-md shadow-md ml-[20px] bg-slate-200 hover:bg-blue-400'
             onClick={()=>updateMySurveyIsPublic(surveyId)}
           >
-            <span className='font-bold text-[20px]'>Puplic</span>
+              <span className='font-bold text-[20px]'>Puplic</span>
+              <FontAwesomeIcon icon={faShareFromSquare} />
           </button> } 
         {
           (isThisSurveyPublic === true) &&
           <button
-              className='w-[150px] h-[50px] p-[5px] rounded-md shadow-md ml-[20px] bg-slate-200 hover:bg-blue-400'
-              onClick={() => updateMySurveyIsPublic(surveyId)}
-            >
+          className='w-[150px] h-[50px] p-[5px] rounded-md shadow-md ml-[20px] bg-slate-200 hover:bg-blue-400'
+          onClick={() => updateMySurveyIsPublic(surveyId)}
+          >
               <span className='font-bold text-[20px]'>Private</span>
+              <FontAwesomeIcon icon={faLock} />
             </button> 
         }
       </section>
