@@ -139,7 +139,7 @@ export default function Home() {
       <div className='my-[20px]'>
         <span className='font-bold text-[22px]'>참여하는 설문지</span>
       </div>
-      <div className='cardsDiv flex items-start justify-start flex-wrap gap-[30px] w-full h-[300px] shadow-sm shadow-slate-400 rounded-md p-[30px] mt-[20px]'>
+      <div className='cardsDiv flex items-start justify-start flex-wrap gap-[30px] w-full h-[300px] shadow-sm shadow-slate-400 rounded-md p-[30px] mt-[20px] bg-white'>
         { publicSurveys.map((survey) => (
           <div key={survey.s_id} className='w-[250px] h-[150px]'>
             <Link href={`/pushedsurvey/${survey.s_id}`}>
