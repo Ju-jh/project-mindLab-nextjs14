@@ -293,7 +293,28 @@ export default function Home({ params }: {
     }
   };
 
+  const checkMySurveyIsPublic = async (surveyId: string) => {
+    const query = `
+      mutation CheckMySurveyIsPublic($surveyId: String!) {
+        checkMySurveyIsPublic(surveyId: $surveyId) {
+          public
+        }
+      }
+    `;
 
+    const variables = {
+      surveyId,
+    };
+
+    try {
+      const result = await sendGraphQLQuery(query, variables);
+      setIsThisSurveyPublic(result)
+      return result.data.getSurveyById;
+    } catch (error) {
+      console.error('Failed to fetch survey information:', error);
+      throw error;
+    }
+  };
 
 
   useEffect(() => {
@@ -336,42 +357,19 @@ export default function Home({ params }: {
           };
         })
         .sort((a: { createdAt: Date; }, b: { createdAt: Date; }) => a.createdAt.getTime() - b.createdAt.getTime());
-
-      setQuestions(mappedQuestions);
-    } catch (error) {
-      console.error('설문지 데이터 로딩 실패:', error);
-    }
-    };
-
-    const checkMySurveyIsPublic = async (surveyId: string) => {
-      const query = `
-        mutation CheckMySurveyIsPublic($surveyId: String!) {
-          checkMySurveyIsPublic(surveyId: $surveyId) {
-            public
-          }
-        }
-      `;
-
-      const variables = {
-        surveyId,
-      };
-
-      try {
-        const result = await sendGraphQLQuery(query, variables);
-        setIsThisSurveyPublic(result)
-        return result.data.getSurveyById;
+        
+        setQuestions(mappedQuestions);
       } catch (error) {
-        console.error('Failed to fetch survey information:', error);
-        throw error;
+        console.error('설문지 데이터 로딩 실패:', error);
       }
     };
-
+    
     if (surveyId) {
       fetchData();
       checkMySurveyIsPublic(surveyId);
     }
   }, [surveyId, isClicked]);
-
+  
   return (
     <main className='flex-col w-full h-full p-[30px] pt-[60px]'>
       <section className='w-full h-[100px]  flex items-center justify-end pr-[50px]'>
