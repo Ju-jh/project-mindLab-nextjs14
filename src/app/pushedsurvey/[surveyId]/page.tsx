@@ -45,6 +45,8 @@ export default function Home({ params }: {
   const saveAnswers = async () => {
     const answers: { questionId: string; optionId: any; }[] = [];
 
+    console.log(answers)
+
     Questions.forEach((question) => {
       if (question.selectedOption) {
         answers.push({
@@ -157,9 +159,9 @@ export default function Home({ params }: {
                   {Question.options && Question.options.map((option, optionIndex) => (
                     <div
                       key={option.o_id}
-                      className={`mr-[30px] px-[20px] py-[10px] shadow-sm shadow-slate-400 hover:bg-slate-300 rounded-sm transition-all flex items-center ${
+                      className={`mr-[30px] px-[20px] py-[10px] shadow-sm shadow-slate-400 hover:bg-slate-300 rounded-sm cursor-pointer transition-all flex items-center ${
                         Question.selectedOption && Question.selectedOption.o_id === option.o_id
-                          ? 'bg-blue-200'  // 선택된 옵션 표시 스타일
+                          ? 'bg-blue-200'
                           : ''
                       }`}
                       onClick={() => {
@@ -191,7 +193,16 @@ export default function Home({ params }: {
               
               </li>
             ))}
-          </ul>)}
+          </ul>
+        )}
+        <div className='problemPlusDiv mt-[30px]'>
+          <button
+            className='w-full py-[10px] rounded-md shadow-sm shadow-slate-400 hover:bg-slate-400 transition-all'
+            onClick={()=>saveAnswers}
+          >
+            제출하기
+          </button>
+        </div>
       </section>
     </main>
   );
