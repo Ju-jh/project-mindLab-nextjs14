@@ -43,18 +43,13 @@ export default function Home({ params }: {
   const [Questions, setQuestions] = useState<Question[]>([]);
   
   const saveAnswers = async () => {
-    const answers: { questionId: string; optionId: any; }[] = [];
+
+    const answers = Questions.map((question) => ({
+      questionId: question.q_id,
+      optionId: question.selectedOption ? question.selectedOption.o_id : null,
+    }));
 
     console.log(answers)
-
-    Questions.forEach((question) => {
-      if (question.selectedOption) {
-        answers.push({
-          questionId: question.q_id,
-          optionId: question.selectedOption.o_id,
-        });
-      }
-    });
 
     const mutation = `
       mutation SaveAnswers($surveyId: String!, $answers: [AnswerInput]!) {
@@ -72,7 +67,7 @@ export default function Home({ params }: {
       });
 
       if (result.data.saveAnswers.success) {
-
+        console.log('답변 저장 성공!');
       } else {
         console.error('답변 저장 실패:', result.data.saveAnswers.message);
       }
