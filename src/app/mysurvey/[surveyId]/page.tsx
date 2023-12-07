@@ -88,11 +88,7 @@ export default function Home({ params }: {
   };
 
   const createQuestion = async (surveyId: string) => {
-    if (isClicked === false) {
-      setIsClicked(true)
-    } else {
-      setIsClicked(true)
-    }
+
     const mutation = `
       mutation CreateQuestion($surveyId: String!) {
         createQuestion(surveyId: $surveyId) {
@@ -116,6 +112,11 @@ export default function Home({ params }: {
             options: [],
           },
         ]);
+        if (isClicked === false) {
+          setIsClicked(true)
+        } else {
+          setIsClicked(true)
+        }
       }
     } catch (error) {
       console.error('Question creation failed:', error);
@@ -123,11 +124,6 @@ export default function Home({ params }: {
   };
 
   const pushQuestionText = async (surveyId: string, questionId: string, newText: string) => {
-    if (isClicked) {
-      setIsClicked(false)
-    } else {
-      setIsClicked(true)
-    }
     const query = `
       mutation UpdateQuestionText($surveyId: String!, $questionId: String!, $newText: String!) {
         updateQuestionText(surveyId: $surveyId, questionId: $questionId, newText: $newText) {
@@ -141,6 +137,11 @@ export default function Home({ params }: {
         variables: { surveyId, questionId, newText },
       });
       if (result.data.updateQuestionText) {
+        if (isClicked === false) {
+          setIsClicked(true)
+        } else {
+          setIsClicked(true)
+        }
       }
     } catch (error) {
       console.error('질문 제목 수정 실패:', error);
@@ -148,11 +149,6 @@ export default function Home({ params }: {
   }
 
   const removeQuestion = async (surveyId: string, questionId: string) => {
-    if (isClicked) {
-      setIsClicked(false)
-    } else {
-      setIsClicked(true)
-    }
     const mutation = `
       mutation DeleteQuestion($surveyId: String!, $questionId: String!) {
         deleteQuestion(surveyId: $surveyId, questionId: $questionId) {
@@ -168,17 +164,19 @@ export default function Home({ params }: {
 
     try {
       const result = await deleteGraphQLQuery(mutation, variables);
+      if (result) {
+        if (isClicked === false) {
+          setIsClicked(true)
+        } else {
+          setIsClicked(true)
+        }
+      }
     } catch (error) {
       console.error('Failed to delete questions:', error);
     }
   };
 
   const addOption = async (surveyId: string, questionId: string) => {
-      if (isClicked) {
-        setIsClicked(false)
-      } else {
-        setIsClicked(true)
-      }
     const mutation = `
       mutation CreateOption($surveyId: String!, $questionId: String!) {
         createOption(surveyId: $surveyId, questionId: $questionId) {
@@ -193,6 +191,11 @@ export default function Home({ params }: {
     try {
       const result = await createOptionGraphQLQuery(mutation, variables);
       if (result.data.createOption) {
+        if (isClicked === false) {
+          setIsClicked(true)
+        } else {
+          setIsClicked(true)
+        }
       }
     } catch (error) {
       console.error('Option creation failed:', error);
@@ -200,11 +203,6 @@ export default function Home({ params }: {
   };
 
   const pushOption = async (optionId: string, newText: string, newScore: number) => {
-    if (isClicked) {
-      setIsClicked(false)
-    } else {
-      setIsClicked(true)
-    }
     const mutation = `
       mutation UpdateOptionTextAndScore($optionId: String!, $newText: String!, $newScore: Float!) {
         updateOptionTextAndScore(optionId: $optionId, newText: $newText, newScore: $newScore) {
@@ -228,6 +226,11 @@ export default function Home({ params }: {
       });
 
       if (result.data.updateOptionTextAndScore) {
+        if (isClicked === false) {
+          setIsClicked(true)
+        } else {
+          setIsClicked(true)
+        }
       }
     } catch (error) {
       console.error('옵션 업데이트 실패:', error);
@@ -235,11 +238,6 @@ export default function Home({ params }: {
   };
 
   const deleteOption = async (optionId: string) => {
-    if (isClicked) {
-      setIsClicked(false);
-    } else {
-      setIsClicked(true);
-    }
 
     const mutation = `
       mutation DeleteOption($optionId: String!) {
@@ -256,6 +254,11 @@ export default function Home({ params }: {
     try {
       const result = await deleteGraphQLQuery(mutation, variables);
       if (result.data.deleteOption) {
+        if (isClicked === false) {
+          setIsClicked(true)
+        } else {
+          setIsClicked(true)
+        }
       }
     } catch (error) {
       console.error('Failed to delete option:', error);
