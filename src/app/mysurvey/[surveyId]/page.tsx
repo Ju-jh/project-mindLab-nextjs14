@@ -36,6 +36,7 @@ interface Option {
 export default function Home({ params }: {
   params: { surveyId:string}
 }) {
+  const [isThisSurveyPublic, setIsThisSurveyPublic] = useState<boolean>()
   const [isClicked, setIsClicked] = useState<boolean>(false)
   const [originTitle, setOriginTitle] = useState<string>('')
   const [surveyTitle, setSurveyTitle] = useState<string>(originTitle);
@@ -47,11 +48,13 @@ export default function Home({ params }: {
     newScore: 0,
   });
 
+  console.log(isThisSurveyPublic);
+  
   const surveyId = params.surveyId;
-
+  
   const PushSurveyTitle = async (surveyId: string, newTitle: string) => {
     const query = `
-      mutation UpdateMySurveyTitle($surveyId: String!, $newTitle: String!) {
+    mutation UpdateMySurveyTitle($surveyId: String!, $newTitle: String!) {
         updateMySurveyTitle(surveyId: $surveyId, newTitle: $newTitle) {
           title
         }
@@ -267,27 +270,29 @@ export default function Home({ params }: {
     const mutation = `
       mutation UpdateMySurveyIsPublic($surveyId: String!) {
         updateMySurveyIsPublic(surveyId: $surveyId) {
-          s_id
-          title
-          description
           public
-          # Add other fields you want to retrieve
         }
       }
-    `;
+    `
 
     const variables = {
       surveyId,
-    };
+    }
 
     try {
       const result = await sendGraphQLQuery(mutation, variables);
+      if (isClicked) {
+        setIsClicked(false)
+      } else {
+        setIsClicked(true)
+      }
       return result.data.updateMySurveyIsPublic;
     } catch (error) {
       console.error('Failed to update survey public status:', error);
       throw error;
     }
   };
+
 
 
 
@@ -338,8 +343,32 @@ export default function Home({ params }: {
     }
     };
 
+    const checkMySurveyIsPublic = async (surveyId: string) => {
+      const query = `
+        mutation CheckMySurveyIsPublic($surveyId: String!) {
+          checkMySurveyIsPublic(surveyId: $surveyId) {
+            public
+          }
+        }
+      `;
+
+      const variables = {
+        surveyId,
+      };
+
+      try {
+        const result = await sendGraphQLQuery(query, variables);
+        setIsThisSurveyPublic(result)
+        return result.data.getSurveyById;
+      } catch (error) {
+        console.error('Failed to fetch survey information:', error);
+        throw error;
+      }
+    };
+
     if (surveyId) {
       fetchData();
+      checkMySurveyIsPublic(surveyId);
     }
   }, [surveyId, isClicked]);
 
