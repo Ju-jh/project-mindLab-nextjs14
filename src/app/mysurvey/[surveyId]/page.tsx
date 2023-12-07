@@ -263,7 +263,7 @@ export default function Home({ params }: {
     }
   };
 
-
+  console.log(option.newText, option.newScore, '@@@@@')
 
   useEffect(() => {
     const fetchData = async () => {
