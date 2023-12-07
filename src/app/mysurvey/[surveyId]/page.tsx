@@ -378,7 +378,7 @@ export default function Home({ params }: {
             className='w-[150px] h-[50px] p-[5px] rounded-md shadow-md ml-[20px] bg-slate-200 hover:bg-blue-400'
             onClick={()=>updateMySurveyIsPublic(surveyId)}
           >
-              <span className='font-bold text-[20px]'>Puplic</span>
+              <span className='font-bold text-[20px] mr-[10px]'>Puplic</span>
               <FontAwesomeIcon icon={faShareFromSquare} />
           </button> } 
         {
@@ -387,7 +387,7 @@ export default function Home({ params }: {
           className='w-[150px] h-[50px] p-[5px] rounded-md shadow-md ml-[20px] bg-slate-200 hover:bg-blue-400'
           onClick={() => updateMySurveyIsPublic(surveyId)}
           >
-              <span className='font-bold text-[20px]'>Private</span>
+              <span className='font-bold text-[20px] mr-[10px]'>Private</span>
               <FontAwesomeIcon icon={faLock} />
             </button> 
         }
