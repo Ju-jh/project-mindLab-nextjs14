@@ -44,33 +44,6 @@ export default function Home({ params }: {
 
   const surveyId = params.surveyId;
 
-  const getSurveyData = async (surveyId: string) => {
-    const query = `
-    mutation GetSurveyData($surveyId: String!) {
-      getSurveyData(surveyId: $surveyId) {
-        title
-        description
-        questions {
-          q_id
-          text
-          options {
-            o_id
-            text
-            score
-          }
-        }
-      }
-    }
-    `
-    try {
-      const result = await getSurveyDataGraphQLQuery(query, surveyId);
-      setOriginTitle(result.data.getSurveyData.title)
-      setOriginDescription(result.data.getSurveyData.description)
-      console.log(result.data.getSurveyData)
-    } catch (error) {
-      console.error('설문지 데이터 로딩 실패:', error);
-    }
-  }
 
   const PushSurveyTitle = async (surveyId: string, newTitle: string) => {
     const query = `
@@ -159,28 +132,6 @@ export default function Home({ params }: {
     }
   }
 
-  const getQuestions = async (surveyId: string) => {
-    const query = `
-      query GetAllQuestions($surveyId: String!) {
-        getAllQuestions(surveyId: $surveyId) {
-          q_id
-          text
-        }
-      }
-    `;
-
-    const variables = {
-      surveyId: surveyId,
-    };
-
-    try {
-      const result = await mapQuestionsToProblems(query, variables);
-      setQuestions(result.data.getAllQuestions || []);
-    } catch (error) {
-      console.error('Failed to fetch questions:', error);
-    }
-  };
-
   const removeQuestion = async (surveyId: string, questionId: string) => {
     const mutation = `
       mutation DeleteQuestion($surveyId: String!, $questionId: String!) {
@@ -226,24 +177,27 @@ export default function Home({ params }: {
 
 
   useEffect(() => {
-    const fetchData = async () => {
-        const query = `
-          mutation GetSurveyData($surveyId: String!) {
-            getSurveyData(surveyId: $surveyId) {
-              title
-              description
-              questions {
-                q_id
-                text
-                options {
-                  o_id
-                  text
-                  score
-                }
-              }
+
+  const fetchData = async () => {
+    const query = `
+      mutation GetSurveyData($surveyId: String!) {
+        getSurveyData(surveyId: $surveyId) {
+          title
+          description
+          questions {
+            q_id
+            text
+            createdAt  // Assuming that createdAt is a property of each question
+            options {
+              o_id
+              text
+              score
             }
           }
-          `
+        }
+      }
+    `;
+
     try {
       const result = await getSurveyDataGraphQLQuery(query, surveyId);
       const surveyData = result.data.getSurveyData;
@@ -251,20 +205,24 @@ export default function Home({ params }: {
       setOriginTitle(surveyData.title);
       setOriginDescription(surveyData.description);
 
-      const mappedQuestions = surveyData.questions.map((question: { q_id: string; text: string; options: any; }) => {
-        return {
-          q_id: question.q_id,
-          text: question.text,
-          survey: surveyData,
-          options: question.options || [],
-        };
-      });
+      const mappedQuestions = surveyData.questions
+        .map((question: { q_id: string; text: string; createdAt: string; options: any[] }) => {
+          return {
+            q_id: question.q_id,
+            text: question.text,
+            createdAt: question.createdAt, 
+            survey: surveyData,
+            options: question.options || [],
+          };
+        })
+        .sort((a: { createdAt: string | number | Date; }, b: { createdAt: string | number | Date; }) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
 
       setQuestions(mappedQuestions);
     } catch (error) {
       console.error('설문지 데이터 로딩 실패:', error);
     }
   };
+
 
     fetchData(); 
   }, [surveyId, Questions]);
@@ -325,7 +283,7 @@ export default function Home({ params }: {
                     type="text"
                     placeholder={Question.text}
                     className='ml-[10px] pl-[10px] w-[500px]'
-                    value={Question.text}
+                    value=''
                     onChange={(e) => {
                       const newText = e.target.value;
                       setQuestions((prevQuestions) => {
