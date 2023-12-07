@@ -52,6 +52,34 @@ export default function Home({ params }: {
 
   const surveyId = params.surveyId;
 
+  const getSurveyData = async (surveyId: string) => {
+    const query = `
+    mutation GetSurveyData($surveyId: String!) {
+      getSurveyData(surveyId: $surveyId) {
+        title
+        description
+        questions {
+          q_id
+          text
+          options {
+            o_id
+            text
+            score
+          }
+        }
+      }
+    }
+    `
+    try {
+      const result = await getSurveyDataGraphQLQuery(query, surveyId);
+      setOriginTitle(result.data.getSurveyData.title)
+      setOriginDescription(result.data.getSurveyData.description)
+      console.log(result.data.getSurveyData)
+    } catch (error) {
+      console.error('설문지 데이터 로딩 실패:', error);
+    }
+  }
+
   const PushSurveyTitle = async (surveyId: string, newTitle: string) => {
     const query = `
       mutation UpdateMySurveyTitle($surveyId: String!, $newTitle: String!) {
@@ -138,6 +166,28 @@ export default function Home({ params }: {
       console.error('질문 제목 수정 실패:', error);
     }
   }
+
+  const getQuestions = async (surveyId: string) => {
+    const query = `
+      query GetAllQuestions($surveyId: String!) {
+        getAllQuestions(surveyId: $surveyId) {
+          q_id
+          text
+        }
+      }
+    `;
+
+    const variables = {
+      surveyId: surveyId,
+    };
+
+    try {
+      const result = await mapQuestionsToProblems(query, variables);
+      setQuestions(result.data.getAllQuestions || []);
+    } catch (error) {
+      console.error('Failed to fetch questions:', error);
+    }
+  };
 
   const removeQuestion = async (surveyId: string, questionId: string) => {
     const mutation = `
