@@ -292,7 +292,7 @@ export default function Home({ params }: {
       setOriginDescription(surveyData.description);
 
       const mappedQuestions = surveyData.questions
-        .map((question: { q_id: string; text: string; options: any; createdAt: string }) => {
+        .map((question: { q_id: string; text: string; options: any; createdAt: Date }) => {
           return {
             q_id: question.q_id,
             text: question.text,
@@ -310,7 +310,7 @@ export default function Home({ params }: {
   };
 
     fetchData(); 
-  }, [surveyId, Questions]);
+  }, [surveyId]);
 
   return (
     <main className='flex-col w-full h-full p-[30px] pt-[60px]'>
