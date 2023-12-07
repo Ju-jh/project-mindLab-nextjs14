@@ -8,6 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { useAuth } from './context/isLogined';
+import { publicSurveyGraphQLQuery } from '@/graphql/Survey/getPublicSurveys';
 
 interface Survey {
   s_id: string;
@@ -89,8 +90,8 @@ export default function Home() {
         }
       `;
       try {
-        const result = await getGraphQLQuery({ query });
-        const publicSurveysData = result.data || [];
+        const result = await publicSurveyGraphQLQuery({ query });
+        const publicSurveysData = result.data.getPublicSurvey || [];
         setPublicSurveys(publicSurveysData);
       } catch (error) {
         console.error('나의 설문지 가져오기 실패:', error);
