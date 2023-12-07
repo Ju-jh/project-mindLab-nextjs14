@@ -113,23 +113,23 @@ export default function Home({ params }: {
           <ul className='problemUl flex-col list-decimal  pl-[30px]'>
             {Questions.map((Question, QuestionIndex) => (
               <li key={Question.q_id} className='mb-[60px] ml-[30px]'>
-                <div className='px-[20px] w-[600px] py-[10px] shadow-sm shadow-slate-400 rounded-sm flex items-center'>
+                <div className='px-[20px] w-[600px] py-[10px] flex items-center'>
                   <span
                     className='ml-[10px] pl-[10px] w-[500px]'
-                  >Question.text</span>
+                  >{Question.text}</span>
                 </div>
-                <div className='flex mt-[20px] h-[80px]'>
+                <div className='flex mt-[20px] h-[60px]'>
                   {Question.options && Question.options.map((option, optionIndex) => (
                     <div
                       key={option.o_id}
                       // value={option.newScore}
-                      className='mr-[30px] px-[20px] py-[10px] shadow-sm shadow-slate-400 rounded-sm transition-all flex items-center'
+                      className='mr-[30px] px-[20px] py-[10px] shadow-sm shadow-slate-400 hover:bg-slate-300 rounded-sm transition-all flex items-center'
                     >
                       <div className='bg-slate-300 flex items-center justify-center w-[35px] h-[35px] rounded-full mr-[10px]'>
                         <span>{optionIndex + 1}</span>
                       </div>
                       <div className='flex flex-col items-center justify-between'>
-                        <span>option.text</span>
+                        <span>{option.text}</span>
                       </div>
                     </div>
                   ))}
