@@ -149,11 +149,6 @@ export default function Home() {
                 <span>{survey.title}</span>
               </button>
             </Link>
-            <button
-              onClick={() => deleteSurvey(survey.s_id)}
-              className='absolute flex flex-col items-center justify-center translate-x-[235px] translate-y-[-160px]  w-[30px] h-[30px] rounded-full bg-green-300 hover:bg-green-500'>
-              <FontAwesomeIcon icon={faX} className='w-[40%]'/>
-            </button>
           </div>
         ))}
       </div>
