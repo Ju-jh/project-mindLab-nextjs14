@@ -308,6 +308,7 @@ export default function Home({ params }: {
                   o_id
                   text
                   score
+                  createdAt
                 }
               }
             }
@@ -323,17 +324,16 @@ export default function Home({ params }: {
       console.log('fetch되었습니다')
 
       const mappedQuestions = surveyData.questions
-        .map((question: { q_id: string; text: string; options: any; createdAt: Date }) => {
+        .map((question: { options: any[]; createdAt: Date; }) => {
+          const sortedOptions = question.options.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
           return {
-            q_id: question.q_id,
-            text: question.text,
-            survey: surveyData,
-            options: question.options || [],
+            ...question,
+            options: sortedOptions,
             createdAt: new Date(question.createdAt),
           };
         })
-        .sort((a: { createdAt: Date; }, b: { createdAt: Date; }) => a.createdAt.getTime() - b.createdAt.getTime());
-        
+        .sort((a: { createdAt: { getTime: () => number; }; }, b: { createdAt: { getTime: () => number; }; }) => a.createdAt.getTime() - b.createdAt.getTime());
+
         setQuestions(mappedQuestions);
       } catch (error) {
         console.error('설문지 데이터 로딩 실패:', error);
