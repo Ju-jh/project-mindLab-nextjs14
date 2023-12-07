@@ -3,10 +3,8 @@
 import { createOptionGraphQLQuery } from '@/graphql/Option/createOption';
 import { updateTextAndScoreGraphQLQuery } from '@/graphql/Option/pushOptionTextAndScore';
 import { sendGraphQLQuery } from '@/graphql/Problem/createProblem';
-import { mapQuestionsToProblems } from '@/graphql/Problem/getProblems';
 import { updateTextGraphQLQuery } from '@/graphql/Problem/pushQuestionText';
 import { deleteGraphQLQuery } from '@/graphql/Survey/deleteSurvey';
-import { getGraphQLQuery } from '@/graphql/Survey/getMySurvey';
 import { getSurveyDataGraphQLQuery } from '@/graphql/Survey/getSurveyData';
 import { updateGraphQLQuery } from '@/graphql/Survey/updateSurveyTitle';
 import { faCheck, faTrash } from '@fortawesome/free-solid-svg-icons';
@@ -38,48 +36,20 @@ interface Option {
 export default function Home({ params }: {
   params: { surveyId:string}
 }) {
-  const [isClicked, setIsClicked] = useState(false)
+  const [isClicked, setIsClicked] = useState<boolean>(false)
   const [originTitle, setOriginTitle] = useState<string>('')
   const [surveyTitle, setSurveyTitle] = useState<string>(originTitle);
   const [originDescription, setOriginDescription] = useState<string>('');
   const [surveyDescription, setSurveyDescription] = useState<string>(originDescription);
+  const [Questions, setQuestions] = useState<Question[]>([]);
   const [newoption, setOption] = useState({
     newText: '',
     newScore: 0,
   });
 
 
-  const [Questions, setQuestions] = useState<Question[]>([]);
 
   const surveyId = params.surveyId;
-
-  const getSurveyData = async (surveyId: string) => {
-    const query = `
-    mutation GetSurveyData($surveyId: String!) {
-      getSurveyData(surveyId: $surveyId) {
-        title
-        description
-        questions {
-          q_id
-          text
-          options {
-            o_id
-            text
-            score
-          }
-        }
-      }
-    }
-    `
-    try {
-      const result = await getSurveyDataGraphQLQuery(query, surveyId);
-      setOriginTitle(result.data.getSurveyData.title)
-      setOriginDescription(result.data.getSurveyData.description)
-      console.log(result.data.getSurveyData)
-    } catch (error) {
-      console.error('설문지 데이터 로딩 실패:', error);
-    }
-  }
 
   const PushSurveyTitle = async (surveyId: string, newTitle: string) => {
     if (isClicked === false) {
@@ -187,28 +157,6 @@ export default function Home({ params }: {
       console.error('질문 제목 수정 실패:', error);
     }
   }
-
-  const getQuestions = async (surveyId: string) => {
-    const query = `
-      query GetAllQuestions($surveyId: String!) {
-        getAllQuestions(surveyId: $surveyId) {
-          q_id
-          text
-        }
-      }
-    `;
-
-    const variables = {
-      surveyId: surveyId,
-    };
-
-    try {
-      const result = await mapQuestionsToProblems(query, variables);
-      setQuestions(result.data.getAllQuestions || []);
-    } catch (error) {
-      console.error('Failed to fetch questions:', error);
-    }
-  };
 
   const removeQuestion = async (surveyId: string, questionId: string) => {
     if (isClicked === false) {
@@ -326,6 +274,8 @@ export default function Home({ params }: {
 
       setOriginTitle(surveyData.title);
       setOriginDescription(surveyData.description);
+
+      console.log('fetch되었습니다')
 
       const mappedQuestions = surveyData.questions
         .map((question: { q_id: string; text: string; options: any; createdAt: Date }) => {
