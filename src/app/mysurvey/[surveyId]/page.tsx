@@ -118,6 +118,8 @@ export default function Home({ params }: {
     const mutation = `
       mutation CreateQuestion($surveyId: String!) {
         createQuestion(surveyId: $surveyId) {
+          success
+          message
           q_id
         }
       }
@@ -128,7 +130,7 @@ export default function Home({ params }: {
 
     try {
       const result = await sendGraphQLQuery(mutation, variables);
-      if (result.data.createQuestion) {
+      if (result.data.createQuestion.sucess) {
         setQuestions((prevQuestions) => [
           ...prevQuestions,
           {
