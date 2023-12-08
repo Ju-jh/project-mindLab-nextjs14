@@ -83,8 +83,8 @@ export default function Home({ params }: {
     `;
     try {
       const result = await updateGraphQLQuery(query, { surveyId, newTitle });
-      if (result.data.PushSurveyTitle.sucess) {
-        alert(result.data.PushSurveyTitle.message)
+      if (result.data.updateMySurveyTitle.sucess) {
+        alert(result.data.updateMySurveyTitle.message)
       }
     } catch (error) {
       console.error('설문지 제목 수정 실패:', error);
@@ -329,21 +329,21 @@ export default function Home({ params }: {
   };
 
   const handleOptionTextChange = (e: React.ChangeEvent<HTMLInputElement>, questionId: string, optionId: string) => {
-  const { value } = e.target;
+    const { value } = e.target;
 
-  setQuestions((prevQuestions) => {
-    const updatedQuestions = prevQuestions.map((question) => {
-      if (question.q_id === questionId) {
-        const updatedOptions = question.options.map((option) => {
-          if (option.o_id === optionId) {
-            return { ...option, localText: value };
-          }
-          return option;
-        });
-        return { ...question, options: updatedOptions };
-      }
-      return question;
-    });
+    setQuestions((prevQuestions) => {
+      const updatedQuestions = prevQuestions.map((question) => {
+        if (question.q_id === questionId) {
+          const updatedOptions = question.options.map((option) => {
+            if (option.o_id === optionId) {
+              return { ...option, localText: value };
+            }
+            return option;
+          });
+          return { ...question, options: updatedOptions };
+        }
+        return question;
+      });
 
     return updatedQuestions;
   });
