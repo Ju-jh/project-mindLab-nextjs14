@@ -130,6 +130,11 @@ export default function Home({ params }: {
 
     try {
       const result = await sendGraphQLQuery(mutation, variables);
+      if (isClicked) {
+        setIsClicked(false)
+      } else {
+        setIsClicked(true)
+      }
       if (result.data.createQuestion.sucess) {
         setQuestions((prevQuestions) => [
           ...prevQuestions,
@@ -140,11 +145,6 @@ export default function Home({ params }: {
             options: [],
           },
         ]);
-        if (isClicked) {
-          setIsClicked(false)
-        } else {
-          setIsClicked(true)
-        }
       }
     } catch (error) {
       console.error('Question creation failed:', error);
