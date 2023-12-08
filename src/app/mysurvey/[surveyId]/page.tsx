@@ -130,7 +130,7 @@ export default function Home({ params }: {
 
     const result = await sendGraphQLQuery(mutation, variables);
     try {
-      if (result.data.createQuestion.sucess) {
+      if (result.data.createQuestion.success) {
         setQuestions((prevQuestions) => [
           ...prevQuestions,
           {
