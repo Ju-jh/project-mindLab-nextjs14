@@ -1,5 +1,7 @@
 'use client'
 
+
+
 import { createOptionGraphQLQuery } from '@/graphql/Option/createOption';
 import { updateTextAndScoreGraphQLQuery } from '@/graphql/Option/pushOptionTextAndScore';
 import { sendGraphQLQuery } from '@/graphql/Problem/createProblem';
@@ -7,9 +9,12 @@ import { updateTextGraphQLQuery } from '@/graphql/Problem/pushQuestionText';
 import { deleteGraphQLQuery } from '@/graphql/Survey/deleteSurvey';
 import { getSurveyDataGraphQLQuery } from '@/graphql/Survey/getSurveyData';
 import { updateGraphQLQuery } from '@/graphql/Survey/updateSurveyTitle';
-import { faCheck, faLock, faShareFromSquare, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faCheck, faFloppyDisk, faLock, faShareFromSquare, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useState } from 'react';
+
+
+  / ////////////////////////////////////////     interface      //////////////////////////////////////////////////
 
 interface Survey {
   s_id: string;
@@ -36,21 +41,40 @@ interface Option {
 export default function Home({ params }: {
   params: { surveyId:string}
 }) {
+
+  / ////////////////////////////////////////     const      //////////////////////////////////////////////////
+
+  const surveyId = params.surveyId;
+
   const [isThisSurveyPublic, setIsThisSurveyPublic] = useState<boolean>()
   const [isClicked, setIsClicked] = useState<boolean>(false)
+
   const [originTitle, setOriginTitle] = useState<string>('')
   const [surveyTitle, setSurveyTitle] = useState<string>(originTitle);
+
   const [originDescription, setOriginDescription] = useState<string>('');
   const [surveyDescription, setSurveyDescription] = useState<string>(originDescription);
-  const [Questions, setQuestions] = useState<Question[]>([]);
+  
+  const [originQuestions, setOriginQuestions] = useState<Question[]>([]);
+  const [Questions, setQuestions] = useState<Question[]>(originQuestions);
+
+  const [originOption, setOriginOption] = useState({
+    text: '',
+    score: 0,
+  });
+
   const [newoption, setOption] = useState({
-    newText: '',
-    newScore: 0,
+    newText: originOption.text,
+    newScore: originOption.score,
   });
   
-  const surveyId = params.surveyId;
   
+
+  / ////////////////////////////////////////     function      //////////////////////////////////////////////////
+
+
   const PushSurveyTitle = async (surveyId: string, newTitle: string) => {
+  
     const query = `
     mutation UpdateMySurveyTitle($surveyId: String!, $newTitle: String!) {
         updateMySurveyTitle(surveyId: $surveyId, newTitle: $newTitle) {
@@ -85,6 +109,8 @@ export default function Home({ params }: {
       console.error('설문지 설명 수정 실패:', error);
     }
   };
+
+
 
   const createQuestion = async (surveyId: string) => {
 
@@ -121,31 +147,6 @@ export default function Home({ params }: {
       console.error('Question creation failed:', error);
     }
   };
-
-  const pushQuestionText = async (surveyId: string, questionId: string, newText: string) => {
-    const query = `
-      mutation UpdateQuestionText($surveyId: String!, $questionId: String!, $newText: String!) {
-        updateQuestionText(surveyId: $surveyId, questionId: $questionId, newText: $newText) {
-          text
-        }
-      }
-    `;
-    try {
-      const result = await updateTextGraphQLQuery({
-        query,
-        variables: { surveyId, questionId, newText },
-      });
-      if (result.data.updateQuestionText) {
-        if (isClicked) {
-          setIsClicked(false)
-        } else {
-          setIsClicked(true)
-        }
-      }
-    } catch (error) {
-      console.error('질문 제목 수정 실패:', error);
-    }
-  }
 
   const removeQuestion = async (surveyId: string, questionId: string) => {
     const mutation = `
@@ -201,7 +202,66 @@ export default function Home({ params }: {
     }
   };
 
-  const pushOption = async (optionId: string, newText: string, newScore: number) => {
+  const deleteOption = async (optionId: string) => {
+
+    const mutation = `
+      mutation DeleteOption($optionId: String!) {
+        deleteOption(optionId: $optionId) {
+          o_id
+        }
+      }
+    `;
+
+    const variables = {
+      optionId: optionId,
+    };
+
+    try {
+      const result = await deleteGraphQLQuery(mutation, variables);
+      if (result.data.deleteOption) {
+        if (isClicked) {
+          setIsClicked(false)
+        } else {
+          setIsClicked(true)
+        }
+      }
+    } catch (error) {
+      console.error('Failed to delete option:', error);
+    }
+  };
+
+
+  const pushQuestionIndex = async (questionId: string, questionIndex: []) => {
+
+  } 
+
+
+  const pushQuestionText = async (surveyId: string, questionId: string, newText: string) => {
+    const query = `
+      mutation UpdateQuestionText($surveyId: String!, $questionId: String!, $newText: String!) {
+        updateQuestionText(surveyId: $surveyId, questionId: $questionId, newText: $newText) {
+          text
+        }
+      }
+    `;
+    try {
+      const result = await updateTextGraphQLQuery({
+        query,
+        variables: { surveyId, questionId, newText },
+      });
+      if (result.data.updateQuestionText) {
+        if (isClicked) {
+          setIsClicked(false)
+        } else {
+          setIsClicked(true)
+        }
+      }
+    } catch (error) {
+      console.error('질문 제목 수정 실패:', error);
+    }
+  }
+
+  const pushOptionScore = async (optionId: string, newText: string, newScore: number) => {
     const mutation = `
       mutation UpdateOptionTextAndScore($optionId: String!, $newText: String!, $newScore: Float!) {
         updateOptionTextAndScore(optionId: $optionId, newText: $newText, newScore: $newScore) {
@@ -236,33 +296,7 @@ export default function Home({ params }: {
     }
   };
 
-  const deleteOption = async (optionId: string) => {
 
-    const mutation = `
-      mutation DeleteOption($optionId: String!) {
-        deleteOption(optionId: $optionId) {
-          o_id
-        }
-      }
-    `;
-
-    const variables = {
-      optionId: optionId,
-    };
-
-    try {
-      const result = await deleteGraphQLQuery(mutation, variables);
-      if (result.data.deleteOption) {
-        if (isClicked) {
-          setIsClicked(false)
-        } else {
-          setIsClicked(true)
-        }
-      }
-    } catch (error) {
-      console.error('Failed to delete option:', error);
-    }
-  };
 
   const updateMySurveyIsPublic = async (surveyId: string) => {
     const mutation = `
@@ -291,7 +325,9 @@ export default function Home({ params }: {
     }
   };
 
-  
+
+    / ////////////////////////////////////////     useEffect      //////////////////////////////////////////////////
+
   
   useEffect(() => {
     const fetchData = async () => {
@@ -320,7 +356,8 @@ export default function Home({ params }: {
 
       setOriginTitle(surveyData.title);
       setOriginDescription(surveyData.description);
-
+      setOriginQuestions(surveyData.questions)
+      setOriginOption(surveyData.options)
       console.log('fetch되었습니다')
 
       const mappedQuestions = surveyData.questions
@@ -368,10 +405,20 @@ export default function Home({ params }: {
       checkMySurveyIsPublic(surveyId);
     }
   }, [surveyId, isClicked]);
+
+    / ////////////////////////////////////////     html      //////////////////////////////////////////////////
+
   
   return (
     <main className='flex-col w-full h-full p-[30px] pt-[60px]'>
       <section className='w-full h-[100px]  flex items-center justify-end pr-[50px]'>
+          <button
+            className='w-[150px] h-[50px] p-[5px] rounded-md shadow-md ml-[20px] bg-slate-200 hover:bg-blue-400'
+            onClick={()=>updateMySurveyIsPublic(surveyId)}
+          >
+              <span className='font-bold text-[20px] mr-[10px]'>저장하기</span>
+              <FontAwesomeIcon icon={faFloppyDisk} />
+        </button>
         {
           (isThisSurveyPublic === false) &&
           <button
@@ -499,7 +546,7 @@ export default function Home({ params }: {
                         />
                       </div>
                       <button
-                        onClick={()=>pushOption(option.o_id, newoption.newText, newoption.newScore)}
+                        onClick={()=>pushOptionScore(option.o_id, newoption.newText, newoption.newScore)}
                         className='w-[40px] text-[20px] h-full rounded-sm shadow-sm hover:bg-blue-600 hover:text-white'
                       >
                         <FontAwesomeIcon icon={faCheck} className='text-[20px]' />

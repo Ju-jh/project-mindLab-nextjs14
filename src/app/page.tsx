@@ -24,14 +24,18 @@ export default function Home() {
       const query = `
         query GetMySurvey {
           getMySurvey {
-            s_id
-            title
+            success
+            message
+            surveys {
+              s_id
+              title
+            }
           }
         }
       `;
       try {
         const result = await getGraphQLQuery({ query });
-        const mySurveysData = result.data.getMySurvey || [];
+        const mySurveysData = result.data.getMySurvey.surveys || [];
         setMySurveys(mySurveysData);
       } catch (error) {
         console.error('나의 설문지 가져오기 실패:', error);
@@ -42,14 +46,17 @@ export default function Home() {
     const query = `
       mutation CreateSurvey {
         createSurvey {
-          s_id
+          success
+          message
         }
       }
     `;
     try {
       const result = await sendGraphQLQuery(query, {});
-      if (result.data.createSurvey) {
+      if (result.data.createSurvey.sucess) {
         getMySurvey();
+      } else {
+        console.log(result.data.createSuvey.message)
       }
     } catch (error) {
       console.error('새 설문지 생성 실패:', error);
@@ -60,7 +67,8 @@ export default function Home() {
     const query = `
       mutation DeleteSurvey($surveyId: String!) {
         deleteSurvey(surveyId: $surveyId) {
-          s_id
+          success
+          message
         }
       }
     `;
@@ -69,7 +77,7 @@ export default function Home() {
 
     try {
       const result = await deleteGraphQLQuery(query, variables);
-      if (result) {
+      if (result.sucess) {
         getMySurvey();
       }
       
@@ -82,14 +90,18 @@ export default function Home() {
       const query = `
         query GetPublicSurvey {
           getPublicSurvey {
-            s_id
-            title
+            success
+            message
+            surveys {
+              s_id
+              title
+            }
           }
         }
       `;
       try {
         const result = await getGraphQLQuery({ query });
-        const publicSurveysData = result.data.getPublicSurvey || [];
+        const publicSurveysData = result.data.getPublicSurvey.surveys || [];
         setPublicSurveys(publicSurveysData);
       } catch (error) {
         console.error('나의 설문지 가져오기 실패:', error);
