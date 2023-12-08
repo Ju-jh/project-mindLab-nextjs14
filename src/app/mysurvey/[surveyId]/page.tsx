@@ -334,17 +334,21 @@ export default function Home({ params }: {
         const query = `
           mutation GetSurveyData($surveyId: String!) {
             getSurveyData(surveyId: $surveyId) {
-              title
-              description
-              questions {
-                q_id
-                text
-                createdAt
-                options {
-                  o_id
+              success
+              message
+              survey {
+                title
+                description
+                questions {
+                  q_id
                   text
-                  score
                   createdAt
+                  options {
+                    o_id
+                    text
+                    score
+                    createdAt
+                  }
                 }
               }
             }
@@ -352,12 +356,12 @@ export default function Home({ params }: {
           `
     try {
       const result = await getSurveyDataGraphQLQuery(query, surveyId);
-      const surveyData = result.data.getSurveyData;
+      const surveyData = result.data.getSurveyData.survey;
 
-      setOriginTitle(surveyData.title);
-      setOriginDescription(surveyData.description);
-      setOriginQuestions(surveyData.questions)
-      setOriginOption(surveyData.options)
+      setOriginTitle(surveyData.survey.title);
+      setOriginDescription(surveyData.survey.description);
+      setOriginQuestions(surveyData.survey.questions)
+      setOriginOption(surveyData.survey.options)
       console.log('fetch되었습니다')
 
       const mappedQuestions = surveyData.questions
@@ -381,6 +385,8 @@ export default function Home({ params }: {
     const query = `
       mutation CheckMySurveyIsPublic($surveyId: String!) {
         checkMySurveyIsPublic(surveyId: $surveyId) {
+          success
+          message
           public
         }
       }
