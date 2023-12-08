@@ -74,16 +74,17 @@ export default function Home({ params }: {
   const PushSurveyTitle = async (surveyId: string, newTitle: string) => {
   
     const query = `
-    mutation UpdateMySurveyTitle($surveyId: String!, $newTitle: String!) {
+      mutation UpdateMySurveyTitle($surveyId: String!, $newTitle: String!) {
         updateMySurveyTitle(surveyId: $surveyId, newTitle: $newTitle) {
-          title
+          success
+          message
         }
       }
     `;
     try {
       const result = await updateGraphQLQuery(query, { surveyId, newTitle });
-      if (result.data.PushSurveyTitle) {
-        alert('수정 완료되었습니다.')
+      if (result.data.PushSurveyTitle.sucess) {
+        alert(result.data.PushSurveyTitle.message)
       }
     } catch (error) {
       console.error('설문지 제목 수정 실패:', error);
@@ -94,14 +95,15 @@ export default function Home({ params }: {
     const query = `
       mutation UpdateMySurveyDescription($surveyId: String!, $newDescription: String!) {
         updateMySurveyDescription(surveyId: $surveyId, newDescription: $newDescription) {
-          description
+          success
+          message
         }
       }
     `;
     try {
       const result = await updateGraphQLQuery(query, {surveyId, newDescription});
-      if (result.data.PushSurveyDescription) {
-        alert('수정 완료되었습니다.')
+      if (result.data.updateMySurveyDescription.sucess) {
+        alert(result.data.updateMySurveyDescription.message)
       }
     } catch (error) {
       console.error('설문지 설명 수정 실패:', error);
