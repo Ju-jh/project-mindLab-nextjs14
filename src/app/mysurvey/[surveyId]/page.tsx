@@ -63,10 +63,11 @@ export default function Home({ params }: {
     score: 0,
   });
 
-  const [newoption, setOption] = useState({
-    newText: originOption.text,
-    newScore: originOption.score,
+  const [newOption, setNewOption] = useState({
+    text: originOption.text,
+    score: originOption.score,
   });
+
   
   
 
@@ -529,9 +530,9 @@ export default function Home({ params }: {
                         <input
                           type='text'
                           placeholder={`${option.text}`}
-                          value={option.newText}
+                          value={newOption.text}
                           onChange={(e) => {
-                            setOption((prevOption) => ({
+                            setNewOption((prevOption) => ({
                               ...prevOption,
                               newText: e.target.value,
                             }));
@@ -543,7 +544,7 @@ export default function Home({ params }: {
                           placeholder='점수를 입력하세요.'
                           value={option.newScore}
                           onChange={(e) => {
-                            setOption((prevOption) => ({
+                            setNewOption((prevOption) => ({
                               ...prevOption,
                               newScore: parseFloat(e.target.value),
                             }));
@@ -553,7 +554,7 @@ export default function Home({ params }: {
                         />
                       </div>
                       <button
-                        onClick={()=>pushOptionScore(option.o_id, newoption.newText, newoption.newScore)}
+                        onClick={()=>pushOptionScore(option.o_id, newOption.text, newOption.score)}
                         className='w-[40px] text-[20px] h-full rounded-sm shadow-sm hover:bg-blue-600 hover:text-white'
                       >
                         <FontAwesomeIcon icon={faCheck} className='text-[20px]' />
