@@ -158,7 +158,6 @@ export default function Home({ params }: {
                           : ''
                       }`}
                       onClick={() => {
-                        // 옵션을 클릭하면 선택 상태를 업데이트
                         const updatedOptions = Question.options.map((o) => ({
                           ...o,
                           selected: o.o_id === option.o_id,
