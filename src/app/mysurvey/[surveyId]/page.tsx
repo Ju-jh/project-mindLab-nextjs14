@@ -31,6 +31,7 @@ interface Question {
 }
 
 interface Option {
+  localText: string;
   o_id: string;
   text: string;
   score: number;
@@ -325,6 +326,27 @@ export default function Home({ params }: {
     }
   };
 
+  const handleOptionTextChange = (e: React.ChangeEvent<HTMLInputElement>, questionId: string, optionId: string) => {
+  const { value } = e.target;
+
+  setQuestions((prevQuestions) => {
+    const updatedQuestions = prevQuestions.map((question) => {
+      if (question.q_id === questionId) {
+        const updatedOptions = question.options.map((option) => {
+          if (option.o_id === optionId) {
+            return { ...option, localText: value };
+          }
+          return option;
+        });
+        return { ...question, options: updatedOptions };
+      }
+      return question;
+    });
+
+    return updatedQuestions;
+  });
+};
+
 
     / ////////////////////////////////////////     useEffect      //////////////////////////////////////////////////
 
@@ -514,8 +536,8 @@ export default function Home({ params }: {
                         <input
                           type='text'
                           placeholder={`${option.text}`}
-                          value={option.text}
-                          className='bg-transparent'
+                          value={option.localText}
+                          onChange={(e) => handleOptionTextChange(e, question.q_id, option.o_id)}
                         />
                         <input
                           type='number'
