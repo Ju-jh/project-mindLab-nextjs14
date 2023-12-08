@@ -84,7 +84,7 @@ export default function Home({ params }: {
     try {
       const result = await updateGraphQLQuery(query, { surveyId, newTitle });
       if (result.data.updateMySurveyTitle.sucess) {
-        alert(result.data.updateMySurveyTitle.message)
+        console.log(result.data.updateMySurveyTitle.message)
       }
     } catch (error) {
       console.error('설문지 제목 수정 실패:', error);
@@ -103,7 +103,7 @@ export default function Home({ params }: {
     try {
       const result = await updateGraphQLQuery(query, {surveyId, newDescription});
       if (result.data.updateMySurveyDescription.sucess) {
-        alert(result.data.updateMySurveyDescription.message)
+        console.log(result.data.updateMySurveyDescription.message)
       }
     } catch (error) {
       console.error('설문지 설명 수정 실패:', error);
