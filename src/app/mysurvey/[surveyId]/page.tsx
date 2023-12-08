@@ -31,6 +31,7 @@ interface Question {
 }
 
 interface Option {
+  localScore: string | number | readonly string[] | undefined;
   localText: string;
   o_id: string;
   text: string;
@@ -347,7 +348,29 @@ export default function Home({ params }: {
 
     return updatedQuestions;
   });
-};
+  };
+  const handleOptionScoreChange = (e: React.ChangeEvent<HTMLInputElement>, questionId: string, optionId: string) => {
+  const { value } = e.target;
+  const parsedValue = parseFloat(value);
+
+  setQuestions((prevQuestions) => {
+    const updatedQuestions = prevQuestions.map((question) => {
+      if (question.q_id === questionId) {
+        const updatedOptions = question.options.map((option) => {
+          if (option.o_id === optionId) {
+            return { ...option, localScore: isNaN(parsedValue) ? 0 : parsedValue };
+          }
+          return option;
+        });
+        return { ...question, options: updatedOptions };
+      }
+      return question;
+    });
+
+    return updatedQuestions;
+  });
+  };
+
 
 
     / ////////////////////////////////////////     useEffect      //////////////////////////////////////////////////
@@ -544,7 +567,8 @@ export default function Home({ params }: {
                         <input
                           type='number'
                           placeholder='점수를 입력하세요.'
-                          value={option.score}
+                          value={option.localScore}
+                          onChange={(e) => handleOptionScoreChange(e, question.q_id, option.o_id)}
                           className='bg-transparent pl-[60px]'
                         />
                       </div>
