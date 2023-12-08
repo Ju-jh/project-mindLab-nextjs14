@@ -71,42 +71,42 @@ export default function Home({ params }: {
   
 
 
-  // const PushSurveyTitle = async (surveyId: string, newTitle: string) => {
+  const PushSurveyTitle = async (surveyId: string, newTitle: string) => {
   
-  //   const query = `
-  //   mutation UpdateMySurveyTitle($surveyId: String!, $newTitle: String!) {
-  //       updateMySurveyTitle(surveyId: $surveyId, newTitle: $newTitle) {
-  //         title
-  //       }
-  //     }
-  //   `;
-  //   try {
-  //     const result = await updateGraphQLQuery(query, { surveyId, newTitle });
-  //     if (result.data.PushSurveyTitle) {
-  //       alert('수정 완료되었습니다.')
-  //     }
-  //   } catch (error) {
-  //     console.error('설문지 제목 수정 실패:', error);
-  //   }
-  // };
+    const query = `
+    mutation UpdateMySurveyTitle($surveyId: String!, $newTitle: String!) {
+        updateMySurveyTitle(surveyId: $surveyId, newTitle: $newTitle) {
+          title
+        }
+      }
+    `;
+    try {
+      const result = await updateGraphQLQuery(query, { surveyId, newTitle });
+      if (result.data.PushSurveyTitle) {
+        alert('수정 완료되었습니다.')
+      }
+    } catch (error) {
+      console.error('설문지 제목 수정 실패:', error);
+    }
+  };
 
-  // const PushSurveyDescription = async (surveyId: string, newDescription: string) => {
-  //   const query = `
-  //     mutation UpdateMySurveyDescription($surveyId: String!, $newDescription: String!) {
-  //       updateMySurveyDescription(surveyId: $surveyId, newDescription: $newDescription) {
-  //         description
-  //       }
-  //     }
-  //   `;
-  //   try {
-  //     const result = await updateGraphQLQuery(query, {surveyId, newDescription});
-  //     if (result.data.PushSurveyDescription) {
-  //       alert('수정 완료되었습니다.')
-  //     }
-  //   } catch (error) {
-  //     console.error('설문지 설명 수정 실패:', error);
-  //   }
-  // };
+  const PushSurveyDescription = async (surveyId: string, newDescription: string) => {
+    const query = `
+      mutation UpdateMySurveyDescription($surveyId: String!, $newDescription: String!) {
+        updateMySurveyDescription(surveyId: $surveyId, newDescription: $newDescription) {
+          description
+        }
+      }
+    `;
+    try {
+      const result = await updateGraphQLQuery(query, {surveyId, newDescription});
+      if (result.data.PushSurveyDescription) {
+        alert('수정 완료되었습니다.')
+      }
+    } catch (error) {
+      console.error('설문지 설명 수정 실패:', error);
+    }
+  };
 
 
 
@@ -296,32 +296,35 @@ export default function Home({ params }: {
 
 
 
-  // const updateMySurveyIsPublic = async (surveyId: string) => {
-  //   const mutation = `
-  //     mutation UpdateMySurveyIsPublic($surveyId: String!) {
-  //       updateMySurveyIsPublic(surveyId: $surveyId) {
-  //         public
-  //       }
-  //     }
-  //   `
+  const updateMySurveyIsPublic = async (surveyId: string) => {
+    const mutation = `
+      mutation UpdateMySurveyIsPublic($surveyId: String!) {
+        updateMySurveyIsPublic(surveyId: $surveyId) {
+          success
+          message
+        }
+      }
+    `
 
-  //   const variables = {
-  //     surveyId,
-  //   }
+    const variables = {
+      surveyId,
+    }
 
-  //   try {
-  //     const result = await sendGraphQLQuery(mutation, variables);
-  //     if (isClicked) {
-  //       setIsClicked(false)
-  //     } else {
-  //       setIsClicked(true)
-  //     }
-  //     return result.data.updateMySurveyIsPublic;
-  //   } catch (error) {
-  //     console.error('Failed to update survey public status:', error);
-  //     throw error;
-  //   }
-  // };
+    try {
+      const result = await sendGraphQLQuery(mutation, variables);
+      if (result.data.updateMySurveyIsPublic.sucess) {
+        if (isClicked) {
+          setIsClicked(false)
+        } else {
+          setIsClicked(true)
+        }
+        return result.data.updateMySurveyIsPublic.sucess;
+      }
+    } catch (error) {
+      console.error('Failed to update survey public status:', error);
+      throw error;
+    }
+  };
 
 
     / ////////////////////////////////////////     useEffect      //////////////////////////////////////////////////
@@ -414,7 +417,7 @@ export default function Home({ params }: {
   
   return (
     <main className='flex-col w-full h-full p-[30px] pt-[60px]'>
-      {/* <section className='w-full h-[100px]  flex items-center justify-end pr-[50px]'>
+      <section className='w-full h-[100px]  flex items-center justify-end pr-[50px]'>
           <button
             className='w-[150px] h-[50px] p-[5px] rounded-md shadow-md ml-[20px] bg-slate-200 hover:bg-blue-400'
             onClick={()=>updateMySurveyIsPublic(surveyId)}
@@ -442,7 +445,7 @@ export default function Home({ params }: {
             </button> 
         }
       </section>
-      <section className='titleSection w-full h-[200px]  flex items-center justify-center '>
+      {/* <section className='titleSection w-full h-[200px]  flex items-center justify-center '>
         <div className='titleDiv w-[500px]  flex items-center justify-center'>
           <input
             type="text"
