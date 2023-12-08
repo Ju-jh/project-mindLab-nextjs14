@@ -58,274 +58,270 @@ export default function Home({ params }: {
   const [originQuestions, setOriginQuestions] = useState<Question[]>([]);
   const [Questions, setQuestions] = useState<Question[]>(originQuestions);
 
-  const [originOption, setOriginOption] = useState({
-    text: '',
-    score: 0,
-  });
+  // const [originOption, setOriginOption] = useState({
+  //   text: '',
+  //   score: 0,
+  // });
 
-  const [newOption, setNewOption] = useState({
-    text: originOption.text,
-    score: originOption.score,
-  });
-
+  // const [newoption, setOption] = useState({
+  //   newText: originOption.text,
+  //   newScore: originOption.score,
+  // });
   
   
 
-  / ////////////////////////////////////////     function      //////////////////////////////////////////////////
 
-
-  const PushSurveyTitle = async (surveyId: string, newTitle: string) => {
+  // const PushSurveyTitle = async (surveyId: string, newTitle: string) => {
   
-    const query = `
-      mutation UpdateMySurveyTitle($surveyId: String!, $newTitle: String!) {
-        updateMySurveyTitle(surveyId: $surveyId, newTitle: $newTitle) {
-          success
-          message
-        }
-      }
-    `;
-    try {
-      const result = await updateGraphQLQuery(query, { surveyId, newTitle });
-      if (result.data.updateMySurveyTitle.sucess) {
-        alert(result.data.updateMySurveyTitle.message)
-      }
-    } catch (error) {
-      console.error('설문지 제목 수정 실패:', error);
-    }
-  };
+  //   const query = `
+  //   mutation UpdateMySurveyTitle($surveyId: String!, $newTitle: String!) {
+  //       updateMySurveyTitle(surveyId: $surveyId, newTitle: $newTitle) {
+  //         title
+  //       }
+  //     }
+  //   `;
+  //   try {
+  //     const result = await updateGraphQLQuery(query, { surveyId, newTitle });
+  //     if (result.data.PushSurveyTitle) {
+  //       alert('수정 완료되었습니다.')
+  //     }
+  //   } catch (error) {
+  //     console.error('설문지 제목 수정 실패:', error);
+  //   }
+  // };
 
-  const PushSurveyDescription = async (surveyId: string, newDescription: string) => {
-    const query = `
-      mutation UpdateMySurveyDescription($surveyId: String!, $newDescription: String!) {
-        updateMySurveyDescription(surveyId: $surveyId, newDescription: $newDescription) {
-          description
-        }
-      }
-    `;
-    try {
-      const result = await updateGraphQLQuery(query, {surveyId, newDescription});
-      if (result.data.PushSurveyDescription) {
-        alert('수정 완료되었습니다.')
-      }
-    } catch (error) {
-      console.error('설문지 설명 수정 실패:', error);
-    }
-  };
-
-
-
-  const createQuestion = async (surveyId: string) => {
-
-    const mutation = `
-      mutation CreateQuestion($surveyId: String!) {
-        createQuestion(surveyId: $surveyId) {
-          q_id
-        }
-      }
-    `;
-    const variables = {
-      surveyId: surveyId,
-    };
-
-    try {
-      const result = await sendGraphQLQuery(mutation, variables);
-      if (result.data.createQuestion) {
-        setQuestions((prevQuestions) => [
-          ...prevQuestions,
-          {
-            q_id: result.data.createQuestion.q_id,
-            text: '',
-            survey: { s_id: surveyId, title: '', description: '', user: '' },
-            options: [],
-          },
-        ]);
-        if (isClicked) {
-          setIsClicked(false)
-        } else {
-          setIsClicked(true)
-        }
-      }
-    } catch (error) {
-      console.error('Question creation failed:', error);
-    }
-  };
-
-  const removeQuestion = async (surveyId: string, questionId: string) => {
-    const mutation = `
-      mutation DeleteQuestion($surveyId: String!, $questionId: String!) {
-        deleteQuestion(surveyId: $surveyId, questionId: $questionId) {
-          q_id
-        }
-      }
-    `;
-
-    const variables = {
-      surveyId: surveyId,
-      questionId: questionId,
-    };
-
-    try {
-      const result = await deleteGraphQLQuery(mutation, variables);
-      if (result) {
-        if (isClicked) {
-          setIsClicked(false)
-        } else {
-          setIsClicked(true)
-        }
-      }
-    } catch (error) {
-      console.error('Failed to delete questions:', error);
-    }
-  };
-
-  const addOption = async (surveyId: string, questionId: string) => {
-    const mutation = `
-      mutation CreateOption($surveyId: String!, $questionId: String!) {
-        createOption(surveyId: $surveyId, questionId: $questionId) {
-          o_id
-        }
-      }
-    `;
-    const variables = {
-      surveyId: surveyId,
-      questionId: questionId
-    };
-    try {
-      const result = await createOptionGraphQLQuery(mutation, variables);
-      if (result.data.createOption) {
-        if (isClicked) {
-          setIsClicked(false)
-        } else {
-          setIsClicked(true)
-        }
-      }
-    } catch (error) {
-      console.error('Option creation failed:', error);
-    }
-  };
-
-  const deleteOption = async (optionId: string) => {
-
-    const mutation = `
-      mutation DeleteOption($optionId: String!) {
-        deleteOption(optionId: $optionId) {
-          o_id
-        }
-      }
-    `;
-
-    const variables = {
-      optionId: optionId,
-    };
-
-    try {
-      const result = await deleteGraphQLQuery(mutation, variables);
-      if (result.data.deleteOption) {
-        if (isClicked) {
-          setIsClicked(false)
-        } else {
-          setIsClicked(true)
-        }
-      }
-    } catch (error) {
-      console.error('Failed to delete option:', error);
-    }
-  };
-
-
-  const pushQuestionIndex = async (questionId: string, questionIndex: []) => {
-
-  } 
-
-
-  const pushQuestionText = async (surveyId: string, questionId: string, newText: string) => {
-    const query = `
-      mutation UpdateQuestionText($surveyId: String!, $questionId: String!, $newText: String!) {
-        updateQuestionText(surveyId: $surveyId, questionId: $questionId, newText: $newText) {
-          text
-        }
-      }
-    `;
-    try {
-      const result = await updateTextGraphQLQuery({
-        query,
-        variables: { surveyId, questionId, newText },
-      });
-      if (result.data.updateQuestionText) {
-        if (isClicked) {
-          setIsClicked(false)
-        } else {
-          setIsClicked(true)
-        }
-      }
-    } catch (error) {
-      console.error('질문 제목 수정 실패:', error);
-    }
-  }
-
-  const pushOptionScore = async (optionId: string, newText: string, newScore: number) => {
-    const mutation = `
-      mutation UpdateOptionTextAndScore($optionId: String!, $newText: String!, $newScore: Float!) {
-        updateOptionTextAndScore(optionId: $optionId, newText: $newText, newScore: $newScore) {
-          o_id
-          text
-          score
-        }
-      }
-    `;
-
-    const variables = {
-      optionId: optionId,
-      newText: newText,
-      newScore: newScore,
-    };
-
-    try {
-      const result = await updateTextAndScoreGraphQLQuery({
-        query: mutation,
-        variables: variables,
-      });
-
-      if (result.data.updateOptionTextAndScore) {
-        if (isClicked) {
-          setIsClicked(false)
-        } else {
-          setIsClicked(true)
-        }
-      }
-    } catch (error) {
-      console.error('옵션 업데이트 실패:', error);
-    }
-  };
+  // const PushSurveyDescription = async (surveyId: string, newDescription: string) => {
+  //   const query = `
+  //     mutation UpdateMySurveyDescription($surveyId: String!, $newDescription: String!) {
+  //       updateMySurveyDescription(surveyId: $surveyId, newDescription: $newDescription) {
+  //         description
+  //       }
+  //     }
+  //   `;
+  //   try {
+  //     const result = await updateGraphQLQuery(query, {surveyId, newDescription});
+  //     if (result.data.PushSurveyDescription) {
+  //       alert('수정 완료되었습니다.')
+  //     }
+  //   } catch (error) {
+  //     console.error('설문지 설명 수정 실패:', error);
+  //   }
+  // };
 
 
 
-  const updateMySurveyIsPublic = async (surveyId: string) => {
-    const mutation = `
-      mutation UpdateMySurveyIsPublic($surveyId: String!) {
-        updateMySurveyIsPublic(surveyId: $surveyId) {
-          public
-        }
-      }
-    `
+  // const createQuestion = async (surveyId: string) => {
 
-    const variables = {
-      surveyId,
-    }
+  //   const mutation = `
+  //     mutation CreateQuestion($surveyId: String!) {
+  //       createQuestion(surveyId: $surveyId) {
+  //         q_id
+  //       }
+  //     }
+  //   `;
+  //   const variables = {
+  //     surveyId: surveyId,
+  //   };
 
-    try {
-      const result = await sendGraphQLQuery(mutation, variables);
-      if (isClicked) {
-        setIsClicked(false)
-      } else {
-        setIsClicked(true)
-      }
-      return result.data.updateMySurveyIsPublic;
-    } catch (error) {
-      console.error('Failed to update survey public status:', error);
-      throw error;
-    }
-  };
+  //   try {
+  //     const result = await sendGraphQLQuery(mutation, variables);
+  //     if (result.data.createQuestion) {
+  //       setQuestions((prevQuestions) => [
+  //         ...prevQuestions,
+  //         {
+  //           q_id: result.data.createQuestion.q_id,
+  //           text: '',
+  //           survey: { s_id: surveyId, title: '', description: '', user: '' },
+  //           options: [],
+  //         },
+  //       ]);
+  //       if (isClicked) {
+  //         setIsClicked(false)
+  //       } else {
+  //         setIsClicked(true)
+  //       }
+  //     }
+  //   } catch (error) {
+  //     console.error('Question creation failed:', error);
+  //   }
+  // };
+
+  // const removeQuestion = async (surveyId: string, questionId: string) => {
+  //   const mutation = `
+  //     mutation DeleteQuestion($surveyId: String!, $questionId: String!) {
+  //       deleteQuestion(surveyId: $surveyId, questionId: $questionId) {
+  //         q_id
+  //       }
+  //     }
+  //   `;
+
+  //   const variables = {
+  //     surveyId: surveyId,
+  //     questionId: questionId,
+  //   };
+
+  //   try {
+  //     const result = await deleteGraphQLQuery(mutation, variables);
+  //     if (result) {
+  //       if (isClicked) {
+  //         setIsClicked(false)
+  //       } else {
+  //         setIsClicked(true)
+  //       }
+  //     }
+  //   } catch (error) {
+  //     console.error('Failed to delete questions:', error);
+  //   }
+  // };
+
+  // const addOption = async (surveyId: string, questionId: string) => {
+  //   const mutation = `
+  //     mutation CreateOption($surveyId: String!, $questionId: String!) {
+  //       createOption(surveyId: $surveyId, questionId: $questionId) {
+  //         o_id
+  //       }
+  //     }
+  //   `;
+  //   const variables = {
+  //     surveyId: surveyId,
+  //     questionId: questionId
+  //   };
+  //   try {
+  //     const result = await createOptionGraphQLQuery(mutation, variables);
+  //     if (result.data.createOption) {
+  //       if (isClicked) {
+  //         setIsClicked(false)
+  //       } else {
+  //         setIsClicked(true)
+  //       }
+  //     }
+  //   } catch (error) {
+  //     console.error('Option creation failed:', error);
+  //   }
+  // };
+
+  // const deleteOption = async (optionId: string) => {
+
+  //   const mutation = `
+  //     mutation DeleteOption($optionId: String!) {
+  //       deleteOption(optionId: $optionId) {
+  //         o_id
+  //       }
+  //     }
+  //   `;
+
+  //   const variables = {
+  //     optionId: optionId,
+  //   };
+
+  //   try {
+  //     const result = await deleteGraphQLQuery(mutation, variables);
+  //     if (result.data.deleteOption) {
+  //       if (isClicked) {
+  //         setIsClicked(false)
+  //       } else {
+  //         setIsClicked(true)
+  //       }
+  //     }
+  //   } catch (error) {
+  //     console.error('Failed to delete option:', error);
+  //   }
+  // };
+
+
+  // const pushQuestionIndex = async (questionId: string, questionIndex: []) => {
+
+  // } 
+
+
+  // const pushQuestionText = async (surveyId: string, questionId: string, newText: string) => {
+  //   const query = `
+  //     mutation UpdateQuestionText($surveyId: String!, $questionId: String!, $newText: String!) {
+  //       updateQuestionText(surveyId: $surveyId, questionId: $questionId, newText: $newText) {
+  //         text
+  //       }
+  //     }
+  //   `;
+  //   try {
+  //     const result = await updateTextGraphQLQuery({
+  //       query,
+  //       variables: { surveyId, questionId, newText },
+  //     });
+  //     if (result.data.updateQuestionText) {
+  //       if (isClicked) {
+  //         setIsClicked(false)
+  //       } else {
+  //         setIsClicked(true)
+  //       }
+  //     }
+  //   } catch (error) {
+  //     console.error('질문 제목 수정 실패:', error);
+  //   }
+  // }
+
+  // const pushOptionScore = async (optionId: string, newText: string, newScore: number) => {
+  //   const mutation = `
+  //     mutation UpdateOptionTextAndScore($optionId: String!, $newText: String!, $newScore: Float!) {
+  //       updateOptionTextAndScore(optionId: $optionId, newText: $newText, newScore: $newScore) {
+  //         o_id
+  //         text
+  //         score
+  //       }
+  //     }
+  //   `;
+
+  //   const variables = {
+  //     optionId: optionId,
+  //     newText: newText,
+  //     newScore: newScore,
+  //   };
+
+  //   try {
+  //     const result = await updateTextAndScoreGraphQLQuery({
+  //       query: mutation,
+  //       variables: variables,
+  //     });
+
+  //     if (result.data.updateOptionTextAndScore) {
+  //       if (isClicked) {
+  //         setIsClicked(false)
+  //       } else {
+  //         setIsClicked(true)
+  //       }
+  //     }
+  //   } catch (error) {
+  //     console.error('옵션 업데이트 실패:', error);
+  //   }
+  // };
+
+
+
+  // const updateMySurveyIsPublic = async (surveyId: string) => {
+  //   const mutation = `
+  //     mutation UpdateMySurveyIsPublic($surveyId: String!) {
+  //       updateMySurveyIsPublic(surveyId: $surveyId) {
+  //         public
+  //       }
+  //     }
+  //   `
+
+  //   const variables = {
+  //     surveyId,
+  //   }
+
+  //   try {
+  //     const result = await sendGraphQLQuery(mutation, variables);
+  //     if (isClicked) {
+  //       setIsClicked(false)
+  //     } else {
+  //       setIsClicked(true)
+  //     }
+  //     return result.data.updateMySurveyIsPublic;
+  //   } catch (error) {
+  //     console.error('Failed to update survey public status:', error);
+  //     throw error;
+  //   }
+  // };
 
 
     / ////////////////////////////////////////     useEffect      //////////////////////////////////////////////////
@@ -363,7 +359,6 @@ export default function Home({ params }: {
       setOriginTitle(surveyData.title);
       setOriginDescription(surveyData.description);
       setOriginQuestions(surveyData.questions)
-      setOriginOption(surveyData.questions.options)
       console.log('fetch되었습니다')
 
       const mappedQuestions = surveyData.questions
@@ -419,7 +414,7 @@ export default function Home({ params }: {
   
   return (
     <main className='flex-col w-full h-full p-[30px] pt-[60px]'>
-      <section className='w-full h-[100px]  flex items-center justify-end pr-[50px]'>
+      {/* <section className='w-full h-[100px]  flex items-center justify-end pr-[50px]'>
           <button
             className='w-[150px] h-[50px] p-[5px] rounded-md shadow-md ml-[20px] bg-slate-200 hover:bg-blue-400'
             onClick={()=>updateMySurveyIsPublic(surveyId)}
@@ -530,9 +525,9 @@ export default function Home({ params }: {
                         <input
                           type='text'
                           placeholder={`${option.text}`}
-                          value={newOption.text}
+                          value={option.newText}
                           onChange={(e) => {
-                            setNewOption((prevOption) => ({
+                            setOption((prevOption) => ({
                               ...prevOption,
                               newText: e.target.value,
                             }));
@@ -544,7 +539,7 @@ export default function Home({ params }: {
                           placeholder='점수를 입력하세요.'
                           value={option.newScore}
                           onChange={(e) => {
-                            setNewOption((prevOption) => ({
+                            setOption((prevOption) => ({
                               ...prevOption,
                               newScore: parseFloat(e.target.value),
                             }));
@@ -554,7 +549,7 @@ export default function Home({ params }: {
                         />
                       </div>
                       <button
-                        onClick={()=>pushOptionScore(option.o_id, newOption.text, newOption.score)}
+                        onClick={()=>pushOptionScore(option.o_id, newoption.newText, newoption.newScore)}
                         className='w-[40px] text-[20px] h-full rounded-sm shadow-sm hover:bg-blue-600 hover:text-white'
                       >
                         <FontAwesomeIcon icon={faCheck} className='text-[20px]' />
@@ -586,7 +581,7 @@ export default function Home({ params }: {
             문제 추가하기 +
           </button>
         </div>
-      </section>
+      </section> */}
     </main>
   );
 }
