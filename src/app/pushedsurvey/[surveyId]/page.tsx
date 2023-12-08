@@ -79,47 +79,53 @@ export default function Home({ params }: {
         const query = `
           mutation GetSurveyData($surveyId: String!) {
             getSurveyData(surveyId: $surveyId) {
-              title
-              description
-              questions {
-                q_id
-                text
-                createdAt
-                options {
-                  o_id
+              success
+              message
+              survey {
+                title
+                description
+                questions {
+                  q_id
                   text
-                  score
+                  createdAt
+                  options {
+                    o_id
+                    text
+                    score
+                    createdAt
+                  }
                 }
               }
             }
           }
           `
-    try {
+      
       const result = await getSurveyDataGraphQLQuery(query, surveyId);
-      const surveyData = result.data.getSurveyData;
-
-      setOriginTitle(surveyData.title);
-      setOriginDescription(surveyData.description);
-
-
-      const mappedQuestions = surveyData.questions
-        .map((question: { q_id: string; text: string; options: any; createdAt: Date }) => {
-          return {
-            q_id: question.q_id,
-            text: question.text,
-            survey: surveyData,
-            options: question.options || [],
-            createdAt: new Date(question.createdAt),
-          };
-        })
-        .sort((a: { createdAt: Date; }, b: { createdAt: Date; }) => a.createdAt.getTime() - b.createdAt.getTime());
-        
-        setQuestions(mappedQuestions);
+      
+      try {
+        if (result.data.getSurveyData.success) {
+          const surveyData = result.data.getSurveyData.survey;
+          const mappedQuestions = surveyData.questions
+            .map((question: { options: any[]; createdAt: Date; }) => {
+              const sortedOptions = question.options.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+              return {
+                ...question,
+                options: sortedOptions,
+                createdAt: new Date(question.createdAt),
+              };
+            })
+            .sort((a: { createdAt: { getTime: () => number; }; }, b: { createdAt: { getTime: () => number; }; }) => a.createdAt.getTime() - b.createdAt.getTime());
+    
+          setOriginTitle(surveyData.title);
+          setOriginDescription(surveyData.description);
+          setQuestions(mappedQuestions);
+        } else {
+          console.log(result.data.getSurveyData.message)
+        }
       } catch (error) {
-        console.error('설문지 데이터 로딩 실패:', error);
+        console.error(result.data.getSurveyData.message, error);
       }
     };
-    
 
     if (surveyId) {
       fetchData();
