@@ -76,16 +76,17 @@ export default function Home({ params }: {
   const PushSurveyTitle = async (surveyId: string, newTitle: string) => {
   
     const query = `
-    mutation UpdateMySurveyTitle($surveyId: String!, $newTitle: String!) {
+      mutation UpdateMySurveyTitle($surveyId: String!, $newTitle: String!) {
         updateMySurveyTitle(surveyId: $surveyId, newTitle: $newTitle) {
-          title
+          success
+          message
         }
       }
     `;
     try {
       const result = await updateGraphQLQuery(query, { surveyId, newTitle });
-      if (result.data.PushSurveyTitle) {
-        alert('수정 완료되었습니다.')
+      if (result.data.updateMySurveyTitle.sucess) {
+        alert(result.data.updateMySurveyTitle.message)
       }
     } catch (error) {
       console.error('설문지 제목 수정 실패:', error);
@@ -361,7 +362,7 @@ export default function Home({ params }: {
       setOriginTitle(surveyData.title);
       setOriginDescription(surveyData.description);
       setOriginQuestions(surveyData.questions)
-      setOriginOption(surveyData.options)
+      setOriginOption(surveyData.questions.options)
       console.log('fetch되었습니다')
 
       const mappedQuestions = surveyData.questions
