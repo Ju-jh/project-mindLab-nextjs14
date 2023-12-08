@@ -40,40 +40,24 @@ interface Option {
   newScore: number;
 }
 
-export default function Home({ params }: {
-  params: { surveyId:string}
-}) {
+export default function Home({ params }: { params: { surveyId: string } }) {
+  // Destructure the surveyId from params
+  const { surveyId } = params;
 
-  / ////////////////////////////////////////     const      //////////////////////////////////////////////////
+  // Define state variables
+  const [isThisSurveyPublic, setIsThisSurveyPublic] = useState<boolean | undefined>();
+  const [isClicked, setIsClicked] = useState<boolean>(false);
 
-  const surveyId = params.surveyId;
-
-  const [isThisSurveyPublic, setIsThisSurveyPublic] = useState<boolean>()
-  const [isClicked, setIsClicked] = useState<boolean>(false)
-
-  const [originTitle, setOriginTitle] = useState<string>('')
+  const [originTitle, setOriginTitle] = useState<string>('');
   const [surveyTitle, setSurveyTitle] = useState<string>(originTitle);
 
   const [originDescription, setOriginDescription] = useState<string>('');
   const [surveyDescription, setSurveyDescription] = useState<string>(originDescription);
-  
+
   const [questions, setQuestions] = useState<Question[]>([]);
 
-  // const [originOption, setOriginOption] = useState({
-  //   text: '',
-  //   score: 0,
-  // });
-
-  // const [option, setOption] = useState({
-  //   text: originOption.text,
-  //   score: originOption.score,
-  // });
-  
-  
-
-
+  // Define functions for updating survey data
   const PushSurveyTitle = async (surveyId: string, newTitle: string) => {
-  
     const query = `
       mutation UpdateMySurveyTitle($surveyId: String!, $newTitle: String!) {
         updateMySurveyTitle(surveyId: $surveyId, newTitle: $newTitle) {
@@ -83,9 +67,9 @@ export default function Home({ params }: {
       }
     `;
     try {
-      const result = await updateGraphQLQuery(query, { surveyId, newTitle });
-      if (result.data.updateMySurveyTitle.sucess) {
-        console.log(result.data.updateMySurveyTitle.message)
+      const result = await sendGraphQLQuery(query, { surveyId, newTitle });
+      if (result.data.updateMySurveyTitle.success) {
+        console.log(result.data.updateMySurveyTitle.message);
       }
     } catch (error) {
       console.error('설문지 제목 수정 실패:', error);
@@ -102,19 +86,16 @@ export default function Home({ params }: {
       }
     `;
     try {
-      const result = await updateGraphQLQuery(query, {surveyId, newDescription});
-      if (result.data.updateMySurveyDescription.sucess) {
-        console.log(result.data.updateMySurveyDescription.message)
+      const result = await sendGraphQLQuery(query, { surveyId, newDescription });
+      if (result.data.updateMySurveyDescription.success) {
+        console.log(result.data.updateMySurveyDescription.message);
       }
     } catch (error) {
       console.error('설문지 설명 수정 실패:', error);
     }
   };
 
-
-
   const createQuestion = async (surveyId: string) => {
-
     const mutation = `
       mutation CreateQuestion($surveyId: String!) {
         createQuestion(surveyId: $surveyId) {
@@ -128,8 +109,8 @@ export default function Home({ params }: {
       surveyId: surveyId,
     };
 
-    const result = await sendGraphQLQuery(mutation, variables);
     try {
+      const result = await sendGraphQLQuery(mutation, variables);
       if (result.data.createQuestion.success) {
         setQuestions((prevQuestions) => [
           ...prevQuestions,
@@ -141,9 +122,9 @@ export default function Home({ params }: {
           },
         ]);
         if (isClicked) {
-          setIsClicked(false)
+          setIsClicked(false);
         } else {
-          setIsClicked(true)
+          setIsClicked(true);
         }
       }
     } catch (error) {
@@ -169,9 +150,9 @@ export default function Home({ params }: {
       const result = await deleteGraphQLQuery(mutation, variables);
       if (result) {
         if (isClicked) {
-          setIsClicked(false)
+          setIsClicked(false);
         } else {
-          setIsClicked(true)
+          setIsClicked(true);
         }
       }
     } catch (error) {
@@ -189,15 +170,15 @@ export default function Home({ params }: {
     `;
     const variables = {
       surveyId: surveyId,
-      questionId: questionId
+      questionId: questionId,
     };
     try {
       const result = await createOptionGraphQLQuery(mutation, variables);
       if (result.data.createOption) {
         if (isClicked) {
-          setIsClicked(false)
+          setIsClicked(false);
         } else {
-          setIsClicked(true)
+          setIsClicked(true);
         }
       }
     } catch (error) {
@@ -206,7 +187,6 @@ export default function Home({ params }: {
   };
 
   const deleteOption = async (optionId: string) => {
-
     const mutation = `
       mutation DeleteOption($optionId: String!) {
         deleteOption(optionId: $optionId) {
@@ -223,83 +203,15 @@ export default function Home({ params }: {
       const result = await deleteGraphQLQuery(mutation, variables);
       if (result.data.deleteOption) {
         if (isClicked) {
-          setIsClicked(false)
+          setIsClicked(false);
         } else {
-          setIsClicked(true)
+          setIsClicked(true);
         }
       }
     } catch (error) {
       console.error('Failed to delete option:', error);
     }
   };
-
-
-  // const pushQuestionIndex = async (questionId: string, questionIndex: []) => {
-
-  // } 
-
-
-  // const pushQuestionText = async (surveyId: string, questionId: string, newText: string) => {
-  //   const query = `
-  //     mutation UpdateQuestionText($surveyId: String!, $questionId: String!, $newText: String!) {
-  //       updateQuestionText(surveyId: $surveyId, questionId: $questionId, newText: $newText) {
-  //         text
-  //       }
-  //     }
-  //   `;
-  //   try {
-  //     const result = await updateTextGraphQLQuery({
-  //       query,
-  //       variables: { surveyId, questionId, newText },
-  //     });
-  //     if (result.data.updateQuestionText) {
-  //       if (isClicked) {
-  //         setIsClicked(false)
-  //       } else {
-  //         setIsClicked(true)
-  //       }
-  //     }
-  //   } catch (error) {
-  //     console.error('질문 제목 수정 실패:', error);
-  //   }
-  // }
-
-  // const pushOptionScore = async (optionId: string, newText: string, newScore: number) => {
-  //   const mutation = `
-  //     mutation UpdateOptionTextAndScore($optionId: String!, $newText: String!, $newScore: Float!) {
-  //       updateOptionTextAndScore(optionId: $optionId, newText: $newText, newScore: $newScore) {
-  //         o_id
-  //         text
-  //         score
-  //       }
-  //     }
-  //   `;
-
-  //   const variables = {
-  //     optionId: optionId,
-  //     newText: newText,
-  //     newScore: newScore,
-  //   };
-
-  //   try {
-  //     const result = await updateTextAndScoreGraphQLQuery({
-  //       query: mutation,
-  //       variables: variables,
-  //     });
-
-  //     if (result.data.updateOptionTextAndScore) {
-  //       if (isClicked) {
-  //         setIsClicked(false)
-  //       } else {
-  //         setIsClicked(true)
-  //       }
-  //     }
-  //   } catch (error) {
-  //     console.error('옵션 업데이트 실패:', error);
-  //   }
-  // };
-
-
 
   const updateMySurveyIsPublic = async (surveyId: string) => {
     const mutation = `
@@ -309,21 +221,21 @@ export default function Home({ params }: {
           message
         }
       }
-    `
+    `;
 
     const variables = {
       surveyId,
-    }
+    };
 
     try {
       const result = await sendGraphQLQuery(mutation, variables);
-      if (result.data.updateMySurveyIsPublic.sucess) {
+      if (result.data.updateMySurveyIsPublic.success) {
         if (isClicked) {
-          setIsClicked(false)
+          setIsClicked(false);
         } else {
-          setIsClicked(true)
+          setIsClicked(true);
         }
-        return result.data.updateMySurveyIsPublic.sucess;
+        return result.data.updateMySurveyIsPublic.success;
       }
     } catch (error) {
       console.error('Failed to update survey public status:', error);
@@ -331,7 +243,11 @@ export default function Home({ params }: {
     }
   };
 
-  const handleOptionTextChange = (e: React.ChangeEvent<HTMLInputElement>, questionId: string, optionId: string) => {
+  const handleOptionTextChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    questionId: string,
+    optionId: string
+  ) => {
     const { value } = e.target;
 
     setQuestions((prevQuestions) => {
@@ -348,31 +264,36 @@ export default function Home({ params }: {
         return question;
       });
 
-    return updatedQuestions;
-  });
-  };
-
-  const handleOptionScoreChange = (e: React.ChangeEvent<HTMLInputElement>, questionId: string, optionId: string) => {
-  const { value } = e.target;
-  const parsedValue = parseFloat(value);
-
-  setQuestions((prevQuestions) => {
-    const updatedQuestions = prevQuestions.map((question) => {
-      if (question.q_id === questionId) {
-        const updatedOptions = question.options.map((option) => {
-          if (option.o_id === optionId) {
-            return { ...option, localScore: isNaN(parsedValue) ? 0 : parsedValue };
-          }
-          return option;
-        });
-        return { ...question, options: updatedOptions };
-      }
-      return question;
+      return updatedQuestions;
     });
-
-    return updatedQuestions;
-  });
   };
+
+  const handleOptionScoreChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    questionId: string,
+    optionId: string
+  ) => {
+    const { value } = e.target;
+    const parsedValue = parseFloat(value);
+
+    setQuestions((prevQuestions) => {
+      const updatedQuestions = prevQuestions.map((question) => {
+        if (question.q_id === questionId) {
+          const updatedOptions = question.options.map((option) => {
+            if (option.o_id === optionId) {
+              return { ...option, localScore: isNaN(parsedValue) ? 0 : parsedValue };
+            }
+            return option;
+          });
+          return { ...question, options: updatedOptions };
+        }
+        return question;
+      });
+
+      return updatedQuestions;
+    });
+  };
+
 
 
 
