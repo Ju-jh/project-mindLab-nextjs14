@@ -358,10 +358,10 @@ export default function Home({ params }: {
       const result = await getSurveyDataGraphQLQuery(query, surveyId);
       const surveyData = result.data.getSurveyData.survey;
 
-      setOriginTitle(surveyData.survey.title);
-      setOriginDescription(surveyData.survey.description);
-      setOriginQuestions(surveyData.survey.questions)
-      setOriginOption(surveyData.survey.options)
+      setOriginTitle(surveyData.title);
+      setOriginDescription(surveyData.description);
+      setOriginQuestions(surveyData.questions)
+      setOriginOption(surveyData.options)
       console.log('fetch되었습니다')
 
       const mappedQuestions = surveyData.questions
