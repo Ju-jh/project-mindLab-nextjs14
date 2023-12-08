@@ -349,6 +349,7 @@ export default function Home({ params }: {
     return updatedQuestions;
   });
   };
+
   const handleOptionScoreChange = (e: React.ChangeEvent<HTMLInputElement>, questionId: string, optionId: string) => {
   const { value } = e.target;
   const parsedValue = parseFloat(value);
@@ -401,29 +402,31 @@ export default function Home({ params }: {
             }
           }
           `
-    try {
+      
       const result = await getSurveyDataGraphQLQuery(query, surveyId);
-      const surveyData = result.data.getSurveyData.survey;
-
-      setOriginTitle(surveyData.title);
-      setOriginDescription(surveyData.description);
-      setQuestions(surveyData.questions)
-      console.log('fetch되었습니다')
-
-      const mappedQuestions = surveyData.questions
-        .map((question: { options: any[]; createdAt: Date; }) => {
-          const sortedOptions = question.options.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
-          return {
-            ...question,
-            options: sortedOptions,
-            createdAt: new Date(question.createdAt),
-          };
-        })
-        .sort((a: { createdAt: { getTime: () => number; }; }, b: { createdAt: { getTime: () => number; }; }) => a.createdAt.getTime() - b.createdAt.getTime());
-
-        setQuestions(mappedQuestions);
+      
+      try {
+        if (result.data.getSurveyData.success) {
+          const surveyData = result.data.getSurveyData.survey;
+          const mappedQuestions = surveyData.questions
+            .map((question: { options: any[]; createdAt: Date; }) => {
+              const sortedOptions = question.options.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+              return {
+                ...question,
+                options: sortedOptions,
+                createdAt: new Date(question.createdAt),
+              };
+            })
+            .sort((a: { createdAt: { getTime: () => number; }; }, b: { createdAt: { getTime: () => number; }; }) => a.createdAt.getTime() - b.createdAt.getTime());
+    
+          setOriginTitle(surveyData.title);
+          setOriginDescription(surveyData.description);
+          setQuestions(mappedQuestions);
+        } else {
+          console.log(result.data.getSurveyData.message)
+        }
       } catch (error) {
-        console.error('설문지 데이터 로딩 실패:', error);
+        console.error(result.data.getSurveyData.message, error);
       }
     };
     
@@ -441,13 +444,18 @@ export default function Home({ params }: {
     const variables = {
       surveyId,
     };
+      
+    const result = await sendGraphQLQuery(query, variables);
 
     try {
-      const result = await sendGraphQLQuery(query, variables);
-      setIsThisSurveyPublic(result.data.checkMySurveyIsPublic.public)
-      return result.data.checkMySurveyIsPublic.public;
+      if (result.data.checkMySurveyIsPublic.success) {
+        setIsThisSurveyPublic(result.data.checkMySurveyIsPublic.public)
+        return result.data.checkMySurveyIsPublic.public;
+      } else {
+        console.log(result.data.checkMySurveyIsPublic.message)
+      }
     } catch (error) {
-      console.error('Failed to fetch survey information:', error);
+      console.error(result.data.checkMySurveyIsPublic.message, error);
       throw error;
     }
     };
