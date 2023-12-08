@@ -55,8 +55,7 @@ export default function Home({ params }: {
   const [originDescription, setOriginDescription] = useState<string>('');
   const [surveyDescription, setSurveyDescription] = useState<string>(originDescription);
   
-  const [originQuestions, setOriginQuestions] = useState<Question[]>([]);
-  const [Questions, setQuestions] = useState<Question[]>(originQuestions);
+  const [questions, setQuestions] = useState<Question[]>([]);
 
   // const [originOption, setOriginOption] = useState({
   //   text: '',
@@ -361,7 +360,7 @@ export default function Home({ params }: {
 
       setOriginTitle(surveyData.title);
       setOriginDescription(surveyData.description);
-      setOriginQuestions(surveyData.questions)
+      setQuestions(surveyData.questions)
       console.log('fetch되었습니다')
 
       const mappedQuestions = surveyData.questions
@@ -480,12 +479,12 @@ export default function Home({ params }: {
         </div>
       </section>
       <section className='problemSection w-full min-h-[400px]  '>
-        {Questions.length > 0 && (
+        {questions.length > 0 && (
           <ul className='problemUl flex-col list-decimal  pl-[30px]'>
-            {Questions.map((Question, QuestionIndex) => (
-              <li key={Question.q_id} className='mb-[60px] ml-[30px]'>
+            {questions.map((question, questionsIndex) => (
+              <li key={question.q_id} className='mb-[60px] ml-[30px]'>
                 <button
-                  onClick={() => removeQuestion(surveyId, Question.q_id)}
+                  onClick={() => removeQuestion(surveyId, question.q_id)}
                   className='bg-red-600 flex items-center justify-center absolute w-[30px] h-[30px] rounded-full translate-x-[-60px] translate-y-[-4px] hover:bg-slate-400 transition-all'
                 >
                   <span className='text-white text-[40px]'>-</span>
@@ -493,14 +492,8 @@ export default function Home({ params }: {
                 <div className='px-[20px] w-[600px] py-[10px] shadow-sm shadow-slate-400 rounded-sm flex items-center'>
                   <input
                     type="text"
-                    placeholder={originQuestions[QuestionIndex].text}
+                    placeholder={question.text}
                     className='ml-[10px] pl-[10px] w-[500px]'
-                    value={Questions[QuestionIndex].text}
-                    onChange={(e) => {
-                      const updatedQuestions = [...Questions];
-                      updatedQuestions[QuestionIndex].text = e.target.value;
-                      setQuestions(updatedQuestions);
-                    }}
                   />
                   <button
                     className='w-[50px] h-full shadow-sm rounded-md hover:slate-300'
@@ -509,7 +502,7 @@ export default function Home({ params }: {
                   </button>
                 </div>
                 <div className='flex mt-[20px] h-[80px]'>
-                  {Question.options && Question.options.map((option, optionIndex) => (
+                  {question.options && question.options.map((option, optionIndex) => (
                     <div
                       key={option.o_id}
                       className='mr-[30px] px-[20px] py-[10px] shadow-sm shadow-slate-400 rounded-sm transition-all flex items-center'
@@ -522,25 +515,12 @@ export default function Home({ params }: {
                           type='text'
                           placeholder={`${option.text}`}
                           value={option.text}
-                          // onChange={(e) => {
-                          //   setOption((prevOption) => ({
-                          //     ...prevOption,
-                          //     newText: e.target.value,
-                          //   }));
-                          // }}
                           className='bg-transparent'
                         />
                         <input
                           type='number'
                           placeholder='점수를 입력하세요.'
                           value={option.score}
-                          // onChange={(e) => {
-                          //   setOption((prevOption) => ({
-                          //     ...prevOption,
-                          //     newScore: parseFloat(e.target.value),
-                          //   }));
-
-                          // }}
                           className='bg-transparent pl-[60px]'
                         />
                       </div>
@@ -559,7 +539,7 @@ export default function Home({ params }: {
                   ))}
                   <button
                     className='mr-[30px] p-[10px] w-[100px] h-full shadow-sm shadow-slate-400 rounded-sm hover:bg-slate-400 transition-all'
-                    onClick={() => addOption(surveyId, Question.q_id)}
+                    onClick={() => addOption(surveyId, question.q_id)}
                   >
                     <span className=''>문항 추가 +</span>
                   </button>
