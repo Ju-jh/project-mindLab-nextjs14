@@ -445,7 +445,7 @@ export default function Home({ params }: {
             </button> 
         }
       </section>
-      {/* <section className='titleSection w-full h-[200px]  flex items-center justify-center '>
+      <section className='titleSection w-full h-[200px]  flex items-center justify-center '>
         <div className='titleDiv w-[500px]  flex items-center justify-center'>
           <input
             type="text"
@@ -479,7 +479,7 @@ export default function Home({ params }: {
           </button>
         </div>
       </section>
-      <section className='problemSection w-full min-h-[400px]  '>
+      {/* <section className='problemSection w-full min-h-[400px]  '>
         {Questions.length > 0 && (
           <ul className='problemUl flex-col list-decimal  pl-[30px]'>
             {Questions.map((Question, QuestionIndex) => (
