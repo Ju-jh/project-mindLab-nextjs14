@@ -111,7 +111,7 @@ export default function Home() {
   useEffect(() => {
     getMySurvey();
     getPublicSurvey();
-  },[])
+  },[mySurveys, publicSurveys])
 
   return (
     <main className='main flex-col w-full min-h-[1400px] p-[30px] pt-[90px] text-center bg-[#e5ccbe]'>
