@@ -1,12 +1,7 @@
 'use client'
 
-import { createOptionGraphQLQuery } from '@/graphql/Option/createOption';
-import { updateTextAndScoreGraphQLQuery } from '@/graphql/Option/pushOptionTextAndScore';
 import { sendGraphQLQuery } from '@/graphql/Problem/createProblem';
-import { updateTextGraphQLQuery } from '@/graphql/Problem/pushQuestionText';
-import { deleteGraphQLQuery } from '@/graphql/Survey/deleteSurvey';
 import { getSurveyDataGraphQLQuery } from '@/graphql/Survey/getSurveyData';
-import { updateGraphQLQuery } from '@/graphql/Survey/updateSurveyTitle';
 import { useEffect, useState } from 'react';
 
 interface Survey {
@@ -196,7 +191,7 @@ export default function Home({ params }: {
         <div className='problemPlusDiv mt-[30px]'>
           <button
             className='w-full py-[10px] rounded-md shadow-sm shadow-slate-400 hover:bg-slate-400 transition-all'
-            onClick={()=>saveAnswers}
+            onClick={()=>saveAnswers()}
           >
             제출하기
           </button>
