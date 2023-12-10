@@ -366,6 +366,14 @@ export default function Home({ params }: { params: { surveyId: string } }) {
           setOriginTitle(surveyData.title);
           setOriginDescription(surveyData.description);
           setQuestions(mappedQuestions);
+
+          const initialQuestionTexts = mappedQuestions.map((question: { text: any; }) => question.text);
+          const initialOptionTexts = mappedQuestions.map((question: { options: any[]; }) => question.options.map((option: { text: any; }) => option.text));
+          const initialOptionScores = mappedQuestions.map((question: { options: any[]; }) => question.options.map((option: { score: any; }) => option.score));
+
+          setQuestionTexts(initialQuestionTexts);
+          setOptionTexts(initialOptionTexts);
+          setOptionScores(initialOptionScores);
         } else {
           console.log(result.data.getSurveyData.message)
         }
@@ -403,6 +411,7 @@ export default function Home({ params }: { params: { surveyId: string } }) {
       throw error;
     }
     };
+    
 
     if (surveyId) {
       fetchData();
