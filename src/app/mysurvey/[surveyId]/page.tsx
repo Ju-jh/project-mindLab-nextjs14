@@ -160,9 +160,10 @@ export default function Home({ params }: { params: { surveyId: string } }) {
 
   const addOption = async (surveyId: string, questionId: string) => {
     const mutation = `
-      mutation CreateOption($surveyId: String!, $questionId: String!) {
-        createOption(surveyId: $surveyId, questionId: $questionId) {
-          o_id
+      mutation CreateQuestion($surveyId: String!) {
+        createQuestion(surveyId: $surveyId) {
+          success
+          message
         }
       }
     `;
@@ -186,9 +187,10 @@ export default function Home({ params }: { params: { surveyId: string } }) {
 
   const deleteOption = async (optionId: string) => {
     const mutation = `
-      mutation DeleteOption($optionId: String!) {
-        deleteOption(optionId: $optionId) {
-          o_id
+      mutation DeleteQuestion($surveyId: String!, $questionId: String!) {
+        deleteQuestion(surveyId: $surveyId, questionId: $questionId) {
+          success
+          message
         }
       }
     `;
