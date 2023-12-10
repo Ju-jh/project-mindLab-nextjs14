@@ -305,41 +305,14 @@ export default function Home({ params }: { params: { surveyId: string } }) {
   ) => {
     const { value } = e.target;
 
-    setQuestions((prevQuestions) => {
-      const updatedQuestions = prevQuestions.map((question) => {
-        if (question.q_id === questionId) {
-          const updatedOptions = question.options.map((option) => {
-            if (option.o_id === optionId) {
-              return { ...option, localText: value };
-            }
-            return option;
-          });
-          return { ...question, options: updatedOptions };
-        }
-        return question;
-      });
-
-      return updatedQuestions;
-    });
-  };
-
-  const handleOptionScoreChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    questionId: string,
-    optionId: string
-  ) => {
-    const { value } = e.target;
-    
-    // Check if the value is a valid number
-    if (!isNaN(value as any)) {
-      const parsedValue = parseFloat(value);
-
+    // Check if the value is not NaN or undefined
+    if (value !== undefined && value !== null && !isNaN(value as any)) {
       setQuestions((prevQuestions) => {
         const updatedQuestions = prevQuestions.map((question) => {
           if (question.q_id === questionId) {
             const updatedOptions = question.options.map((option) => {
               if (option.o_id === optionId) {
-                return { ...option, localScore: isNaN(parsedValue) ? 0 : parsedValue } as Option;
+                return { ...option, localText: value };
               }
               return option;
             });
@@ -352,6 +325,37 @@ export default function Home({ params }: { params: { surveyId: string } }) {
       });
     }
   };
+
+  const handleOptionScoreChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    questionId: string,
+    optionId: string
+  ) => {
+    const { value } = e.target;
+
+    // Check if the value is a valid number
+    if (!isNaN(value as any)) {
+      const parsedValue = parseFloat(value);
+
+      setQuestions((prevQuestions) => {
+        const updatedQuestions = prevQuestions.map((question) => {
+          if (question.q_id === questionId) {
+            const updatedOptions = question.options.map((option) => {
+              if (option.o_id === optionId) {
+                return { ...option, localScore: parsedValue } as Option;
+              }
+              return option;
+            });
+            return { ...question, options: updatedOptions };
+          }
+          return question;
+        });
+
+        return updatedQuestions;
+      });
+    }
+  };
+
 
   
 
