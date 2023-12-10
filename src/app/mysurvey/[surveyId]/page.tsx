@@ -475,7 +475,7 @@ export default function Home({ params }: { params: { surveyId: string } }) {
         </div>
       </section>
       <section className='problemSection w-full min-h-[400px]  '>
-        {questions.length > 0 && (
+        {questionTexts && questionTexts.length > 0 && (
           <ul className='problemUl flex-col list-decimal  pl-[30px]'>
             {questions.map((question, questionIndex) => (
               <li key={question.q_id} className='mb-[60px] ml-[30px]'>
