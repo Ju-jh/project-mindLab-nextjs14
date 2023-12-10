@@ -133,7 +133,8 @@ export default function Home({ params }: { params: { surveyId: string } }) {
     const query = `
       mutation UpdateQuestionText($surveyId: String!, $questionId: String!, $newText: String!) {
         updateQuestionText(surveyId: $surveyId, questionId: $questionId, newText: $newText) {
-          text
+          success
+          message
         }
       }
     `;
@@ -185,8 +186,8 @@ export default function Home({ params }: { params: { surveyId: string } }) {
 
   const addOption = async (surveyId: string, questionId: string) => {
     const mutation = `
-      mutation CreateQuestion($surveyId: String!) {
-        createQuestion(surveyId: $surveyId) {
+      mutation CreateOption($surveyId: String!, $questionId: String!) {
+        createOption(surveyId: $surveyId, questionId: $questionId) {
           success
           message
         }
