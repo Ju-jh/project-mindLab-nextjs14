@@ -408,7 +408,7 @@ export default function Home({ params }: { params: { surveyId: string } }) {
       fetchData();
       checkMySurveyIsPublic(surveyId);
     }
-  }, [surveyId, isClicked]);
+  }, [surveyId, isClicked, questionTexts, optionTexts, optionScores]);
 
   return (
     <main className='flex-col w-full h-full p-[30px] pt-[60px]'>
@@ -512,14 +512,14 @@ export default function Home({ params }: { params: { surveyId: string } }) {
                         <span>{optionIndex + 1}</span>
                       </div>
                       <div className='flex flex-col items-center justify-between'>
-                        {optionTexts && optionScores &&(
+                        {questionTexts && optionTexts &&(
                           <input
                             type='text'
                             placeholder={`${option.text}`}
                             value={optionTexts[questionIndex][optionIndex]}
                             onChange={(e) => updateOptionText(questionIndex, optionIndex, e.target.value)}
                           />)}
-                        {optionTexts && optionScores && (
+                        {questionTexts &&  optionScores && (
                           <input
                             type='number'
                             placeholder='점수를 입력하세요.'
