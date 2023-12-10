@@ -345,10 +345,12 @@ export default function Home({ params }: { params: { surveyId: string } }) {
             if (question.q_id === questionId) {
               const updatedOptions = question.options.map((option) => {
                 if (option.o_id === optionId) {
-                  return { ...option, localScore: parsedValue } as Option;
+                  // Create a new option object with updated localScore
+                  return { ...option, localScore: parsedValue };
                 }
                 return option;
               });
+              // Create a new question object with updated options
               return { ...question, options: updatedOptions };
             }
             return question;
@@ -359,6 +361,7 @@ export default function Home({ params }: { params: { surveyId: string } }) {
       }
     }
   };
+
 
 
   
