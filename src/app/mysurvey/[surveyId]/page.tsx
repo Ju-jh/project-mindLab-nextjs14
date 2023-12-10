@@ -332,13 +332,8 @@ export default function Home({ params }: { params: { surveyId: string } }) {
   ) => {
     const { value } = e.target;
 
-    console.log("Original Value:", value);
-
-    if (value !== undefined && value !== null && value.trim() !== "") {
+    if (value !== undefined && value !== null && !isNaN(value as any)) {
       const parsedValue = parseFloat(value);
-
-      console.log("Parsed Value:", parsedValue);
-
       if (!isNaN(parsedValue)) {
         setQuestions((prevQuestions) => {
           const updatedQuestions = prevQuestions.map((question) => {
