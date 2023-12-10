@@ -507,6 +507,7 @@ export default function Home({ params }: { params: { surveyId: string } }) {
                   }
                   <button
                     className='w-[50px] h-full shadow-sm rounded-md hover:slate-300'
+                    onClick={()=>pushQuestionText(surveyId, question.q_id,questionTexts[questionIndex])}
                   >
                     저장
                   </button>
@@ -540,7 +541,7 @@ export default function Home({ params }: { params: { surveyId: string } }) {
                       </div>
                       <button
                         className='w-[40px] text-[20px] h-full rounded-sm shadow-sm hover:bg-blue-600 hover:text-white'
-                          onClick={() => pushOptionTextAndScore(option.o_id, option.localText, option.localScore)}
+                          onClick={() => pushOptionTextAndScore(option.o_id, optionTexts[questionIndex][optionIndex], optionScores[questionIndex][optionIndex])}
                       >
                         <FontAwesomeIcon icon={faCheck} className='text-[20px]' />
                       </button>
