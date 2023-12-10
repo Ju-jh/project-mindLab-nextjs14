@@ -51,8 +51,8 @@ export default function Home({ params }: { params: { surveyId: string } }) {
   const [questions, setQuestions] = useState<Question[]>([]);
   const [questionTexts, setQuestionTexts] = useState<string[]>([]);
 
-  const [optionTexts, setOptionTexts] = useState<string[]>([]);
-  const [optionScores, setOptionScores] = useState<number[]>([]);
+  const [optionTexts, setOptionTexts] = useState<string[][]>([]);
+  const [optionScores, setOptionScores] = useState<number[][]>([]);
 
   const PushSurveyTitle = async (surveyId: string, newTitle: string) => {
     const query = `
@@ -308,15 +308,15 @@ export default function Home({ params }: { params: { surveyId: string } }) {
     setQuestionTexts(updatedTexts);
   };
 
-  const updateOptionText = (index: number, text: string) => {
+  const updateOptionText = (questionIndex: number, optionIndex: number, text: string) => {
     const updatedTexts = [...optionTexts];
-    updatedTexts[index] = text;
+    updatedTexts[questionIndex][optionIndex] = text;
     setOptionTexts(updatedTexts);
   };
 
-  const updateOptionScore = (index: number, score: number) => {
+  const updateOptionScore = (questionIndex: number, optionIndex: number, score: number) => {
     const updatedScores = [...optionScores];
-    updatedScores[index] = score;
+    updatedScores[questionIndex][optionIndex] = score;
     setOptionScores(updatedScores);
   };
 
@@ -477,7 +477,7 @@ export default function Home({ params }: { params: { surveyId: string } }) {
       <section className='problemSection w-full min-h-[400px]  '>
         {questions.length > 0 && (
           <ul className='problemUl flex-col list-decimal  pl-[30px]'>
-            {questions.map((question, questionsIndex) => (
+            {questions.map((question, questionIndex) => (
               <li key={question.q_id} className='mb-[60px] ml-[30px]'>
                 <button
                   onClick={() => removeQuestion(surveyId, question.q_id)}
@@ -490,8 +490,8 @@ export default function Home({ params }: { params: { surveyId: string } }) {
                     type="text"
                     placeholder={question.text}
                     className='ml-[10px] pl-[10px] w-[500px]'
-                    value={questionTexts[questionsIndex]}
-                    onChange={(e) => updateQuestionText(questionsIndex, e.target.value)}
+                    value={questionTexts[questionIndex]}
+                    onChange={(e) => updateQuestionText(questionIndex, e.target.value)}
                   />
                   <button
                     className='w-[50px] h-full shadow-sm rounded-md hover:slate-300'
@@ -512,15 +512,15 @@ export default function Home({ params }: { params: { surveyId: string } }) {
                         <input
                           type='text'
                           placeholder={`${option.text}`}
-                          value={optionTexts[optionIndex]}
-                          onChange={(e) => updateOptionText(optionIndex, e.target.value)}
+                          value={optionTexts[questionIndex][optionIndex]}
+                          onChange={(e) => updateOptionText(questionIndex, optionIndex, e.target.value)}
                         />
                         <input
                           type='number'
                           placeholder='점수를 입력하세요.'
                           className='bg-transparent pl-[60px]'
-                          value={optionScores[optionIndex]}
-                          onChange={(e) => updateOptionScore(optionIndex, Number(e.target.value))}
+                          value={optionScores[questionIndex][optionIndex]}
+                          onChange={(e) => updateOptionScore(questionIndex, optionIndex, Number(e.target.value))}
                         />
                       </div>
                       <button
