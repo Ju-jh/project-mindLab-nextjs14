@@ -8,13 +8,9 @@ import { sendGraphQLQuery } from '@/graphql/Problem/createProblem';
 import { updateTextGraphQLQuery } from '@/graphql/Problem/pushQuestionText';
 import { deleteGraphQLQuery } from '@/graphql/Survey/deleteSurvey';
 import { getSurveyDataGraphQLQuery } from '@/graphql/Survey/getSurveyData';
-import { updateGraphQLQuery } from '@/graphql/Survey/updateSurveyTitle';
 import { faCheck, faFloppyDisk, faLock, faShareFromSquare, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useState } from 'react';
-
-
-  / ////////////////////////////////////////     interface      //////////////////////////////////////////////////
 
 interface Survey {
   s_id: string;
@@ -333,31 +329,31 @@ export default function Home({ params }: { params: { surveyId: string } }) {
     optionId: string
   ) => {
     const { value } = e.target;
-    const parsedValue = parseFloat(value);
+    
+    // Check if the value is a valid number
+    if (!isNaN(value as any)) {
+      const parsedValue = parseFloat(value);
 
-    setQuestions((prevQuestions) => {
-      const updatedQuestions = prevQuestions.map((question) => {
-        if (question.q_id === questionId) {
-          const updatedOptions = question.options.map((option) => {
-            if (option.o_id === optionId) {
-              return { ...option, localScore: isNaN(parsedValue) ? 0 : parsedValue } as Option;
-            }
-            return option;
-          });
-          return { ...question, options: updatedOptions };
-        }
-        return question;
+      setQuestions((prevQuestions) => {
+        const updatedQuestions = prevQuestions.map((question) => {
+          if (question.q_id === questionId) {
+            const updatedOptions = question.options.map((option) => {
+              if (option.o_id === optionId) {
+                return { ...option, localScore: isNaN(parsedValue) ? 0 : parsedValue } as Option;
+              }
+              return option;
+            });
+            return { ...question, options: updatedOptions };
+          }
+          return question;
+        });
+
+        return updatedQuestions;
       });
-
-      return updatedQuestions;
-    });
+    }
   };
 
-
-
   
-
-    / ////////////////////////////////////////     useEffect      //////////////////////////////////////////////////
 
   
   useEffect(() => {
@@ -449,7 +445,6 @@ export default function Home({ params }: { params: { surveyId: string } }) {
     }
   }, [surveyId, isClicked]);
 
-    / ////////////////////////////////////////     html      //////////////////////////////////////////////////
 
   
   return (
