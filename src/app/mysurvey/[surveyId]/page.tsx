@@ -31,7 +31,7 @@ interface Question {
 }
 
 interface Option {
-  localScore: string | number | readonly string[] | undefined;
+  localScore: number;
   localText: string;
   o_id: string;
   text: string;
@@ -129,6 +129,31 @@ export default function Home({ params }: { params: { surveyId: string } }) {
     }
   };
 
+  const pushQuestionText = async (surveyId: string, questionId: string, newText: string) => {
+    const query = `
+      mutation UpdateQuestionText($surveyId: String!, $questionId: String!, $newText: String!) {
+        updateQuestionText(surveyId: $surveyId, questionId: $questionId, newText: $newText) {
+          text
+        }
+      }
+    `;
+    try {
+      const result = await updateTextGraphQLQuery({
+        query,
+        variables: { surveyId, questionId, newText },
+      });
+      if (result.data.updateQuestionText) {
+        if (isClicked) {
+          setIsClicked(false)
+        } else {
+          setIsClicked(true)
+        }
+      }
+    } catch (error) {
+      console.error('질문 제목 수정 실패:', error);
+    }
+  }
+
   const removeQuestion = async (surveyId: string, questionId: string) => {
     const mutation = `
       mutation DeleteQuestion($surveyId: String!, $questionId: String!) {
@@ -182,6 +207,40 @@ export default function Home({ params }: { params: { surveyId: string } }) {
       }
     } catch (error) {
       console.error('Option creation failed:', error);
+    }
+  };
+
+  const pushOptionTextAndScore = async (optionId: string, newText: string, newScore: number) => {
+    const mutation = `
+      mutation UpdateOptionTextAndScore($optionId: String!, $newText: String!, $newScore: Float!) {
+        updateOptionTextAndScore(optionId: $optionId, newText: $newText, newScore: $newScore) {
+          success
+          message
+        }
+      }
+    `;
+
+    const variables = {
+      optionId: optionId,
+      newText: newText,
+      newScore: newScore,
+    };
+
+    try {
+      const result = await updateTextAndScoreGraphQLQuery({
+        query: mutation,
+        variables: variables,
+      });
+
+      if (result.data.updateOptionTextAndScore) {
+        if (isClicked) {
+          setIsClicked(false)
+        } else {
+          setIsClicked(true)
+        }
+      }
+    } catch (error) {
+      console.error('옵션 업데이트 실패:', error);
     }
   };
 
@@ -281,7 +340,7 @@ export default function Home({ params }: { params: { surveyId: string } }) {
         if (question.q_id === questionId) {
           const updatedOptions = question.options.map((option) => {
             if (option.o_id === optionId) {
-              return { ...option, localScore: isNaN(parsedValue) ? 0 : parsedValue };
+              return { ...option, localScore: isNaN(parsedValue) ? 0 : parsedValue } as Option;
             }
             return option;
           });
@@ -293,6 +352,7 @@ export default function Home({ params }: { params: { surveyId: string } }) {
       return updatedQuestions;
     });
   };
+
 
   
 
@@ -497,13 +557,14 @@ export default function Home({ params }: { params: { surveyId: string } }) {
                         <input
                           type='number'
                           placeholder='점수를 입력하세요.'
-                          value={option.localScore}
+                          value={Number(option.localScore)}
                           onChange={(e) => handleOptionScoreChange(e, question.q_id, option.o_id)}
                           className='bg-transparent pl-[60px]'
                         />
                       </div>
                       <button
                         className='w-[40px] text-[20px] h-full rounded-sm shadow-sm hover:bg-blue-600 hover:text-white'
+                          onClick={() => pushOptionTextAndScore(option.o_id, option.localText, option.localScore)}
                       >
                         <FontAwesomeIcon icon={faCheck} className='text-[20px]' />
                       </button>
