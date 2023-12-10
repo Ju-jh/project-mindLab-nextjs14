@@ -300,13 +300,12 @@ export default function Home({ params }: { params: { surveyId: string } }) {
     }
   };
 
-  const updateQuestionText = (index: number, text: string) => {
-    setQuestionTexts((prevQuestionTexts) => {
-      const updatedTexts = [...prevQuestionTexts];
-      updatedTexts[index] = text;
-      return updatedTexts;
-    });
+  const updateQuestionText = (questionIndex: number, text: string) => {
+    const updatedTexts = [...questionTexts];
+    updatedTexts[questionIndex] = text;
+    setQuestionTexts(updatedTexts);
   };
+
 
   const updateOptionText = (questionIndex: number, optionIndex: number, text: string) => {
     const updatedTexts = [...optionTexts];
