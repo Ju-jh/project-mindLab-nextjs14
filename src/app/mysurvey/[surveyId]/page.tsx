@@ -305,7 +305,6 @@ export default function Home({ params }: { params: { surveyId: string } }) {
   ) => {
     const { value } = e.target;
 
-    // Check if the value is not NaN or undefined
     if (value !== undefined && value !== null && !isNaN(value as any)) {
       setQuestions((prevQuestions) => {
         const updatedQuestions = prevQuestions.map((question) => {
@@ -333,32 +332,29 @@ export default function Home({ params }: { params: { surveyId: string } }) {
   ) => {
     const { value } = e.target;
 
-    if (!isNaN(value as any)) {
+    if (value !== undefined && value !== null && value.trim() !== "") {
       const parsedValue = parseFloat(value);
 
-      setQuestions((prevQuestions) => {
-        const updatedQuestions = prevQuestions.map((question) => {
-          if (question.q_id === questionId) {
-            const updatedOptions = question.options.map((option) => {
-              if (option.o_id === optionId) {
-                return { ...option, localScore: isNaN(parsedValue) ? 0 : parsedValue } as Option;
-              }
-              return option;
-            });
-            return { ...question, options: updatedOptions };
-          }
-          return question;
-        });
+      if (!isNaN(parsedValue)) {
+        setQuestions((prevQuestions) => {
+          const updatedQuestions = prevQuestions.map((question) => {
+            if (question.q_id === questionId) {
+              const updatedOptions = question.options.map((option) => {
+                if (option.o_id === optionId) {
+                  return { ...option, localScore: parsedValue } as Option;
+                }
+                return option;
+              });
+              return { ...question, options: updatedOptions };
+            }
+            return question;
+          });
 
-        return updatedQuestions;
-      });
+          return updatedQuestions;
+        });
+      }
     }
   };
-
-
-
-  
-
   
   useEffect(() => {
     const fetchData = async () => {
