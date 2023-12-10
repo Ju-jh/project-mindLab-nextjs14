@@ -41,10 +41,8 @@ interface Option {
 }
 
 export default function Home({ params }: { params: { surveyId: string } }) {
-  // Destructure the surveyId from params
   const { surveyId } = params;
 
-  // Define state variables
   const [isThisSurveyPublic, setIsThisSurveyPublic] = useState<boolean | undefined>();
   const [isClicked, setIsClicked] = useState<boolean>(false);
 
@@ -56,7 +54,6 @@ export default function Home({ params }: { params: { surveyId: string } }) {
 
   const [questions, setQuestions] = useState<Question[]>([]);
 
-  // Define functions for updating survey data
   const PushSurveyTitle = async (surveyId: string, newTitle: string) => {
     const query = `
       mutation UpdateMySurveyTitle($surveyId: String!, $newTitle: String!) {
@@ -136,7 +133,8 @@ export default function Home({ params }: { params: { surveyId: string } }) {
     const mutation = `
       mutation DeleteQuestion($surveyId: String!, $questionId: String!) {
         deleteQuestion(surveyId: $surveyId, questionId: $questionId) {
-          q_id
+          success
+          message
         }
       }
     `;
@@ -294,8 +292,7 @@ export default function Home({ params }: { params: { surveyId: string } }) {
     });
   };
 
-
-
+  
 
     / ////////////////////////////////////////     useEffect      //////////////////////////////////////////////////
 
