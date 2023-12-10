@@ -49,10 +49,6 @@ export default function Home({ params }: { params: { surveyId: string } }) {
   const [surveyDescription, setSurveyDescription] = useState<string>(originDescription);
 
   const [questions, setQuestions] = useState<Question[]>([]);
-  const [questionTexts, setQuestionTexts] = useState<string[]>([]);
-
-  const [optionTexts, setOptionTexts] = useState<string[][]>([]);
-  const [optionScores, setOptionScores] = useState<number[][]>([]);
 
   const PushSurveyTitle = async (surveyId: string, newTitle: string) => {
     const query = `
@@ -246,12 +242,12 @@ export default function Home({ params }: { params: { surveyId: string } }) {
 
   const deleteOption = async (optionId: string) => {
     const mutation = `
-    mutation DeleteOption($optionId: String!) {
-      deleteOption(optionId: $optionId) {
-        success
-        message
+      mutation DeleteQuestion($surveyId: String!, $questionId: String!) {
+        deleteQuestion(surveyId: $surveyId, questionId: $questionId) {
+          success
+          message
+        }
       }
-    }
     `;
 
     const variables = {
@@ -300,24 +296,6 @@ export default function Home({ params }: { params: { surveyId: string } }) {
       console.error('Failed to update survey public status:', error);
       throw error;
     }
-  };
-
-  const updateQuestionText = (index: number, text: string) => {
-    const updatedTexts = [...questionTexts];
-    updatedTexts[index] = text;
-    setQuestionTexts(updatedTexts);
-  };
-
-  const updateOptionText = (questionIndex: number, optionIndex: number, text: string) => {
-    const updatedTexts = [...optionTexts];
-    updatedTexts[questionIndex][optionIndex] = text;
-    setOptionTexts(updatedTexts);
-  };
-
-  const updateOptionScore = (questionIndex: number, optionIndex: number, score: number) => {
-    const updatedScores = [...optionScores];
-    updatedScores[questionIndex][optionIndex] = score;
-    setOptionScores(updatedScores);
   };
 
   
@@ -477,7 +455,7 @@ export default function Home({ params }: { params: { surveyId: string } }) {
       <section className='problemSection w-full min-h-[400px]  '>
         {questions.length > 0 && (
           <ul className='problemUl flex-col list-decimal  pl-[30px]'>
-            {questions.map((question, questionIndex) => (
+            {questions.map((question, questionsIndex) => (
               <li key={question.q_id} className='mb-[60px] ml-[30px]'>
                 <button
                   onClick={() => removeQuestion(surveyId, question.q_id)}
@@ -490,8 +468,6 @@ export default function Home({ params }: { params: { surveyId: string } }) {
                     type="text"
                     placeholder={question.text}
                     className='ml-[10px] pl-[10px] w-[500px]'
-                    value={questionTexts[questionIndex]}
-                    onChange={(e) => updateQuestionText(questionIndex, e.target.value)}
                   />
                   <button
                     className='w-[50px] h-full shadow-sm rounded-md hover:slate-300'
@@ -512,15 +488,13 @@ export default function Home({ params }: { params: { surveyId: string } }) {
                         <input
                           type='text'
                           placeholder={`${option.text}`}
-                          value={optionTexts[questionIndex][optionIndex]}
-                          onChange={(e) => updateOptionText(questionIndex, optionIndex, e.target.value)}
+                          value={option.localText}
                         />
                         <input
                           type='number'
                           placeholder='점수를 입력하세요.'
+                          value={Number(option.localScore)}
                           className='bg-transparent pl-[60px]'
-                          value={optionScores[questionIndex][optionIndex]}
-                          onChange={(e) => updateOptionScore(questionIndex, optionIndex, Number(e.target.value))}
                         />
                       </div>
                       <button
