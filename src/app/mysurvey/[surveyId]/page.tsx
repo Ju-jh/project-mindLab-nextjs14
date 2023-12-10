@@ -333,7 +333,6 @@ export default function Home({ params }: { params: { surveyId: string } }) {
   ) => {
     const { value } = e.target;
 
-    // Check if the value is a valid number
     if (!isNaN(value as any)) {
       const parsedValue = parseFloat(value);
 
@@ -342,7 +341,7 @@ export default function Home({ params }: { params: { surveyId: string } }) {
           if (question.q_id === questionId) {
             const updatedOptions = question.options.map((option) => {
               if (option.o_id === optionId) {
-                return { ...option, localScore: parsedValue } as Option;
+                return { ...option, localScore: isNaN(parsedValue) ? 0 : parsedValue } as Option;
               }
               return option;
             });
@@ -355,6 +354,7 @@ export default function Home({ params }: { params: { surveyId: string } }) {
       });
     }
   };
+
 
 
   
