@@ -333,19 +333,17 @@ export default function Home({ params }: { params: { surveyId: string } }) {
     const { value } = e.target;
 
     if (value !== undefined && value !== null && !isNaN(value as any)) {
-      const parsedValue = parseFloat(value);
-      if (!isNaN(parsedValue)) {
+      
+      if (value) {
         setQuestions((prevQuestions) => {
           const updatedQuestions = prevQuestions.map((question) => {
             if (question.q_id === questionId) {
               const updatedOptions = question.options.map((option) => {
                 if (option.o_id === optionId) {
-                  // Create a new option object with updated localScore
-                  return { ...option, localScore: parsedValue };
+                  return { ...option, localScore: +(value) };
                 }
                 return option;
               });
-              // Create a new question object with updated options
               return { ...question, options: updatedOptions };
             }
             return question;
