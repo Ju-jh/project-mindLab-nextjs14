@@ -16,31 +16,9 @@ interface Survey {
 
 export default function Home() {
   const { accessToken, email, photo } = useAuth();
-
+  const [isClicked, setIsClicked] = useState<boolean>(false);
   const [mySurveys, setMySurveys] = useState<Survey[]>([]);
   const [publicSurveys, setPublicSurveys] = useState<Survey[]>([]);
-  
-  const getMySurvey = async () => {
-      const query = `
-        query GetMySurvey {
-          getMySurvey {
-            success
-            message
-            surveys {
-              s_id
-              title
-            }
-          }
-        }
-      `;
-      try {
-        const result = await getGraphQLQuery({ query });
-        const mySurveysData = result.data.getMySurvey.surveys || [];
-        setMySurveys(mySurveysData);
-      } catch (error) {
-        console.error('나의 설문지 가져오기 실패:', error);
-      }
-  };
 
   const createSurvey = async () => {
     const query = `
@@ -53,8 +31,12 @@ export default function Home() {
     `;
     try {
       const result = await sendGraphQLQuery(query, {});
-      if (result.data.createSurvey.sucess) {
-        getMySurvey();
+      if (result.data.createSurvey.success) {
+        if (isClicked) {
+          setIsClicked(false);
+        } else {
+          setIsClicked(true);
+        }
       } else {
         console.log(result.data.createSuvey.message)
       }
@@ -77,8 +59,12 @@ export default function Home() {
 
     try {
       const result = await deleteGraphQLQuery(query, variables);
-      if (result.sucess) {
-        getMySurvey();
+      if (result.data.deleteSurvey.success) {
+        if (isClicked) {
+          setIsClicked(false);
+        } else {
+          setIsClicked(true);
+        }
       }
       
     } catch (error) {
@@ -86,7 +72,31 @@ export default function Home() {
     }
   };
 
-  const getPublicSurvey = async () => {
+  useEffect(() => {
+    
+    const getMySurvey = async () => {
+    const query = `
+      query GetMySurvey {
+        getMySurvey {
+          success
+          message
+          surveys {
+            s_id
+            title
+          }
+        }
+      }
+    `;
+    try {
+      const result = await getGraphQLQuery({ query });
+      const mySurveysData = result.data.getMySurvey.surveys || [];
+      setMySurveys(mySurveysData);
+    } catch (error) {
+      console.error('나의 설문지 가져오기 실패:', error);
+    }
+    };
+
+    const getPublicSurvey = async () => {
       const query = `
         query GetPublicSurvey {
           getPublicSurvey {
@@ -106,12 +116,11 @@ export default function Home() {
       } catch (error) {
         console.error('나의 설문지 가져오기 실패:', error);
       }
-  };
-
-  useEffect(() => {
+    };
+    
     getMySurvey();
     getPublicSurvey();
-  },[mySurveys, publicSurveys])
+  },[isClicked])
 
   return (
     <main className='main flex-col w-full min-h-[1400px] p-[30px] pt-[90px] text-center bg-[#e5ccbe]'>
