@@ -49,6 +49,10 @@ export default function Home({ params }: { params: { surveyId: string } }) {
   const [surveyDescription, setSurveyDescription] = useState<string>(originDescription);
 
   const [questions, setQuestions] = useState<Question[]>([]);
+  const [questionTexts, setQuestionTexts] = useState<string[]>([]);
+
+  const [optionTexts, setOptionTexts] = useState<string[]>([]);
+  const [optionScores, setOptionScores] = useState<number[]>([]);
 
   const PushSurveyTitle = async (surveyId: string, newTitle: string) => {
     const query = `
@@ -298,61 +302,23 @@ export default function Home({ params }: { params: { surveyId: string } }) {
     }
   };
 
-  const handleOptionTextChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    questionId: string,
-    optionId: string
-  ) => {
-    const { value } = e.target;
-
-    if (value !== undefined && value !== null && !isNaN(value as any)) {
-      setQuestions((prevQuestions) => {
-        const updatedQuestions = prevQuestions.map((question) => {
-          if (question.q_id === questionId) {
-            const updatedOptions = question.options.map((option) => {
-              if (option.o_id === optionId) {
-                return { ...option, localText: value };
-              }
-              return option;
-            });
-            return { ...question, options: updatedOptions };
-          }
-          return question;
-        });
-
-        return updatedQuestions;
-      });
-    }
+  const updateQuestionText = (index: number, text: string) => {
+    const updatedTexts = [...questionTexts];
+    updatedTexts[index] = text;
+    setQuestionTexts(updatedTexts);
   };
 
-  const handleOptionScoreChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    questionId: string,
-    optionId: string
-  ) => {
-    const { value } = e.target;
-
-    const parsedValue = value !== '' ? parseFloat(value) : 0;
-
-    setQuestions((prevQuestions) => {
-      const updatedQuestions = prevQuestions.map((question) => {
-        if (question.q_id === questionId) {
-          const updatedOptions = question.options.map((option) => {
-            if (option.o_id === optionId) {
-              return { ...option, localScore: parsedValue };
-            }
-            return option;
-          });
-          return { ...question, options: updatedOptions };
-        }
-        return question;
-      });
-
-      return updatedQuestions;
-    });
+  const updateOptionText = (index: number, text: string) => {
+    const updatedTexts = [...optionTexts];
+    updatedTexts[index] = text;
+    setOptionTexts(updatedTexts);
   };
 
-
+  const updateOptionScore = (index: number, score: number) => {
+    const updatedScores = [...optionScores];
+    updatedScores[index] = score;
+    setOptionScores(updatedScores);
+  };
 
   
   useEffect(() => {
@@ -524,6 +490,8 @@ export default function Home({ params }: { params: { surveyId: string } }) {
                     type="text"
                     placeholder={question.text}
                     className='ml-[10px] pl-[10px] w-[500px]'
+                    value={questionTexts[questionsIndex]}
+                    onChange={(e) => updateQuestionText(questionsIndex, e.target.value)}
                   />
                   <button
                     className='w-[50px] h-full shadow-sm rounded-md hover:slate-300'
@@ -544,15 +512,15 @@ export default function Home({ params }: { params: { surveyId: string } }) {
                         <input
                           type='text'
                           placeholder={`${option.text}`}
-                          value={option.localText}
-                          onChange={(e) => handleOptionTextChange(e, question.q_id, option.o_id)}
+                          value={optionTexts[optionIndex]}
+                          onChange={(e) => updateOptionText(optionIndex, e.target.value)}
                         />
                         <input
                           type='number'
                           placeholder='점수를 입력하세요.'
-                          value={Number(option.localScore)}
-                          onChange={(e) => handleOptionScoreChange(e, question.q_id, option.o_id)}
                           className='bg-transparent pl-[60px]'
+                          value={optionScores[optionIndex]}
+                          onChange={(e) => updateOptionScore(optionIndex, Number(e.target.value))}
                         />
                       </div>
                       <button
