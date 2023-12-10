@@ -246,8 +246,8 @@ export default function Home({ params }: { params: { surveyId: string } }) {
 
   const deleteOption = async (optionId: string) => {
     const mutation = `
-      mutation DeleteQuestion($surveyId: String!, $questionId: String!) {
-        deleteQuestion(surveyId: $surveyId, questionId: $questionId) {
+      mutation DeleteOption($optionId: String!) {
+        deleteOption(optionId: $optionId) {
           success
           message
         }
