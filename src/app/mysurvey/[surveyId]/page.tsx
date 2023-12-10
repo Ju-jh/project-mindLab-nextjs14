@@ -332,27 +332,24 @@ export default function Home({ params }: { params: { surveyId: string } }) {
   ) => {
     const { value } = e.target;
 
-    if (value !== undefined && value !== null && !isNaN(value as any)) {
-      
-      if (value) {
-        setQuestions((prevQuestions) => {
-          const updatedQuestions = prevQuestions.map((question) => {
-            if (question.q_id === questionId) {
-              const updatedOptions = question.options.map((option) => {
-                if (option.o_id === optionId) {
-                  return { ...option, localScore: +(value) };
-                }
-                return option;
-              });
-              return { ...question, options: updatedOptions };
-            }
-            return question;
-          });
+    const parsedValue = value !== '' ? parseFloat(value) : 0;
 
-          return updatedQuestions;
-        });
-      }
-    }
+    setQuestions((prevQuestions) => {
+      const updatedQuestions = prevQuestions.map((question) => {
+        if (question.q_id === questionId) {
+          const updatedOptions = question.options.map((option) => {
+            if (option.o_id === optionId) {
+              return { ...option, localScore: parsedValue };
+            }
+            return option;
+          });
+          return { ...question, options: updatedOptions };
+        }
+        return question;
+      });
+
+      return updatedQuestions;
+    });
   };
 
 
