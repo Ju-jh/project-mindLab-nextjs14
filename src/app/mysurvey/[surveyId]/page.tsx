@@ -417,7 +417,7 @@ export default function Home({ params }: { params: { surveyId: string } }) {
       fetchData();
       checkMySurveyIsPublic(surveyId);
     }
-  }, [surveyId, isClicked, questionTexts, optionTexts, optionScores]);
+  }, [surveyId, isClicked]);
 
   return (
     <main className='flex-col w-full h-full p-[30px] pt-[60px]'>
