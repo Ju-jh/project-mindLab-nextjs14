@@ -232,7 +232,7 @@ export default function Home({ params }: { params: { surveyId: string } }) {
         variables: variables,
       });
 
-      if (result.data.updateOptionTextAndScore) {
+      if (result.data.updateOptionTextAndScore.success) {
         if (isClicked) {
           setIsClicked(false)
         } else {
