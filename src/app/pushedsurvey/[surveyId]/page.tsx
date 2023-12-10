@@ -16,7 +16,7 @@ interface Question {
   text: string;
   survey: Survey;
   options: Option[];
-  selectedOption?: Option;
+  selectedOption?: Option | null | undefined;
 }
 
 interface Option {
@@ -42,8 +42,6 @@ export default function Home({ params }: {
       score: question.selectedOption ? question.selectedOption.score : null,
     }));
 
-    console.log(answers)
-
     const mutation = `
       mutation SaveAnswers($surveyId: String!, $answers: [AnswerInput!]!) {
         saveAnswers(surveyId: $surveyId, answers: $answers) {
@@ -60,7 +58,11 @@ export default function Home({ params }: {
       });
 
       if (result.data.saveAnswers.success) {
-        console.log('답변 저장 성공!');
+        if (isClicked) {
+          setIsClicked(false)
+        } else {
+          setIsClicked(true)
+        }
       } else {
         console.error('답변 저장 실패:', result.data.saveAnswers.message);
       }
@@ -69,6 +71,45 @@ export default function Home({ params }: {
     }
   };
   
+  const getAnswers = async () => {
+      const query = `
+        query GetAnswers($surveyId: String!) {
+          getAnswers(surveyId: $surveyId) {
+            success
+            message
+            answers {
+              questionId
+              optionId
+              score
+            }
+          }
+        }
+      `;
+
+      try {
+        const result = await sendGraphQLQuery(query, { surveyId });
+        if (result.data.getAnswers.success) {
+          const answers = result.data.getAnswers.answers;
+
+          const updatedQuestions = Questions.map((question) => {
+            const answer = answers.find((a: { questionId: string; }) => a.questionId === question.q_id);
+            return {
+              ...question,
+              selectedOption: answer
+                ? question.options.find((o) => o.o_id === answer.optionId)
+                : null,
+            };
+          });
+
+          setQuestions(updatedQuestions);
+        } else {
+          console.error('답변 정보를 가져오는데 실패했습니다:', result.data.getAnswers.message);
+        }
+      } catch (error) {
+        console.error('답변 정보를 가져오는데 실패했습니다:', error);
+      }
+  };
+
   useEffect(() => {
     const fetchData = async () => {
         const query = `
@@ -114,6 +155,8 @@ export default function Home({ params }: {
           setOriginTitle(surveyData.title);
           setOriginDescription(surveyData.description);
           setQuestions(mappedQuestions);
+                await getAnswers();
+
         } else {
           console.log(result.data.getSurveyData.message)
         }
