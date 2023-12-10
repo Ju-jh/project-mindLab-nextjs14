@@ -355,6 +355,7 @@ export default function Home({ params }: { params: { surveyId: string } }) {
       }
     }
   };
+
   
   useEffect(() => {
     const fetchData = async () => {
@@ -445,8 +446,6 @@ export default function Home({ params }: { params: { surveyId: string } }) {
     }
   }, [surveyId, isClicked]);
 
-
-  
   return (
     <main className='flex-col w-full h-full p-[30px] pt-[60px]'>
       <section className='w-full h-[100px]  flex items-center justify-end pr-[50px]'>
