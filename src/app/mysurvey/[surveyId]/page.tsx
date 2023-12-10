@@ -501,7 +501,7 @@ export default function Home({ params }: { params: { surveyId: string } }) {
                     type="text"
                     placeholder={question.text}
                     className='ml-[10px] pl-[10px] w-[500px]'
-                    value={optionTexts[questionIndex]}
+                    value={questionTexts[questionIndex]}
                     onChange={(e) => updateQuestionText(questionIndex, e.target.value)}
                   />)
                   }
