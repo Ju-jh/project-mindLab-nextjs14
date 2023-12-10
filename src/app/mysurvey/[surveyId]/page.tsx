@@ -1,5 +1,7 @@
 'use client'
 
+
+
 import { createOptionGraphQLQuery } from '@/graphql/Option/createOption';
 import { updateTextAndScoreGraphQLQuery } from '@/graphql/Option/pushOptionTextAndScore';
 import { sendGraphQLQuery } from '@/graphql/Problem/createProblem';
@@ -25,6 +27,8 @@ interface Question {
 }
 
 interface Option {
+  localScore: number;
+  localText: string;
   o_id: string;
   text: string;
   score: number;
@@ -242,12 +246,12 @@ export default function Home({ params }: { params: { surveyId: string } }) {
 
   const deleteOption = async (optionId: string) => {
     const mutation = `
-      mutation DeleteOption($optionId: String!) {
-        deleteOption(optionId: $optionId) {
-          success
-          message
-        }
+    mutation DeleteOption($optionId: String!) {
+      deleteOption(optionId: $optionId) {
+        success
+        message
       }
+    }
     `;
 
     const variables = {
@@ -298,9 +302,9 @@ export default function Home({ params }: { params: { surveyId: string } }) {
     }
   };
 
-  const updateQuestionText = (questionIndex: number, text: string) => {
+  const updateQuestionText = (index: number, text: string) => {
     const updatedTexts = [...questionTexts];
-    updatedTexts[questionIndex] = text;
+    updatedTexts[index] = text;
     setQuestionTexts(updatedTexts);
   };
 
@@ -471,7 +475,7 @@ export default function Home({ params }: { params: { surveyId: string } }) {
         </div>
       </section>
       <section className='problemSection w-full min-h-[400px]  '>
-        {questionTexts.length > 0 && (
+        {questions.length > 0 && (
           <ul className='problemUl flex-col list-decimal  pl-[30px]'>
             {questions.map((question, questionIndex) => (
               <li key={question.q_id} className='mb-[60px] ml-[30px]'>
@@ -486,6 +490,8 @@ export default function Home({ params }: { params: { surveyId: string } }) {
                     type="text"
                     placeholder={question.text}
                     className='ml-[10px] pl-[10px] w-[500px]'
+                    value={questionTexts[questionIndex]}
+                    onChange={(e) => updateQuestionText(questionIndex, e.target.value)}
                   />
                   <button
                     className='w-[50px] h-full shadow-sm rounded-md hover:slate-300'
@@ -506,15 +512,20 @@ export default function Home({ params }: { params: { surveyId: string } }) {
                         <input
                           type='text'
                           placeholder={`${option.text}`}
+                          value={optionTexts[questionIndex][optionIndex]}
+                          onChange={(e) => updateOptionText(questionIndex, optionIndex, e.target.value)}
                         />
                         <input
                           type='number'
                           placeholder='점수를 입력하세요.'
                           className='bg-transparent pl-[60px]'
+                          value={optionScores[questionIndex][optionIndex]}
+                          onChange={(e) => updateOptionScore(questionIndex, optionIndex, Number(e.target.value))}
                         />
                       </div>
                       <button
                         className='w-[40px] text-[20px] h-full rounded-sm shadow-sm hover:bg-blue-600 hover:text-white'
+                          onClick={() => pushOptionTextAndScore(option.o_id, option.localText, option.localScore)}
                       >
                         <FontAwesomeIcon icon={faCheck} className='text-[20px]' />
                       </button>
