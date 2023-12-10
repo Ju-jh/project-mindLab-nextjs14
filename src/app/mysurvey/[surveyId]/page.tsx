@@ -332,8 +332,12 @@ export default function Home({ params }: { params: { surveyId: string } }) {
   ) => {
     const { value } = e.target;
 
+    console.log("Original Value:", value);
+
     if (value !== undefined && value !== null && value.trim() !== "") {
       const parsedValue = parseFloat(value);
+
+      console.log("Parsed Value:", parsedValue);
 
       if (!isNaN(parsedValue)) {
         setQuestions((prevQuestions) => {
@@ -355,6 +359,7 @@ export default function Home({ params }: { params: { surveyId: string } }) {
       }
     }
   };
+
 
   
   useEffect(() => {
