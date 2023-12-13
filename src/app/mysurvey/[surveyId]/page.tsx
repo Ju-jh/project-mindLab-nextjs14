@@ -423,13 +423,13 @@ export default function Home({ params }: { params: { surveyId: string } }) {
   return (
     <main className='flex-col w-full h-full p-[30px] pt-[60px]'>
       <section className='w-full h-[100px]  flex items-center justify-end pr-[50px]'>
-          <button
+          {/* <button
             className='w-[150px] h-[50px] p-[5px] rounded-md shadow-md ml-[20px] bg-slate-200 hover:bg-blue-400'
             onClick={()=>updateMySurveyIsPublic(surveyId)}
           >
               <span className='font-bold text-[20px] mr-[10px]'>저장하기</span>
               <FontAwesomeIcon icon={faFloppyDisk} />
-        </button>
+        </button> */}
         {
           (isThisSurveyPublic === false) &&
           <button
