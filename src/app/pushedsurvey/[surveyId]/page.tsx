@@ -1,7 +1,9 @@
 'use client'
 
+import { useAuth } from '@/app/context/isLogined';
 import { sendGraphQLQuery } from '@/graphql/Problem/createProblem';
 import { getSurveyDataGraphQLQuery } from '@/graphql/Survey/getSurveyData';
+import { redirect } from 'next/dist/server/api-utils';
 import { useEffect, useState } from 'react';
 
 interface Survey {
@@ -29,6 +31,7 @@ export default function Home({ params }: {
   params: { surveyId:string}
 }) {
   const surveyId = params.surveyId;
+  const { accessToken, email, photo } = useAuth();
   const [isClicked, setIsClicked] = useState<boolean>(false)
   const [originTitle, setOriginTitle] = useState<string>('')
   const [originDescription, setOriginDescription] = useState<string>('');
@@ -111,6 +114,12 @@ export default function Home({ params }: {
   };
 
   useEffect(() => {
+    if (!accessToken) {
+      alert('로그인이 필요한 페이지입니다.')
+      window.location.href = 'https://mind-lab-fe-55b3987890a9.herokuapp.com/';
+      return;
+    } 
+
     const fetchData = async () => {
         const query = `
           mutation GetSurveyData($surveyId: String!) {
